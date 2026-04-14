@@ -7,7 +7,7 @@
   <title>NeoQuest TV — Mon Profil</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="xp.js"></script>
+  <script src="js/xp.js"></script>
   <style>
     :root { --bg:#08061a; --violet:#a855f7; --cyan:#22d3ee; }
     * { box-sizing:border-box; margin:0; padding:0; }
@@ -86,7 +86,7 @@
   <!-- En-tête profil -->
   <div class="text-center mb-10">
     <div class="relative inline-block mb-4">
-      <img id="profile-avatar-display" src="Neo_assis-Photoroom.png" alt="Avatar"
+      <img id="profile-avatar-display" src="img/Neo_assis-Photoroom.png" alt="Avatar"
         style="width:100px;height:100px;object-fit:contain;filter:drop-shadow(0 0 20px rgba(168,85,247,0.6));" />
       <div style="position:absolute;inset:-4px;border-radius:50%;border:2px solid rgba(34,211,238,0.5);pointer-events:none;"></div>
     </div>
@@ -144,19 +144,19 @@
       <label style="font-size:0.82rem;font-weight:700;color:#94a3b8;display:block;margin-bottom:0.75rem;">Ton avatar Neo</label>
       <div class="avatar-grid" id="avatar-grid">
         <div class="avatar-card" data-avatar="Neo_assis-Photoroom.png" data-name="Neo Studieux" onclick="selectAvatar(this)">
-          <img src="Neo_assis-Photoroom.png" alt="Neo Studieux" />
+          <img src="img/Neo_assis-Photoroom.png" alt="Neo Studieux" />
           <div class="avatar-name">Studieux</div>
         </div>
         <div class="avatar-card" data-avatar="NeoGeo3DlogoTranspbright.png" data-name="Neo Explorateur" onclick="selectAvatar(this)">
-          <img src="NeoGeo3DlogoTranspbright.png" alt="Neo Explorateur" />
+          <img src="img/NeoGeo3DlogoTranspbright.png" alt="Neo Explorateur" />
           <div class="avatar-name">Explorateur</div>
         </div>
         <div class="avatar-card" data-avatar="Neo_assis-Photoroom.png" data-name="Neo Scientifique" onclick="selectAvatar(this)">
-          <img src="Neo_assis-Photoroom.png" alt="Neo Scientifique" style="filter:hue-rotate(120deg);" />
+          <img src="img/Neo_assis-Photoroom.png" alt="Neo Scientifique" style="filter:hue-rotate(120deg);" />
           <div class="avatar-name">Scientifique</div>
         </div>
         <div class="avatar-card" data-avatar="Neo_assis-Photoroom.png" data-name="Neo Tech" onclick="selectAvatar(this)">
-          <img src="Neo_assis-Photoroom.png" alt="Neo Tech" style="filter:hue-rotate(200deg);" />
+          <img src="img/Neo_assis-Photoroom.png" alt="Neo Tech" style="filter:hue-rotate(200deg);" />
           <div class="avatar-name">Tech</div>
         </div>
       </div>

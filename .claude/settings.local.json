@@ -1,7 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "Bash(powershell.exe -File -)"
+      "Bash(powershell.exe -File -)",
+      "Bash(mkdir -p img js data)",
+      "Bash(mv \"Neo assis-Photoroom.png\" img/)",
+      "Bash(mv NeoGeo3DlogoTranspbright.png img/)",
+      "Bash(mv neobanner2.jpg img/)",
+      "Bash(mv xp.js js/)"
     ]
   }
 }

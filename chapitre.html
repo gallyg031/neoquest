@@ -8,11 +8,11 @@
   <meta name="theme-color" content="#a855f7" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <link rel="apple-touch-icon" href="Neo_assis-Photoroom.png" />
+  <link rel="apple-touch-icon" href="img/Neo_assis-Photoroom.png" />
   <title>NeoQuest TV — Chapitre</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="xp.js"></script>
+  <script src="js/xp.js"></script>
   <style>
     :root { --bg:#08061a; --violet:#a855f7; --cyan:#22d3ee; --accent:#a855f7; }
     * { box-sizing:border-box; margin:0; padding:0; }
@@ -254,7 +254,7 @@
   <a id="nav-back" href="index.html" class="nav-link">← Retour aux cours</a>
 <a href="profil.html" id="nav-profile" title="Mon profil" style="display:flex;align-items:center;gap:0.5rem;text-decoration:none;">
     <div style="position:relative;">
-      <img id="nav-avatar" src="Neo_assis-Photoroom.png" alt="Profil" style="width:34px;height:34px;object-fit:contain;border-radius:50%;border:2px solid rgba(168,85,247,0.5);background:rgba(168,85,247,0.1);padding:2px;transition:border-color 0.2s;" onmouseover="this.style.borderColor='rgba(34,211,238,0.8)'" onmouseout="this.style.borderColor='rgba(168,85,247,0.5)'" />
+      <img id="nav-avatar" src="img/Neo_assis-Photoroom.png" alt="Profil" style="width:34px;height:34px;object-fit:contain;border-radius:50%;border:2px solid rgba(168,85,247,0.5);background:rgba(168,85,247,0.1);padding:2px;transition:border-color 0.2s;" onmouseover="this.style.borderColor='rgba(34,211,238,0.8)'" onmouseout="this.style.borderColor='rgba(168,85,247,0.5)'" />
     </div>
     <span id="nav-pseudo" style="font-size:0.8rem;font-weight:700;color:#c4b5fd;display:none;"></span>
   </a>
@@ -414,7 +414,7 @@
           <button id="hint-btn" onclick="showHint()" title="Indice de Neo" style="display:flex;align-items:center;gap:0.4rem;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.35);border-radius:9999px;padding:0.3rem 0.8rem;color:#fbbf24;font-weight:800;font-size:0.8rem;cursor:pointer;font-family:'Nunito',sans-serif;transition:all 0.2s;">💡 Indice</button>
         </div>
         <div id="hint-box" class="hidden mb-4" style="background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.3);border-radius:0.85rem;padding:0.85rem 1rem;display:flex;align-items:flex-start;gap:0.75rem;">
-          <img src="Neo_assis-Photoroom.png" alt="Neo" style="width:44px;height:44px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 8px #fbbf24);" />
+          <img src="img/Neo_assis-Photoroom.png" alt="Neo" style="width:44px;height:44px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 8px #fbbf24);" />
           <div>
             <p style="font-weight:900;color:#fbbf24;font-size:0.82rem;margin-bottom:0.25rem;">💡 Petit rappel de Neo :</p>
             <p id="hint-text" style="color:#fde68a;font-size:0.88rem;line-height:1.5;"></p>
@@ -478,7 +478,7 @@
   const niveauId   = params.get('niveau');
   const chapitreId = params.get('chapitre');
 
-  fetch('data.json')
+  fetch('data/data.json')
     .then(r => r.json())
     .then(data => {
       const mat    = data.matieres.find(m => m.id === matiereId);
@@ -739,7 +739,7 @@
     const hintNote=(!isRevisionMode&&isCorrect&&hintUsed)?` <span style="font-size:0.78rem;color:#fbbf24;font-weight:700;">(indice : ×½)</span>`:'';
     const correctTitle=isRevisionMode?'👍 Bravo ! (mode révision — sans points)':`👍 Bravo ! +${pts} pts${hintNote}`;
     const explication=q.explication||null;
-    fb.innerHTML=`<div class="neo-feedback ${isCorrect?'ok':'ko'}"><img src="Neo_assis-Photoroom.png" alt="Neo" style="${isCorrect?'filter:drop-shadow(0 0 12px #22d3ee)':'transform:scaleX(-1);filter:drop-shadow(0 0 12px #f472b6)'};" /><div class="neo-feedback-text"><div class="neo-feedback-title ${isCorrect?'ok':'ko'}">${isCorrect?correctTitle:'😬 Pas tout à fait…'}</div>${!isCorrect?`<div class="neo-feedback-answer">✅ ${q.choix[correct]}</div>`:''}${explication?`<div class="neo-feedback-expl">${explication}</div>`:''}</div></div>`;
+    fb.innerHTML=`<div class="neo-feedback ${isCorrect?'ok':'ko'}"><img src="img/Neo_assis-Photoroom.png" alt="Neo" style="${isCorrect?'filter:drop-shadow(0 0 12px #22d3ee)':'transform:scaleX(-1);filter:drop-shadow(0 0 12px #f472b6)'};" /><div class="neo-feedback-text"><div class="neo-feedback-title ${isCorrect?'ok':'ko'}">${isCorrect?correctTitle:'😬 Pas tout à fait…'}</div>${!isCorrect?`<div class="neo-feedback-answer">✅ ${q.choix[correct]}</div>`:''}${explication?`<div class="neo-feedback-expl">${explication}</div>`:''}</div></div>`;
     const nb=document.getElementById('quiz-next-btn');nb.classList.remove('hidden');nb.textContent=quizIndex<quizData.length-1?'Question suivante →':'Voir mon score 🏆';
     const hintBtn2=document.getElementById('hint-btn');hintBtn2.disabled=true;hintBtn2.style.opacity='0.35';
   }
@@ -847,7 +847,7 @@ Tente de me battre ! 👉 https://neoquest.tv`);
 
   <!-- Pill compacte -->
   <div id="p-compact" onclick="pExpand()" style="display:none;align-items:center;gap:8px;background:rgba(8,6,26,0.92);backdrop-filter:blur(16px);border:1px solid rgba(34,211,238,0.4);border-radius:9999px;padding:5px 12px 5px 5px;cursor:pointer;box-shadow:0 0 16px rgba(34,211,238,0.2);">
-    <img src="Neo_assis-Photoroom.png" alt="Neo" style="width:28px;height:28px;object-fit:contain;border-radius:50%;background:rgba(168,85,247,0.15);padding:2px;" id="p-cneo-img" />
+    <img src="img/Neo_assis-Photoroom.png" alt="Neo" style="width:28px;height:28px;object-fit:contain;border-radius:50%;background:rgba(168,85,247,0.15);padding:2px;" id="p-cneo-img" />
     <span id="p-ctime" style="font-size:14px;font-weight:900;color:#e2e8f0;font-variant-numeric:tabular-nums;">--:--</span>
     <svg width="24" height="24" style="transform:rotate(-90deg);flex-shrink:0;">
       <circle cx="12" cy="12" r="9" fill="none" stroke="rgba(34,211,238,0.2)" stroke-width="2.5"/>
