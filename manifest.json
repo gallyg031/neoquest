@@ -1,0 +1,38 @@
+{
+  "name": "NeoQuest TV",
+  "short_name": "NeoQuest",
+  "description": "L'Aventure de l'Apprentissage — Flashcards, Quiz et cours interactifs",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#08061a",
+  "theme_color": "#a855f7",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "Neo_assis-Photoroom.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "Neo_assis-Photoroom.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "games"],
+  "lang": "fr",
+  "shortcuts": [
+    {
+      "name": "Histoire-Géo",
+      "url": "/cours.html?matiere=histoire-geo",
+      "description": "Accéder aux cours d'Histoire-Géo"
+    },
+    {
+      "name": "Mon Profil",
+      "url": "/profil.html",
+      "description": "Voir mon profil et mes badges"
+    }
+  ]
+}

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NeoQuest TV — Mon Profil</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="xp.js"></script>
+  <style>
+    :root { --bg:#08061a; --violet:#a855f7; --cyan:#22d3ee; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { background:var(--bg); font-family:'Nunito',sans-serif; color:#e2e8f0; overflow-x:hidden; }
+    body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events:none; z-index:9999; opacity:0.3; }
+    .blob { position:fixed; border-radius:50%; filter:blur(120px); pointer-events:none; z-index:0; }
+    .blob-1 { width:500px; height:500px; background:rgba(168,85,247,0.13); top:-100px; left:-100px; }
+    .blob-2 { width:400px; height:400px; background:rgba(34,211,238,0.08); bottom:-80px; right:-80px; }
+    nav { background:rgba(8,6,26,0.8); backdrop-filter:blur(20px); border-bottom:1px solid rgba(168,85,247,0.15); }
+    .logo-text { background:linear-gradient(90deg,#a855f7,#22d3ee); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; font-weight:900; }
+    .nav-link { color:#c4b5fd; font-weight:700; font-size:0.9rem; text-decoration:none; transition:color 0.2s; }
+    .nav-link:hover { color:#fff; }
+    .glass { background:rgba(255,255,255,0.04); backdrop-filter:blur(18px); border:1px solid rgba(168,85,247,0.2); border-radius:1.25rem; }
+    .badge-pill { display:inline-flex; align-items:center; gap:0.4rem; background:rgba(168,85,247,0.12); border:1px solid rgba(168,85,247,0.35); border-radius:9999px; padding:0.3rem 0.9rem; font-size:0.78rem; font-weight:700; color:#c4b5fd; text-transform:uppercase; }
+    .btn-neon { display:inline-flex; align-items:center; gap:0.5rem; background:linear-gradient(135deg,#7c3aed,#06b6d4); border-radius:9999px; padding:0.75rem 1.8rem; font-weight:800; color:#fff; box-shadow:0 0 20px rgba(124,58,237,0.4); transition:transform 0.2s,box-shadow 0.2s; border:none; cursor:pointer; font-family:'Nunito',sans-serif; font-size:0.95rem; }
+    .btn-neon:hover { transform:scale(1.04); box-shadow:0 0 35px rgba(124,58,237,0.6); }
+    .btn-outline { display:inline-flex; align-items:center; gap:0.5rem; border:1px solid rgba(168,85,247,0.4); border-radius:9999px; padding:0.65rem 1.4rem; font-weight:700; color:#c4b5fd; background:transparent; cursor:pointer; font-family:'Nunito',sans-serif; font-size:0.88rem; transition:all 0.2s; }
+    .btn-outline:hover { background:rgba(168,85,247,0.12); }
+    .btn-danger { display:inline-flex; align-items:center; gap:0.5rem; border:1px solid rgba(244,114,182,0.4); border-radius:9999px; padding:0.65rem 1.4rem; font-weight:700; color:#f472b6; background:transparent; cursor:pointer; font-family:'Nunito',sans-serif; font-size:0.88rem; transition:all 0.2s; }
+    .btn-danger:hover { background:rgba(244,114,182,0.1); }
+
+    /* Avatar selector */
+    .avatar-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:0.75rem; }
+    .avatar-card { border:2px solid rgba(168,85,247,0.2); border-radius:1rem; padding:0.75rem 0.5rem; text-align:center; cursor:pointer; transition:all 0.25s; background:rgba(255,255,255,0.03); }
+    .avatar-card:hover { border-color:rgba(168,85,247,0.6); background:rgba(168,85,247,0.08); transform:translateY(-3px); }
+    .avatar-card.selected { border-color:#22d3ee; background:rgba(34,211,238,0.1); box-shadow:0 0 20px rgba(34,211,238,0.2); }
+    .avatar-card img { width:60px; height:60px; object-fit:contain; margin:0 auto 0.4rem; display:block; }
+    .avatar-card .avatar-name { font-size:0.7rem; font-weight:700; color:#94a3b8; }
+    .avatar-card.selected .avatar-name { color:#22d3ee; }
+
+    /* Stat cards */
+    .stat-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:0.75rem; }
+    .stat-card { background:rgba(255,255,255,0.04); border:1px solid rgba(168,85,247,0.2); border-radius:1rem; padding:1rem; text-align:center; }
+    .stat-val  { font-size:1.8rem; font-weight:900; background:linear-gradient(90deg,#a855f7,#22d3ee); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .stat-label { font-size:0.72rem; color:#64748b; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; margin-top:0.25rem; }
+
+    /* Badge showcase */
+    .badge-showcase { display:flex; gap:0.75rem; flex-wrap:wrap; }
+    .bs-card { flex:1; min-width:80px; max-width:120px; border:1px solid rgba(255,255,255,0.08); border-radius:1rem; padding:0.75rem 0.5rem; text-align:center; transition:all 0.3s; }
+    .bs-card.locked   { opacity:0.35; filter:grayscale(1); }
+    .bs-card.unlocked { border-color:rgba(250,204,21,0.4); background:rgba(250,204,21,0.07); }
+    .bs-emoji { font-size:1.8rem; display:block; margin-bottom:0.3rem; }
+    .bs-name  { font-size:0.7rem; font-weight:700; color:#64748b; }
+    .bs-card.unlocked .bs-name { color:#fbbf24; }
+
+    /* Pseudo input */
+    .pseudo-input { background:rgba(255,255,255,0.05); border:1px solid rgba(168,85,247,0.3); border-radius:0.75rem; padding:0.75rem 1rem; font-size:1rem; font-weight:700; color:#fff; font-family:'Nunito',sans-serif; width:100%; outline:none; transition:border-color 0.2s; }
+    .pseudo-input:focus { border-color:rgba(168,85,247,0.7); box-shadow:0 0 0 3px rgba(168,85,247,0.15); }
+    .pseudo-input::placeholder { color:#475569; }
+
+    /* XP bar */
+    .xp-track { background:rgba(255,255,255,0.08); border-radius:9999px; height:10px; overflow:hidden; }
+    .xp-fill  { height:100%; border-radius:9999px; background:linear-gradient(90deg,#a855f7,#22d3ee); transition:width 1s cubic-bezier(.4,0,.2,1); }
+
+    ::-webkit-scrollbar { width:6px; }
+    ::-webkit-scrollbar-track { background:#08061a; }
+    ::-webkit-scrollbar-thumb { background:linear-gradient(var(--violet),var(--cyan)); border-radius:3px; }
+  </style>
+</head>
+<body>
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+
+<!-- NAVBAR -->
+<nav class="relative z-50 w-full px-6 py-4 flex items-center justify-between">
+  <a href="index.html" class="flex items-center gap-2 no-underline">
+    <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="15" stroke="url(#lg)" stroke-width="1.5"/><circle cx="16" cy="16" r="3" fill="url(#lg)"/><path d="M9 12L16 8L23 12L23 20L16 24L9 20Z" stroke="url(#lg)" stroke-width="1.5" fill="none"/><defs><linearGradient id="lg" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse"><stop stop-color="#a855f7"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs></svg>
+    <span class="logo-text text-xl">NeoQuest TV</span>
+  </a>
+  <a href="index.html" class="nav-link">← Accueil</a>
+</nav>
+
+<!-- MAIN -->
+<main class="relative z-10 max-w-2xl mx-auto px-6 py-10">
+
+  <!-- En-tête profil -->
+  <div class="text-center mb-10">
+    <div class="relative inline-block mb-4">
+      <img id="profile-avatar-display" src="Neo_assis-Photoroom.png" alt="Avatar"
+        style="width:100px;height:100px;object-fit:contain;filter:drop-shadow(0 0 20px rgba(168,85,247,0.6));" />
+      <div style="position:absolute;inset:-4px;border-radius:50%;border:2px solid rgba(34,211,238,0.5);pointer-events:none;"></div>
+    </div>
+    <h1 id="profile-name-display" class="font-black text-3xl text-white mb-1">Mon Profil</h1>
+    <div class="badge-pill" id="profile-level-badge">⚡ Niveau 1 — Apprenti</div>
+  </div>
+
+  <!-- XP -->
+  <div class="glass p-5 mb-5">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+      <span style="font-weight:800;font-size:0.85rem;color:#c4b5fd;">Expérience</span>
+      <span id="xp-label" style="font-size:0.82rem;font-weight:700;color:#a855f7;"></span>
+    </div>
+    <div class="xp-track"><div class="xp-fill" id="xp-fill" style="width:0%"></div></div>
+    <div style="display:flex;justify-content:space-between;font-size:0.7rem;color:#475569;margin-top:0.3rem;">
+      <span id="xp-level-label"></span>
+      <span id="xp-next-label"></span>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stat-grid mb-5">
+    <div class="stat-card">
+      <div class="stat-val" id="stat-pts">0</div>
+      <div class="stat-label">Points</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" id="stat-badges">0</div>
+      <div class="stat-label">Badges</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" id="stat-quizzes">0</div>
+      <div class="stat-label">Quiz joués</div>
+    </div>
+  </div>
+
+  <!-- Badges -->
+  <div class="glass p-5 mb-5">
+    <p style="font-weight:800;font-size:0.85rem;color:#c4b5fd;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:1rem;">🏅 Mes badges</p>
+    <div class="badge-showcase" id="badge-showcase"></div>
+  </div>
+
+  <!-- Personnalisation -->
+  <div class="glass p-5 mb-5">
+    <p style="font-weight:800;font-size:0.85rem;color:#c4b5fd;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:1rem;">✏️ Personnalisation</p>
+
+    <!-- Pseudo -->
+    <div style="margin-bottom:1.25rem;">
+      <label style="font-size:0.82rem;font-weight:700;color:#94a3b8;display:block;margin-bottom:0.4rem;">Ton pseudo</label>
+      <input type="text" id="pseudo-input" class="pseudo-input" placeholder="Entre ton pseudo…" maxlength="20" />
+    </div>
+
+    <!-- Choix avatar -->
+    <div>
+      <label style="font-size:0.82rem;font-weight:700;color:#94a3b8;display:block;margin-bottom:0.75rem;">Ton avatar Neo</label>
+      <div class="avatar-grid" id="avatar-grid">
+        <div class="avatar-card" data-avatar="Neo_assis-Photoroom.png" data-name="Neo Studieux" onclick="selectAvatar(this)">
+          <img src="Neo_assis-Photoroom.png" alt="Neo Studieux" />
+          <div class="avatar-name">Studieux</div>
+        </div>
+        <div class="avatar-card" data-avatar="NeoGeo3DlogoTranspbright.png" data-name="Neo Explorateur" onclick="selectAvatar(this)">
+          <img src="NeoGeo3DlogoTranspbright.png" alt="Neo Explorateur" />
+          <div class="avatar-name">Explorateur</div>
+        </div>
+        <div class="avatar-card" data-avatar="Neo_assis-Photoroom.png" data-name="Neo Scientifique" onclick="selectAvatar(this)">
+          <img src="Neo_assis-Photoroom.png" alt="Neo Scientifique" style="filter:hue-rotate(120deg);" />
+          <div class="avatar-name">Scientifique</div>
+        </div>
+        <div class="avatar-card" data-avatar="Neo_assis-Photoroom.png" data-name="Neo Tech" onclick="selectAvatar(this)">
+          <img src="Neo_assis-Photoroom.png" alt="Neo Tech" style="filter:hue-rotate(200deg);" />
+          <div class="avatar-name">Tech</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:1.25rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
+      <button class="btn-neon" onclick="saveProfile()">💾 Sauvegarder</button>
+    </div>
+  </div>
+
+  <!-- Danger zone -->
+  <div class="glass p-5" style="border-color:rgba(244,114,182,0.2);">
+    <p style="font-weight:800;font-size:0.85rem;color:#f472b6;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.75rem;">⚠️ Zone de réinitialisation</p>
+    <p style="font-size:0.82rem;color:#64748b;margin-bottom:1rem;">Ces actions sont irréversibles. Tes points, badges et progression seront effacés.</p>
+    <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+      <button class="btn-danger" onclick="resetProgress()">🗑️ Réinitialiser la progression</button>
+      <button class="btn-danger" onclick="resetAll()">💥 Tout réinitialiser</button>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  // ── Niveaux ──
+  const LEVELS = [
+    { min:0,    max:99,   label:'Apprenti',       color:'#94a3b8' },
+    { min:100,  max:299,  label:'Explorateur',    color:'#22d3ee' },
+    { min:300,  max:599,  label:'Érudit',         color:'#a855f7' },
+    { min:600,  max:999,  label:'Savant',         color:'#fbbf24' },
+    { min:1000, max:1999, label:'Maître',         color:'#f472b6' },
+    { min:2000, max:Infinity, label:'Légende',    color:'#fbbf24' },
+  ];
+
+  const BADGES_DEF = [
+    { id:'novice',  label:'Novice',  emoji:'🥉', threshold:50  },
+    { id:'initie',  label:'Initié',  emoji:'🥈', threshold:150 },
+    { id:'maitre',  label:'Maître',  emoji:'🥇', threshold:300 },
+  ];
+
+  // ── LocalStorage helpers ──
+  function getProfile() {
+    try { return JSON.parse(localStorage.getItem('neoquest_profile') || '{}'); } catch { return {}; }
+  }
+  function saveProfileData(p) {
+    try { localStorage.setItem('neoquest_profile', JSON.stringify(p)); } catch {}
+  }
+  function getProgress() {
+    try { return JSON.parse(localStorage.getItem('neoquest_progress') || '{}'); } catch { return {}; }
+  }
+
+  // ── Calcul niveau ──
+  function getLevel(pts) {
+    return LEVELS.findLast(l => pts >= l.min) || LEVELS[0];
+  }
+  function getNextLevel(pts) {
+    return LEVELS.find(l => pts < l.min) || null;
+  }
+
+  // ── Chargement ──
+  function loadProfile() {
+    const profile  = getProfile();
+    const progress = getProgress();
+    const pts      = progress.totalPts || 0;
+    const badges   = progress.badges   || [];
+    const quizzes  = progress.quizCount || 0;
+
+    // Pseudo & avatar
+    const pseudo = profile.pseudo || 'Explorateur';
+    const avatar = profile.avatar || 'Neo_assis-Photoroom.png';
+    const avatarStyle = profile.avatarStyle || '';
+
+    document.getElementById('profile-name-display').textContent = pseudo;
+    document.getElementById('pseudo-input').value = pseudo;
+
+    const avatarImg = document.getElementById('profile-avatar-display');
+    avatarImg.src = avatar;
+    avatarImg.style.filter = avatarStyle
+      ? `hue-rotate(${avatarStyle}) drop-shadow(0 0 20px rgba(168,85,247,0.6))`
+      : 'drop-shadow(0 0 20px rgba(168,85,247,0.6))';
+
+    // Sélection avatar
+    const avatarCards = document.querySelectorAll('.avatar-card');
+    avatarCards.forEach(c => {
+      c.classList.remove('selected');
+      if(c.dataset.avatar === avatar && (c.querySelector('img').style.filter||'') === avatarStyle) {
+        c.classList.add('selected');
+      }
+    });
+
+    // Stats
+    document.getElementById('stat-pts').textContent    = pts;
+    document.getElementById('stat-badges').textContent = badges.length;
+    document.getElementById('stat-quizzes').textContent = quizzes;
+
+    // Niveau & XP
+    const lvl  = getLevel(pts);
+    const next = getNextLevel(pts);
+    document.getElementById('profile-level-badge').textContent = `⚡ ${lvl.label}`;
+    document.getElementById('profile-level-badge').style.color = lvl.color;
+    document.getElementById('profile-level-badge').style.borderColor = lvl.color + '55';
+    document.getElementById('profile-level-badge').style.background = lvl.color + '18';
+    document.getElementById('xp-label').textContent = `${pts} XP`;
+
+    if(next) {
+      const pct = Math.round(((pts - lvl.min) / (next.min - lvl.min)) * 100);
+      document.getElementById('xp-fill').style.width = pct + '%';
+      document.getElementById('xp-level-label').textContent = lvl.label;
+      document.getElementById('xp-next-label').textContent  = `${next.label} à ${next.min} XP`;
+    } else {
+      document.getElementById('xp-fill').style.width = '100%';
+      document.getElementById('xp-level-label').textContent = '⭐ Niveau maximum atteint !';
+      document.getElementById('xp-next-label').textContent  = '';
+    }
+
+    // Badges showcase
+    const showcase = document.getElementById('badge-showcase');
+    showcase.innerHTML = '';
+    BADGES_DEF.forEach(b => {
+      const isUnlocked = badges.includes(b.id);
+      const card = document.createElement('div');
+      card.className = `bs-card ${isUnlocked ? 'unlocked' : 'locked'}`;
+      card.innerHTML = `<span class="bs-emoji">${b.emoji}</span><div class="bs-name">${b.label}</div>`;
+      showcase.appendChild(card);
+    });
+  }
+
+  // ── Avatar selection ──
+  let selectedAvatar = 'Neo_assis-Photoroom.png';
+  let selectedAvatarStyle = '';
+
+  function selectAvatar(card) {
+    document.querySelectorAll('.avatar-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    selectedAvatar      = card.dataset.avatar;
+    selectedAvatarStyle = card.querySelector('img').style.filter || '';
+    // Aperçu immédiat
+    const avatarImg = document.getElementById('profile-avatar-display');
+    avatarImg.src = selectedAvatar;
+    avatarImg.style.filter = selectedAvatarStyle
+      ? `${selectedAvatarStyle} drop-shadow(0 0 20px rgba(168,85,247,0.6))`
+      : 'drop-shadow(0 0 20px rgba(168,85,247,0.6))';
+  }
+
+  // ── Sauvegarde ──
+  function saveProfile() {
+    const pseudo = document.getElementById('pseudo-input').value.trim() || 'Explorateur';
+    const profile = getProfile();
+    profile.pseudo      = pseudo;
+    profile.avatar      = selectedAvatar;
+    profile.avatarStyle = selectedAvatarStyle;
+    saveProfileData(profile);
+    document.getElementById('profile-name-display').textContent = pseudo;
+    // Feedback visuel
+    const btn = event.currentTarget;
+    btn.textContent = '✅ Sauvegardé !';
+    setTimeout(() => { btn.textContent = '💾 Sauvegarder'; }, 2000);
+  }
+
+  // ── Réinitialisations ──
+  function resetProgress() {
+    if(!confirm('Réinitialiser points, badges et quiz ? (profil conservé)')) return;
+    try { localStorage.removeItem('neoquest_progress'); localStorage.removeItem('neoquest_weak'); localStorage.removeItem('neoquest_fc_weak'); } catch {}
+    loadProfile();
+  }
+
+  function resetAll() {
+    if(!confirm('Tout supprimer ? (profil + progression)')) return;
+    try { ['neoquest_progress','neoquest_profile','neoquest_weak','neoquest_fc_weak'].forEach(k => localStorage.removeItem(k)); } catch {}
+    loadProfile();
+  }
+
+  // ── Init ──
+  const profile = getProfile();
+  selectedAvatar      = profile.avatar      || 'Neo_assis-Photoroom.png';
+  selectedAvatarStyle = profile.avatarStyle || '';
+  loadProfile();
+</script>
+</body>
+</html>

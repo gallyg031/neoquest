@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#a855f7" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="apple-touch-icon" href="Neo_assis-Photoroom.png" />
+  <title>NeoQuest TV — Cours</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="xp.js"></script>
+  <style>
+    :root { --bg:#08061a; --violet:#a855f7; --cyan:#22d3ee; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { background:var(--bg); font-family:'Nunito',sans-serif; color:#e2e8f0; overflow-x:hidden; }
+    body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events:none; z-index:9999; opacity:0.3; }
+    .blob { position:fixed; border-radius:50%; filter:blur(120px); pointer-events:none; z-index:0; }
+    .blob-1 { width:500px; height:500px; background:rgba(168,85,247,0.13); top:-100px; left:-100px; }
+    .blob-2 { width:400px; height:400px; background:rgba(34,211,238,0.08); bottom:-80px; right:-80px; }
+    nav { background:rgba(8,6,26,0.8); backdrop-filter:blur(20px); border-bottom:1px solid rgba(168,85,247,0.15); }
+    .logo-text { background:linear-gradient(90deg,#a855f7,#22d3ee); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; font-weight:900; }
+    .nav-link { color:#c4b5fd; font-weight:700; font-size:0.9rem; text-decoration:none; transition:color 0.2s; }
+    .nav-link:hover { color:#fff; }
+    .glass { background:rgba(255,255,255,0.04); backdrop-filter:blur(18px); border:1px solid rgba(168,85,247,0.2); border-radius:1.25rem; }
+    .glass-hover { transition:transform 0.25s,box-shadow 0.25s,border-color 0.25s; cursor:pointer; }
+    .glass-hover:hover { transform:translateY(-5px); box-shadow:0 10px 35px rgba(168,85,247,0.2); border-color:rgba(168,85,247,0.5); }
+    .badge { display:inline-flex; align-items:center; gap:0.4rem; background:rgba(168,85,247,0.12); border:1px solid rgba(168,85,247,0.35); border-radius:9999px; padding:0.3rem 0.9rem; font-size:0.78rem; font-weight:700; color:#c4b5fd; text-transform:uppercase; }
+    .btn-back { display:inline-flex; align-items:center; gap:0.5rem; color:#a78bfa; font-weight:700; font-size:0.9rem; text-decoration:none; transition:color 0.2s; cursor:pointer; background:none; border:none; }
+    .btn-back:hover { color:#e9d5ff; }
+    .niveau-btn { border:2px solid rgba(168,85,247,0.3); border-radius:9999px; padding:0.6rem 1.4rem; font-weight:800; font-size:0.95rem; color:#c4b5fd; background:transparent; cursor:pointer; transition:all 0.2s; }
+    .niveau-btn:hover, .niveau-btn.active { background:rgba(168,85,247,0.2); border-color:rgba(168,85,247,0.8); color:#fff; }
+    .theme-header { border-left:3px solid var(--violet); padding-left:1rem; margin-bottom:1rem; }
+    .chapitre-link { display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:1rem 1.2rem; border-radius:0.75rem; background:rgba(255,255,255,0.03); border:1px solid rgba(168,85,247,0.1); transition:all 0.2s; text-decoration:none; color:inherit; }
+    .chapitre-link:hover { background:rgba(168,85,247,0.1); border-color:rgba(168,85,247,0.4); }
+    .pill { display:inline-flex; align-items:center; gap:0.3rem; background:rgba(168,85,247,0.12); border:1px solid rgba(168,85,247,0.25); border-radius:9999px; padding:0.2rem 0.6rem; font-size:0.7rem; font-weight:700; color:#c4b5fd; }
+    ::-webkit-scrollbar { width:6px; }
+    ::-webkit-scrollbar-track { background:#08061a; }
+    ::-webkit-scrollbar-thumb { background:linear-gradient(var(--violet),var(--cyan)); border-radius:3px; }
+  </style>
+</head>
+<body>
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+
+<!-- NAVBAR -->
+<nav class="relative z-50 w-full px-6 py-4 flex items-center justify-between">
+  <a href="index.html" class="flex items-center gap-2 no-underline">
+    <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="15" stroke="url(#lg)" stroke-width="1.5"/><circle cx="16" cy="16" r="3" fill="url(#lg)"/><path d="M9 12L16 8L23 12L23 20L16 24L9 20Z" stroke="url(#lg)" stroke-width="1.5" fill="none"/><defs><linearGradient id="lg" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse"><stop stop-color="#a855f7"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs></svg>
+    <span class="logo-text text-xl">NeoQuest TV</span>
+  </a>
+  <a href="index.html" class="nav-link">← Accueil</a>
+<a href="profil.html" id="nav-profile" title="Mon profil" style="display:flex;align-items:center;gap:0.5rem;text-decoration:none;">
+    <div style="position:relative;">
+      <img id="nav-avatar" src="Neo_assis-Photoroom.png" alt="Profil" style="width:34px;height:34px;object-fit:contain;border-radius:50%;border:2px solid rgba(168,85,247,0.5);background:rgba(168,85,247,0.1);padding:2px;transition:border-color 0.2s;" onmouseover="this.style.borderColor='rgba(34,211,238,0.8)'" onmouseout="this.style.borderColor='rgba(168,85,247,0.5)'" />
+    </div>
+    <span id="nav-pseudo" style="font-size:0.8rem;font-weight:700;color:#c4b5fd;display:none;"></span>
+  </a>
+</nav>
+<script>
+  (function(){
+    try {
+      const p = JSON.parse(localStorage.getItem('neoquest_profile') || '{}');
+      if(p.avatar) {
+        const img = document.getElementById('nav-avatar');
+        if(img) { img.src = p.avatar; if(p.avatarStyle) img.style.filter = p.avatarStyle; }
+      }
+      if(p.pseudo) {
+        const el = document.getElementById('nav-pseudo');
+        if(el) { el.textContent = p.pseudo; el.style.display = 'inline'; }
+      }
+    } catch(e) {}
+  })();
+</script>
+
+<!-- MAIN -->
+<main class="relative z-10 max-w-4xl mx-auto px-6 py-12">
+
+  <!-- Breadcrumb -->
+  <div id="breadcrumb" class="flex items-center gap-2 text-sm text-slate-500 mb-8 flex-wrap">
+    <a href="index.html" class="hover:text-purple-400 transition-colors">Accueil</a>
+    <span>›</span>
+    <span id="bc-matiere" class="text-purple-400 font-bold"></span>
+  </div>
+
+  <!-- En-tête matière -->
+  <div class="flex items-center gap-4 mb-10">
+    <span id="mat-emoji" class="text-6xl"></span>
+    <div>
+      <div class="badge mb-2" id="mat-badge">Matière</div>
+      <h1 id="mat-nom" class="font-black text-4xl text-white"></h1>
+    </div>
+  </div>
+
+  <!-- Niveaux tabs -->
+  <div class="mb-10">
+    <p class="text-slate-400 font-700 mb-4 font-bold">Choisis ton niveau :</p>
+    <div id="niveaux-tabs" class="flex flex-wrap gap-3"></div>
+  </div>
+
+  <!-- Thèmes & chapitres -->
+  <div id="themes-container" class="flex flex-col gap-8"></div>
+
+  <!-- Vide -->
+  <div id="empty-state" class="hidden text-center py-20">
+    <div class="text-6xl mb-4">🚧</div>
+    <p class="font-black text-xl text-white mb-2">Contenu en cours de préparation</p>
+    <p class="text-slate-400">Reviens bientôt, Neo prépare les cours !</p>
+  </div>
+
+</main>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const matiereId = params.get('matiere');
+  let matiereData = null;
+  let couleur = '#a855f7';
+
+  fetch('data.json')
+    .then(r => r.json())
+    .then(data => {
+      matiereData = data.matieres.find(m => m.id === matiereId);
+      if (!matiereData) { window.location.href = 'index.html'; return; }
+
+      couleur = matiereData.couleur || '#a855f7';
+      document.title = `NeoQuest TV — ${matiereData.nom}`;
+      document.getElementById('bc-matiere').textContent = matiereData.nom;
+      document.getElementById('mat-emoji').textContent = matiereData.emoji;
+      document.getElementById('mat-nom').textContent = matiereData.nom;
+      document.getElementById('mat-badge').textContent = matiereData.nom;
+      document.getElementById('mat-badge').style.color = couleur;
+      document.getElementById('mat-badge').style.borderColor = couleur + '55';
+      document.getElementById('mat-badge').style.background = couleur + '18';
+
+      // Style blob à la couleur de la matière
+      document.querySelector('.blob-1').style.background = couleur + '22';
+
+      if (!matiereData.niveaux || matiereData.niveaux.length === 0) {
+        document.getElementById('empty-state').classList.remove('hidden');
+        return;
+      }
+
+      // Niveaux tabs
+      const tabs = document.getElementById('niveaux-tabs');
+      matiereData.niveaux.forEach((niv, i) => {
+        const btn = document.createElement('button');
+        btn.className = `niveau-btn ${i === 0 ? 'active' : ''}`;
+        btn.textContent = niv.nom;
+        btn.style.setProperty('--accent', couleur);
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.niveau-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          renderThemes(niv);
+        });
+        tabs.appendChild(btn);
+      });
+
+      renderThemes(matiereData.niveaux[0]);
+    });
+
+  function renderThemes(niveau) {
+    const container = document.getElementById('themes-container');
+    container.innerHTML = '';
+
+    if (!niveau.themes || niveau.themes.length === 0) {
+      container.innerHTML = '<p class="text-slate-500 text-center py-10">Aucun thème disponible pour ce niveau.</p>';
+      return;
+    }
+
+    niveau.themes.forEach(theme => {
+      const block = document.createElement('div');
+      block.className = 'glass p-6';
+
+      const chapitresHTML = theme.chapitres.map(chap => `
+        <a href="chapitre.html?matiere=${matiereId}&niveau=${niveau.id}&chapitre=${chap.id}" class="chapitre-link">
+          <div class="flex items-center gap-3">
+            <span style="color:${couleur};font-size:1.2rem;">▶</span>
+            <span class="font-bold text-white">${chap.nom}</span>
+          </div>
+          <div class="flex items-center gap-2 flex-shrink-0">
+            <span class="pill">🎬 Vidéo</span>
+            <span class="pill">📄 Fiche</span>
+            <span class="pill">🃏 ${chap.flashcards.length} cartes</span>
+            <span class="pill">❓ ${chap.quiz.length} questions</span>
+          </div>
+        </a>
+      `).join('');
+
+      block.innerHTML = `
+        <div class="theme-header" style="border-color:${couleur};">
+          <h2 class="font-black text-xl text-white">${theme.nom}</h2>
+          <p class="text-slate-400 text-sm">${theme.chapitres.length} chapitre${theme.chapitres.length > 1 ? 's' : ''}</p>
+        </div>
+        <div class="flex flex-col gap-3">${chapitresHTML}</div>
+      `;
+      container.appendChild(block);
+    });
+  }
+</script>
+<script>
+  if("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js")
+      .then(() => console.log("[NeoQuest] Service Worker enregistré"))
+      .catch(e => console.warn("[NeoQuest] SW erreur:", e));
+  }
+</script>
+</body>
+</html>

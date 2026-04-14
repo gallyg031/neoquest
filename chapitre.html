@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#a855f7" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="apple-touch-icon" href="Neo_assis-Photoroom.png" />
+  <title>NeoQuest TV — Chapitre</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="xp.js"></script>
+  <style>
+    :root { --bg:#08061a; --violet:#a855f7; --cyan:#22d3ee; --accent:#a855f7; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { background:var(--bg); font-family:'Nunito',sans-serif; color:#e2e8f0; overflow-x:hidden; }
+    body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events:none; z-index:9999; opacity:0.3; }
+    .blob { position:fixed; border-radius:50%; filter:blur(130px); pointer-events:none; z-index:0; }
+    .blob-1 { width:500px; height:500px; background:rgba(168,85,247,0.13); top:-100px; left:-100px; }
+    .blob-2 { width:350px; height:350px; background:rgba(34,211,238,0.08); bottom:-80px; right:-80px; }
+    nav { background:rgba(8,6,26,0.8); backdrop-filter:blur(20px); border-bottom:1px solid rgba(168,85,247,0.15); }
+    .logo-text { background:linear-gradient(90deg,#a855f7,#22d3ee); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; font-weight:900; }
+    .nav-link { color:#c4b5fd; font-weight:700; font-size:0.9rem; text-decoration:none; transition:color 0.2s; }
+    .nav-link:hover { color:#fff; }
+    .glass { background:rgba(255,255,255,0.04); backdrop-filter:blur(18px); border:1px solid rgba(168,85,247,0.2); border-radius:1.25rem; }
+    .badge { display:inline-flex; align-items:center; gap:0.4rem; background:rgba(168,85,247,0.12); border:1px solid rgba(168,85,247,0.35); border-radius:9999px; padding:0.3rem 0.9rem; font-size:0.78rem; font-weight:700; color:#c4b5fd; text-transform:uppercase; }
+    .section-title { font-weight:900; font-size:1.3rem; color:#fff; display:flex; align-items:center; gap:0.6rem; margin-bottom:1.2rem; }
+
+    /* Video */
+    .video-wrapper { position:relative; padding-bottom:56.25%; height:0; border-radius:0.75rem; overflow:hidden; }
+    .video-wrapper iframe { position:absolute; top:0; left:0; width:100%; height:100%; }
+
+    /* PDF btn */
+    .btn-download { display:inline-flex; align-items:center; gap:0.6rem; background:linear-gradient(135deg,#7c3aed,#06b6d4); border-radius:9999px; padding:0.85rem 2rem; font-weight:800; color:#fff; box-shadow:0 0 20px rgba(124,58,237,0.4); transition:transform 0.2s,box-shadow 0.2s; text-decoration:none; font-size:1rem; border:none; cursor:pointer; }
+    .btn-download:hover { transform:scale(1.05); box-shadow:0 0 35px rgba(124,58,237,0.6); }
+
+    /* Tabs */
+    .tab-btn { padding:0.6rem 1.4rem; border-radius:9999px; font-weight:800; font-size:0.9rem; border:2px solid rgba(168,85,247,0.3); color:#a78bfa; background:transparent; cursor:pointer; transition:all 0.2s; }
+    .tab-btn.active { background:rgba(168,85,247,0.2); border-color:var(--accent); color:#fff; }
+
+    /* ── Flashcards ── */
+    .fc-wrapper { position:relative; width:100%; }
+
+    /* Compteur + bouton mélanger */
+    .fc-topbar { display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; }
+    .fc-mastered { font-size:0.85rem; font-weight:700; color:#22d3ee; }
+    .fc-pile-info { font-size:0.78rem; color:#64748b; font-weight:600; }
+
+    /* Effet pile : ombres de cartes derrière */
+    .fc-stack { position:relative; width:100%; height:220px; margin-bottom:1rem; }
+    .fc-stack::before,
+    .fc-stack::after {
+      content:''; position:absolute; inset:0;
+      border-radius:1.1rem; border:1px solid rgba(34,211,238,0.2);
+      background:rgba(255,255,255,0.02);
+    }
+    .fc-stack::before { transform:rotate(-2.5deg) translateY(6px); z-index:1; }
+    .fc-stack::after  { transform:rotate(1.5deg)  translateY(3px); z-index:2; }
+
+    /* Scène perspective */
+    .fc-scene { position:absolute; inset:0; z-index:3; perspective:1200px; }
+
+    /* Carte 3D */
+    .fc-card {
+      width:100%; height:100%;
+      position:relative;
+      transform-style:preserve-3d;
+      -webkit-transform-style:preserve-3d;
+      transition:transform 0.65s cubic-bezier(.4,0,.2,1);
+      cursor:pointer;
+      border-radius:1.1rem;
+    }
+    .fc-card.flipped { transform:rotateY(180deg); }
+
+    /* Faces */
+    .fc-face {
+      position:absolute; inset:0;
+      border-radius:1.1rem;
+      backface-visibility:hidden;
+      -webkit-backface-visibility:hidden;
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      padding:1.5rem; text-align:center;
+    }
+    /* Face avant — glassmorphism violet */
+    .fc-front {
+      background:rgba(168,85,247,0.08);
+      backdrop-filter:blur(20px);
+      -webkit-backdrop-filter:blur(20px);
+      border:1.5px solid rgba(168,85,247,0.45);
+      box-shadow:0 0 30px rgba(168,85,247,0.15), inset 0 0 20px rgba(168,85,247,0.05);
+    }
+    /* Face arrière — glassmorphism cyan */
+    .fc-back {
+      background:rgba(34,211,238,0.08);
+      backdrop-filter:blur(20px);
+      -webkit-backdrop-filter:blur(20px);
+      border:1.5px solid rgba(34,211,238,0.5);
+      box-shadow:0 0 30px rgba(34,211,238,0.18), inset 0 0 20px rgba(34,211,238,0.05);
+      transform:rotateY(180deg);
+      -webkit-transform:rotateY(180deg);
+    }
+    .fc-label { font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.6rem; }
+    .fc-front .fc-label { color:#c084fc; }
+    .fc-back  .fc-label { color:#22d3ee; }
+    .fc-text  { font-size:1.05rem; font-weight:800; color:#fff; line-height:1.5; }
+    .fc-hint  { font-size:0.72rem; color:#64748b; margin-top:0.6rem; }
+
+    /* Boutons acquis / à revoir */
+    .fc-actions { display:none; gap:0.75rem; justify-content:center; margin-top:0.75rem; }
+    .fc-actions.visible { display:flex; }
+    .fc-btn-revoir { flex:1; max-width:160px; padding:0.7rem 1rem; border-radius:9999px; background:rgba(244,114,182,0.12); border:1.5px solid rgba(244,114,182,0.5); color:#f472b6; font-weight:800; font-size:0.9rem; cursor:pointer; font-family:'Nunito',sans-serif; transition:all 0.2s; }
+    .fc-btn-revoir:hover  { background:rgba(244,114,182,0.22); box-shadow:0 0 16px rgba(244,114,182,0.3); }
+    .fc-btn-acquis  { flex:1; max-width:160px; padding:0.7rem 1rem; border-radius:9999px; background:rgba(34,211,238,0.12); border:1.5px solid rgba(34,211,238,0.5); color:#22d3ee; font-weight:800; font-size:0.9rem; cursor:pointer; font-family:'Nunito',sans-serif; transition:all 0.2s; }
+    .fc-btn-acquis:hover  { background:rgba(34,211,238,0.22); box-shadow:0 0 16px rgba(34,211,238,0.3); }
+
+    /* Écran victoire pile vide */
+    .fc-complete { text-align:center; padding:2rem 1rem; display:none; }
+    .fc-complete.visible { display:block; }
+
+    /* Animation slide-out carte */
+    @keyframes fcSlideOut { 0%{transform:translateX(0) rotate(0) scale(1);opacity:1} 100%{transform:translateX(120%) rotate(15deg) scale(0.8);opacity:0} }
+    @keyframes fcSlideBack { 0%{transform:translateX(0) rotate(0) scale(1);opacity:1} 100%{transform:translateX(-120%) rotate(-10deg) scale(0.8);opacity:0} }
+    .fc-card.exit-right { animation:fcSlideOut 0.35s ease forwards; }
+    .fc-card.exit-left  { animation:fcSlideBack 0.35s ease forwards; }
+
+    /* Quiz */
+    .quiz-opt { width:100%; text-align:left; padding:0.9rem 1.2rem; border-radius:0.75rem; background:rgba(255,255,255,0.04); border:2px solid rgba(168,85,247,0.15); color:#e2e8f0; font-weight:700; font-size:0.95rem; cursor:pointer; transition:all 0.2s; font-family:'Nunito',sans-serif; }
+    .quiz-opt:hover:not(:disabled) { background:rgba(168,85,247,0.12); border-color:rgba(168,85,247,0.5); }
+    .quiz-opt.correct { background:rgba(34,211,238,0.18); border:2px solid #22d3ee; color:#e2e8f0; font-weight:800; }
+    .quiz-opt.correct::before { content:'✓  '; color:#22d3ee; }
+    .quiz-opt.wrong   { background:rgba(244,114,182,0.18); border:2px solid #f472b6; color:#e2e8f0; font-weight:800; }
+    .quiz-opt.wrong::before   { content:'✗  '; color:#f472b6; }
+    .quiz-opt.muted   { opacity:0.35; }
+    .quiz-result { display:inline-flex; align-items:center; gap:0.5rem; padding:0.6rem 1.2rem; border-radius:9999px; font-weight:800; font-size:0.9rem; margin-top:1rem; }
+    .quiz-result.ok { background:rgba(34,211,238,0.1);   color:#22d3ee; border:1px solid #22d3ee55; }
+    .quiz-result.ko { background:rgba(244,114,182,0.1);  color:#f472b6; border:1px solid #f472b655; }
+    .btn-quiz-nav { background:rgba(168,85,247,0.15); border:1px solid rgba(168,85,247,0.35); border-radius:9999px; padding:0.6rem 1.4rem; color:#c4b5fd; font-weight:800; cursor:pointer; transition:all 0.2s; font-family:'Nunito',sans-serif; font-size:0.9rem; }
+    .btn-quiz-nav:hover { background:rgba(168,85,247,0.3); color:#fff; }
+
+    /* Progress bar */
+    .prog-track { background:rgba(255,255,255,0.08); border-radius:9999px; height:10px; overflow:hidden; }
+    .prog-fill { height:100%; border-radius:9999px; background:linear-gradient(90deg,#a855f7,#22d3ee); transition:width 0.6s cubic-bezier(.4,0,.2,1); }
+
+    /* Difficulty badge */
+    .diff-badge   { display:inline-flex; align-items:center; gap:0.3rem; border-radius:9999px; padding:0.25rem 0.7rem; font-size:0.72rem; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; }
+    .diff-facile  { background:rgba(34,211,238,0.12);  border:1px solid #22d3ee55; color:#22d3ee; }
+    .diff-medium  { background:rgba(168,85,247,0.12);  border:1px solid #a855f755; color:#c084fc; }
+    .diff-hard    { background:rgba(244,114,182,0.12); border:1px solid #f472b655; color:#f472b6; }
+
+    /* Points flash */
+    @keyframes pointsPop { 0%{transform:scale(0.5) translateY(0);opacity:0} 40%{transform:scale(1.3) translateY(-10px);opacity:1} 100%{transform:scale(1) translateY(-24px);opacity:0} }
+    .points-pop { position:absolute; right:1rem; top:0; font-weight:900; font-size:1.1rem; pointer-events:none; animation:pointsPop 1s ease forwards; }
+
+    /* Badge unlock animation */
+    @keyframes badgeIn { 0%{transform:scale(0.3) rotate(-10deg);opacity:0} 70%{transform:scale(1.15) rotate(3deg);opacity:1} 100%{transform:scale(1) rotate(0deg);opacity:1} }
+    .badge-unlock { animation:badgeIn 0.6s cubic-bezier(.4,0,.2,1) forwards; }
+
+    /* Badge card */
+    .badge-card { display:flex; align-items:center; gap:0.8rem; padding:0.8rem 1rem; border-radius:0.85rem; border:1px solid; }
+    .badge-card.locked   { background:rgba(255,255,255,0.02); border-color:rgba(255,255,255,0.08); opacity:0.4; filter:grayscale(1); }
+    .badge-card.unlocked { border-color:rgba(250,204,21,0.4); background:rgba(250,204,21,0.07); }
+
+    /* Reset btn */
+    .btn-reset { display:inline-flex; align-items:center; gap:0.5rem; border:1px solid rgba(248,113,113,0.35); border-radius:9999px; padding:0.5rem 1.2rem; font-size:0.82rem; font-weight:700; color:#f87171; background:transparent; cursor:pointer; transition:all 0.2s; font-family:'Nunito',sans-serif; }
+    .btn-reset:hover { background:rgba(248,113,113,0.12); border-color:#f87171; }
+
+    /* Neo feedback */
+    @keyframes neoIn { 0%{transform:scale(0.4) translateY(20px);opacity:0} 70%{transform:scale(1.1) translateY(-4px);opacity:1} 100%{transform:scale(1) translateY(0);opacity:1} }
+    .neo-feedback { display:flex; align-items:flex-end; gap:1rem; padding:1rem; border-radius:1rem; margin-top:1rem; }
+    .neo-feedback.ok  { background:rgba(34,211,238,0.07);  border:1px solid #22d3ee33; }
+    .neo-feedback.ko  { background:rgba(244,114,182,0.07); border:1px solid #f472b633; }
+    .neo-feedback img { width:64px; height:64px; object-fit:contain; animation:neoIn 0.5s cubic-bezier(.4,0,.2,1) forwards; flex-shrink:0; }
+    .neo-feedback-text { flex:1; }
+    .neo-feedback-title { font-weight:900; font-size:1rem; margin-bottom:0.3rem; }
+    .neo-feedback-title.ok { color:#22d3ee; }
+    .neo-feedback-title.ko { color:#f472b6; }
+    .neo-feedback-expl { font-size:0.88rem; color:#cbd5e1; line-height:1.5; }
+    .neo-feedback-answer { display:inline-flex; align-items:center; gap:0.4rem; margin-top:0.4rem; background:rgba(34,211,238,0.1); border:1px solid #22d3ee44; border-radius:0.5rem; padding:0.3rem 0.7rem; font-size:0.82rem; font-weight:700; color:#22d3ee; }
+
+    /* WhatsApp share btn */
+    .btn-whatsapp { display:inline-flex; align-items:center; gap:0.6rem; background:#25d366; border-radius:9999px; padding:0.85rem 1.8rem; font-weight:800; color:#fff; font-size:1rem; border:none; cursor:pointer; transition:transform 0.2s, box-shadow 0.2s; font-family:'Nunito',sans-serif; box-shadow:0 0 20px rgba(37,211,102,0.35); text-decoration:none; }
+    .btn-whatsapp:hover { transform:scale(1.05); box-shadow:0 0 35px rgba(37,211,102,0.55); }
+
+    /* Badge showcase cards */
+    @keyframes badgeGlow { 0%,100%{box-shadow:0 0 12px rgba(250,204,21,0.4)} 50%{box-shadow:0 0 28px rgba(250,204,21,0.75)} }
+    .showcase-card { border-radius:1.1rem; padding:1.2rem 0.75rem; text-align:center; display:flex; flex-direction:column; align-items:center; gap:0.5rem; transition:all 0.5s ease; position:relative; overflow:hidden; }
+    .showcase-card.locked { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); filter:grayscale(1); opacity:0.4; }
+    .showcase-card.unlocked { background:rgba(250,204,21,0.08); border:2px solid rgba(250,204,21,0.45); animation:badgeGlow 2.5s ease-in-out infinite; }
+    .showcase-card .badge-emoji { font-size:2.8rem; line-height:1; }
+    .showcase-card.locked .badge-emoji { filter:grayscale(1) brightness(0.5); }
+    .showcase-card .badge-label { font-weight:900; font-size:0.85rem; color:#fff; }
+    .showcase-card.locked .badge-label { color:#475569; }
+    .showcase-card .badge-threshold { font-size:0.7rem; font-weight:700; color:#64748b; }
+    .showcase-card.unlocked .badge-threshold { color:#fbbf24; }
+    .showcase-card .badge-lock-icon { position:absolute; top:0.5rem; right:0.6rem; font-size:0.75rem; color:#334155; }
+    .showcase-card.unlocked .badge-lock-icon { display:none; }
+    /* Unlock burst animation */
+    @keyframes burstIn { 0%{transform:scale(0.2) rotate(-15deg);opacity:0} 60%{transform:scale(1.18) rotate(4deg);opacity:1} 100%{transform:scale(1) rotate(0);opacity:1} }
+    .showcase-card.just-unlocked { animation:burstIn 0.65s cubic-bezier(.4,0,.2,1) forwards, badgeGlow 2.5s ease-in-out 0.65s infinite; }
+    .recap-row { display:flex; justify-content:space-between; align-items:center; padding:0.5rem 0; border-bottom:1px solid rgba(255,255,255,0.06); font-size:0.9rem; }
+    .recap-row:last-child { border-bottom:none; }
+
+    /* Question slide transition */
+    @keyframes slideIn  { from{transform:translateX(50px);opacity:0} to{transform:translateX(0);opacity:1} }
+    @keyframes slideOut { from{transform:translateX(0);opacity:1}    to{transform:translateX(-50px);opacity:0} }
+    .quiz-slide-in  { animation:slideIn  0.28s cubic-bezier(.4,0,.2,1) forwards; }
+    .quiz-slide-out { animation:slideOut 0.22s cubic-bezier(.4,0,.2,1) forwards; pointer-events:none; }
+
+    /* Streak */
+    @keyframes streakPop { 0%{transform:scale(0.5);opacity:0} 60%{transform:scale(1.3);opacity:1} 100%{transform:scale(1);opacity:1} }
+    .streak-badge { display:inline-flex; align-items:center; gap:0.3rem; background:rgba(251,146,60,0.15); border:1px solid rgba(251,146,60,0.4); border-radius:9999px; padding:0.2rem 0.65rem; font-size:0.78rem; font-weight:900; color:#fb923c; animation:streakPop 0.4s ease forwards; }
+
+    /* Badge overlay */
+    @keyframes overlayIn  { from{opacity:0} to{opacity:1} }
+    @keyframes overlayOut { from{opacity:1} to{opacity:0} }
+    @keyframes badgeDrop  { 0%{transform:scale(0.2) translateY(-60px) rotate(-15deg);opacity:0} 60%{transform:scale(1.18) translateY(8px) rotate(3deg);opacity:1} 80%{transform:scale(0.96) translateY(-3px);} 100%{transform:scale(1) translateY(0) rotate(0);opacity:1} }
+    @keyframes shimmer    { 0%,100%{opacity:0.5} 50%{opacity:1} }
+    .badge-overlay { position:fixed; inset:0; z-index:10001; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:1rem; background:rgba(8,6,26,0.88); backdrop-filter:blur(8px); animation:overlayIn 0.3s ease forwards; }
+    .badge-overlay.out { animation:overlayOut 0.4s ease forwards; }
+    .badge-overlay-icon { font-size:6rem; animation:badgeDrop 0.7s cubic-bezier(.4,0,.2,1) forwards; filter:drop-shadow(0 0 40px rgba(250,204,21,0.8)); }
+    .badge-overlay-title { font-family:'Nunito',sans-serif; font-weight:900; font-size:1.6rem; color:#fbbf24; text-align:center; animation:shimmer 1.5s ease infinite; }
+    .badge-overlay-label { font-family:'Nunito',sans-serif; font-size:1rem; color:#e2e8f0; text-align:center; opacity:0.8; }
+    .badge-overlay-desc  { font-family:'Nunito',sans-serif; font-size:0.85rem; color:#94a3b8; text-align:center; }
+
+    /* Revision mode */
+    .btn-revision { display:inline-flex; align-items:center; gap:0.6rem; background:rgba(248,113,113,0.1); border:1px solid rgba(248,113,113,0.4); border-radius:9999px; padding:0.85rem 1.8rem; font-weight:800; color:#f87171; font-size:1rem; cursor:pointer; transition:all 0.2s; font-family:'Nunito',sans-serif; }
+    .btn-revision:hover { background:rgba(248,113,113,0.2); box-shadow:0 0 20px rgba(248,113,113,0.3); }
+
+    /* Pomodoro */
+    .pomo-dur-btn { padding:0.3rem 0; border-radius:0.4rem; background:rgba(255,255,255,0.04); border:1px solid rgba(168,85,247,0.25); color:#94a3b8; font-weight:700; font-size:0.78rem; cursor:pointer; font-family:'Nunito',sans-serif; transition:all 0.2s; }
+    .pomo-dur-btn:hover  { background:rgba(168,85,247,0.15); border-color:rgba(168,85,247,0.6); color:#fff; }
+    .pomo-dur-btn.active { background:rgba(168,85,247,0.2);  border-color:#a855f7; color:#c4b5fd; }
+    @keyframes pomoRing  { 0%{box-shadow:0 0 0 0 rgba(168,85,247,0.6)} 100%{box-shadow:0 0 0 12px rgba(168,85,247,0)} }
+    @keyframes pomoDone  { 0%,100%{transform:scale(1)} 50%{transform:scale(1.04)} }
+    ::-webkit-scrollbar-track { background:#08061a; }
+    ::-webkit-scrollbar-thumb { background:linear-gradient(var(--violet),var(--cyan)); border-radius:3px; }
+  </style>
+</head>
+<body>
+<canvas id="confetti-canvas"></canvas>
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+
+<!-- NAVBAR -->
+<nav class="relative z-50 w-full px-6 py-4 flex items-center justify-between">
+  <a href="index.html" class="flex items-center gap-2 no-underline">
+    <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="15" stroke="url(#lg)" stroke-width="1.5"/><circle cx="16" cy="16" r="3" fill="url(#lg)"/><path d="M9 12L16 8L23 12L23 20L16 24L9 20Z" stroke="url(#lg)" stroke-width="1.5" fill="none"/><defs><linearGradient id="lg" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse"><stop stop-color="#a855f7"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs></svg>
+    <span class="logo-text text-xl">NeoQuest TV</span>
+  </a>
+  <a id="nav-back" href="index.html" class="nav-link">← Retour aux cours</a>
+<a href="profil.html" id="nav-profile" title="Mon profil" style="display:flex;align-items:center;gap:0.5rem;text-decoration:none;">
+    <div style="position:relative;">
+      <img id="nav-avatar" src="Neo_assis-Photoroom.png" alt="Profil" style="width:34px;height:34px;object-fit:contain;border-radius:50%;border:2px solid rgba(168,85,247,0.5);background:rgba(168,85,247,0.1);padding:2px;transition:border-color 0.2s;" onmouseover="this.style.borderColor='rgba(34,211,238,0.8)'" onmouseout="this.style.borderColor='rgba(168,85,247,0.5)'" />
+    </div>
+    <span id="nav-pseudo" style="font-size:0.8rem;font-weight:700;color:#c4b5fd;display:none;"></span>
+  </a>
+</nav>
+<script>
+  (function(){
+    try {
+      const p = JSON.parse(localStorage.getItem('neoquest_profile') || '{}');
+      if(p.avatar) {
+        const img = document.getElementById('nav-avatar');
+        if(img) { img.src = p.avatar; if(p.avatarStyle) img.style.filter = p.avatarStyle; }
+      }
+      if(p.pseudo) {
+        const el = document.getElementById('nav-pseudo');
+        if(el) { el.textContent = p.pseudo; el.style.display = 'inline'; }
+      }
+    } catch(e) {}
+  })();
+</script>
+
+<!-- MAIN -->
+<main class="relative z-10 max-w-3xl mx-auto px-6 py-10">
+
+  <!-- Breadcrumb -->
+  <div id="breadcrumb" class="flex items-center gap-2 text-sm text-slate-500 mb-6 flex-wrap">
+    <a href="index.html" class="hover:text-purple-400 transition-colors">Accueil</a>
+    <span>›</span>
+    <a id="bc-matiere" href="#" class="hover:text-purple-400 transition-colors"></a>
+    <span>›</span>
+    <span id="bc-niveau" class="text-slate-400"></span>
+    <span>›</span>
+    <span id="bc-chapitre" class="text-purple-400 font-bold"></span>
+  </div>
+
+  <div class="badge mb-4" id="chap-badge">Chapitre</div>
+  <h1 id="chap-nom" class="font-black text-3xl md:text-4xl text-white mb-10"></h1>
+
+  <!-- ── VIDÉO ── -->
+  <section class="glass p-6 mb-6">
+    <div class="section-title">🎬 Vidéo du cours</div>
+    <div style="padding:3px;border-radius:0.9rem;background:linear-gradient(135deg,#7c3aed,#06b6d4);box-shadow:0 0 40px rgba(124,58,237,0.3);">
+      <div style="border-radius:0.75rem;overflow:hidden;background:#08061a;">
+        <div class="video-wrapper">
+          <iframe id="yt-frame" src="" title="Vidéo NeoQuest" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FICHE PDF ── -->
+  <section class="glass p-6 mb-6">
+    <div class="section-title">📄 Fiche de révision</div>
+    <p class="text-slate-400 mb-5 text-sm">Télécharge la fiche illustrée pour réviser offline ou l'imprimer.</p>
+    <a id="pdf-link" href="#" class="btn-download" download>
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+      Télécharger la fiche PDF
+    </a>
+  </section>
+
+  <!-- ── FLASHCARDS ── -->
+  <section id="section-flashcards" style="margin-bottom:1.5rem;border-radius:1.25rem;overflow:hidden;border:1px solid rgba(168,85,247,0.25);background:rgba(168,85,247,0.04);backdrop-filter:blur(18px);">
+    <!-- En-tête section -->
+    <div style="padding:1.25rem 1.5rem;border-bottom:1px solid rgba(168,85,247,0.15);display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;" onclick="toggleSection('flashcards')">
+      <div style="display:flex;align-items:center;gap:0.75rem;">
+        <div style="width:36px;height:36px;border-radius:0.6rem;background:rgba(168,85,247,0.15);border:1px solid rgba(168,85,247,0.4);display:flex;align-items:center;justify-content:center;font-size:1.1rem;">🃏</div>
+        <div>
+          <div style="font-weight:900;font-size:1rem;color:#fff;">Flashcards</div>
+          <div style="font-size:0.72rem;color:#a855f7;font-weight:700;" id="fc-section-sub">Mémorise les notions clés</div>
+        </div>
+      </div>
+      <span id="fc-chevron" style="color:#a855f7;font-size:1.2rem;transition:transform 0.3s;">▾</span>
+    </div>
+    <!-- Corps -->
+    <div id="fc-body" style="padding:1.25rem 1.5rem;">
+      <div class="fc-wrapper">
+        <div class="fc-topbar">
+          <div>
+            <div class="fc-mastered" id="fc-mastered">0 / 0 cartes maîtrisées</div>
+            <div class="fc-pile-info" id="fc-pile-info"></div>
+          </div>
+          <button onclick="reshuffleFC()" style="display:inline-flex;align-items:center;gap:0.4rem;background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.35);border-radius:9999px;padding:0.25rem 0.8rem;font-size:0.78rem;font-weight:700;color:#c4b5fd;cursor:pointer;font-family:'Nunito',sans-serif;" onmouseover="this.style.background='rgba(168,85,247,0.2)'" onmouseout="this.style.background='rgba(168,85,247,0.1)'">
+            🔀 Nouvelle pile
+          </button>
+        </div>
+        <div id="fc-indice-bar" style="margin-bottom:0.6rem;min-height:2rem;">
+          <button id="fc-indice-btn" onclick="showFCIndice()" style="display:none;align-items:center;gap:0.4rem;background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.3);border-radius:9999px;padding:0.25rem 0.9rem;font-size:0.78rem;font-weight:700;color:#fbbf24;cursor:pointer;font-family:'Nunito',sans-serif;">💡 Indice</button>
+          <div id="fc-indice-text" style="display:none;background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.25);border-radius:0.6rem;padding:0.5rem 0.8rem;font-size:0.82rem;color:#fde68a;line-height:1.5;"></div>
+        </div>
+        <div class="fc-stack" id="fc-stack">
+          <div class="fc-scene">
+            <div class="fc-card" id="fc-card">
+              <div class="fc-face fc-front">
+                <div class="fc-label">Question</div>
+                <div class="fc-text" id="fc-question"></div>
+                <div class="fc-hint" id="fc-swipe-hint">Clique ou glisse pour voir la réponse</div>
+              </div>
+              <div class="fc-face fc-back">
+                <div class="fc-label">Réponse</div>
+                <div class="fc-text" id="fc-reponse"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center;font-size:0.72rem;color:#475569;margin-top:0.4rem;" id="fc-gesture-hint">← Glisse à gauche : À revoir &nbsp;·&nbsp; Glisse à droite : Acquis →</div>
+        <div class="fc-actions" id="fc-actions">
+          <button class="fc-btn-revoir" onclick="fcRevoir()">↩️ À revoir</button>
+          <button class="fc-btn-acquis" onclick="fcAcquis()">✦ Acquis !</button>
+        </div>
+        <div class="fc-complete" id="fc-complete">
+          <div style="font-size:3.5rem;margin-bottom:0.5rem;">🎉</div>
+          <p style="font-weight:900;font-size:1.3rem;color:#22d3ee;margin-bottom:0.3rem;">Pile maîtrisée !</p>
+          <p style="color:#64748b;font-size:0.9rem;margin-bottom:1.5rem;">Tu as acquis toutes les cartes de cette session.</p>
+          <button onclick="reshuffleFC()" style="display:inline-flex;align-items:center;gap:0.5rem;background:linear-gradient(135deg,#7c3aed,#06b6d4);border:none;border-radius:9999px;padding:0.75rem 1.8rem;font-weight:800;color:#fff;font-size:0.95rem;cursor:pointer;font-family:'Nunito',sans-serif;">🔀 Nouvelle pile</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── QUIZ ── -->
+  <section id="section-quiz" style="margin-bottom:1.5rem;border-radius:1.25rem;overflow:hidden;border:1px solid rgba(34,211,238,0.25);background:rgba(34,211,238,0.03);backdrop-filter:blur(18px);">
+    <!-- En-tête section -->
+    <div style="padding:1.25rem 1.5rem;border-bottom:1px solid rgba(34,211,238,0.15);display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;" onclick="toggleSection('quiz')">
+      <div style="display:flex;align-items:center;gap:0.75rem;">
+        <div style="width:36px;height:36px;border-radius:0.6rem;background:rgba(34,211,238,0.12);border:1px solid rgba(34,211,238,0.4);display:flex;align-items:center;justify-content:center;font-size:1.1rem;">❓</div>
+        <div>
+          <div style="font-weight:900;font-size:1rem;color:#fff;">Quiz</div>
+          <div style="font-size:0.72rem;color:#22d3ee;font-weight:700;" id="quiz-section-sub">Teste tes connaissances</div>
+        </div>
+      </div>
+      <span id="quiz-chevron" style="color:#22d3ee;font-size:1.2rem;transition:transform 0.3s;">▾</span>
+    </div>
+    <!-- Corps -->
+    <div id="quiz-body" style="padding:1.25rem 1.5rem;">
+      <p id="quiz-bank-info" style="color:#64748b;font-size:0.78rem;font-weight:700;margin-bottom:1rem;"></p>
+      <div style="margin-bottom:1.25rem;">
+        <div style="display:flex;justify-content:space-between;font-size:0.75rem;font-weight:700;margin-bottom:0.3rem;">
+          <span style="color:#94a3b8;" id="quiz-prog-label">Question 1 / 12</span>
+          <div style="display:flex;align-items:center;gap:0.5rem;">
+            <span id="quiz-streak-badge" class="hidden"></span>
+            <span id="quiz-pts-label" style="color:#fbbf24;">0 pts</span>
+          </div>
+        </div>
+        <div class="prog-track"><div class="prog-fill" id="quiz-prog-bar" style="width:0%"></div></div>
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
+          <span style="font-size:10px;color:#22d3ee;font-weight:700;">Facile</span>
+          <span style="font-size:10px;color:#c084fc;font-weight:700;">Medium</span>
+          <span style="font-size:10px;color:#f472b6;font-weight:700;">Hard</span>
+        </div>
+      </div>
+
+      <div id="quiz-content">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:0.5rem;margin-bottom:0.75rem;">
+          <div style="display:flex;align-items:center;gap:0.5rem;">
+            <span id="quiz-diff-badge" class="diff-badge diff-facile">⭐ Facile</span>
+            <span id="quiz-pts-badge" class="diff-badge" style="background:rgba(250,204,21,0.1);border-color:#fbbf2444;color:#fbbf24;">+10 pts</span>
+          </div>
+          <button id="hint-btn" onclick="showHint()" title="Indice de Neo" style="display:flex;align-items:center;gap:0.4rem;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.35);border-radius:9999px;padding:0.3rem 0.8rem;color:#fbbf24;font-weight:800;font-size:0.8rem;cursor:pointer;font-family:'Nunito',sans-serif;transition:all 0.2s;">💡 Indice</button>
+        </div>
+        <div id="hint-box" class="hidden mb-4" style="background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.3);border-radius:0.85rem;padding:0.85rem 1rem;display:flex;align-items:flex-start;gap:0.75rem;">
+          <img src="Neo_assis-Photoroom.png" alt="Neo" style="width:44px;height:44px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 8px #fbbf24);" />
+          <div>
+            <p style="font-weight:900;color:#fbbf24;font-size:0.82rem;margin-bottom:0.25rem;">💡 Petit rappel de Neo :</p>
+            <p id="hint-text" style="color:#fde68a;font-size:0.88rem;line-height:1.5;"></p>
+            <p style="color:#92400e;font-size:0.72rem;margin-top:0.35rem;font-weight:700;">⚠️ Points divisés par 2 si bonne réponse</p>
+          </div>
+        </div>
+        <p id="quiz-q-num" style="font-size:0.72rem;color:#a855f7;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.5rem;"></p>
+        <p id="quiz-question" style="font-weight:900;font-size:1.2rem;color:#fff;margin-bottom:1.25rem;line-height:1.5;"></p>
+        <div id="quiz-choix" style="display:flex;flex-direction:column;gap:0.75rem;position:relative;"></div>
+        <div id="quiz-feedback" class="hidden"></div>
+        <div style="margin-top:1rem;display:flex;gap:0.75rem;">
+          <button id="quiz-next-btn" class="btn-quiz-nav hidden" onclick="quizNext()">Question suivante →</button>
+        </div>
+      </div>
+
+      <div id="quiz-final" class="hidden" style="padding:1rem 0;">
+        <div style="text-align:center;margin-bottom:1.5rem;">
+          <div id="quiz-final-emoji" style="font-size:3.5rem;margin-bottom:0.5rem;"></div>
+          <p style="font-weight:900;font-size:1.3rem;color:#fff;margin-bottom:0.25rem;" id="quiz-final-title"></p>
+          <p style="font-weight:900;font-size:1.8rem;color:#fbbf24;margin-bottom:0.25rem;" id="quiz-final-pts"></p>
+          <p style="color:#64748b;font-size:0.85rem;" id="quiz-final-score"></p>
+        </div>
+        <div class="glass p-4 mb-5">
+          <p style="font-weight:700;color:#64748b;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.75rem;">📋 Récapitulatif</p>
+          <div id="quiz-recap" style="display:flex;flex-direction:column;"></div>
+        </div>
+        <div id="quiz-new-badges" style="display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1.25rem;align-items:center;"></div>
+        <div class="glass p-4 mb-5">
+          <p style="font-weight:700;color:#64748b;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.75rem;">🏅 Mes badges</p>
+          <div style="display:flex;flex-direction:column;gap:0.5rem;" id="badges-display"></div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:0.75rem;justify-content:center;">
+          <a id="btn-whatsapp-share" href="#" target="_blank" class="btn-whatsapp">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Partager sur WhatsApp
+          </a>
+          <button id="btn-revision" class="btn-revision hidden" onclick="startRevisionMode()">🔄 Réviser mes erreurs</button>
+          <button class="btn-download" onclick="quizRestart()">⚡ Nouveau quiz</button>
+          <button class="btn-reset" onclick="resetProgress()">🗑️ Réinitialiser</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── VITRINE DES BADGES ── -->
+  <section class="glass p-6 mb-6" id="badge-showcase-section">
+    <div class="section-title">🏅 Mes badges</div>
+    <p class="text-slate-400 text-sm mb-5">Cumule des points dans les quiz pour débloquer tes badges !</p>
+    <div id="badge-showcase" class="grid grid-cols-3 gap-4"></div>
+    <div class="mt-4 flex items-center justify-between">
+      <span class="text-xs text-slate-500 font-bold" id="cumul-pts-label"></span>
+      <button class="btn-reset" onclick="resetProgress()" style="font-size:0.75rem;padding:0.35rem 0.9rem;">🗑️ Réinitialiser</button>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const matiereId  = params.get('matiere');
+  const niveauId   = params.get('niveau');
+  const chapitreId = params.get('chapitre');
+
+  fetch('data.json')
+    .then(r => r.json())
+    .then(data => {
+      const mat    = data.matieres.find(m => m.id === matiereId);
+      const niveau = mat?.niveaux.find(n => n.id === niveauId);
+      let chap = null;
+      niveau?.themes.forEach(t => { const c = t.chapitres.find(c => c.id === chapitreId); if(c) chap = c; });
+      if (!mat || !niveau || !chap) { window.location.href = 'index.html'; return; }
+
+      const couleur = mat.couleur || '#a855f7';
+      document.documentElement.style.setProperty('--accent', couleur);
+      document.querySelector('.blob-1').style.background = couleur + '20';
+      document.title = `NeoQuest TV — ${chap.nom}`;
+      document.getElementById('bc-matiere').textContent = mat.nom;
+      document.getElementById('bc-matiere').href = `cours.html?matiere=${matiereId}`;
+      document.getElementById('bc-niveau').textContent = niveau.nom;
+      document.getElementById('bc-chapitre').textContent = chap.nom;
+      document.getElementById('nav-back').href = `cours.html?matiere=${matiereId}`;
+      document.getElementById('chap-nom').textContent = chap.nom;
+      document.getElementById('chap-badge').textContent = `${mat.emoji} ${mat.nom} — ${niveau.nom}`;
+      document.getElementById('chap-badge').style.color = couleur;
+      document.getElementById('chap-badge').style.borderColor = couleur + '55';
+      document.getElementById('chap-badge').style.background = couleur + '18';
+
+      applyChapterTheme(chap);
+      renderBadgeShowcase(getUnlocked());
+      document.getElementById('yt-frame').src = `https://www.youtube.com/embed/${chap.youtube}?enablejsapi=1`;
+      document.getElementById('yt-frame').parentElement.addEventListener('click', () => pomoActivity('video'));
+      document.getElementById('pdf-link').href = chap.pdf;
+      initFlashcards(chap.flashcards);
+      initQuiz(chap.quiz);
+    });
+
+  // ── Sections accordion ──
+  function toggleSection(name) {
+    const body    = document.getElementById(name === 'flashcards' ? 'fc-body' : 'quiz-body');
+    const chevron = document.getElementById(name === 'flashcards' ? 'fc-chevron' : 'quiz-chevron');
+    const isOpen  = body.style.display !== 'none';
+    body.style.display      = isOpen ? 'none' : 'block';
+    chevron.style.transform = isOpen ? 'rotate(-90deg)' : 'rotate(0deg)';
+  }
+
+  // ── LocalStorage ──
+  function getProgress() { try { return JSON.parse(localStorage.getItem('neoquest_progress') || '{}'); } catch { return {}; } }
+  function saveProgress(p) { try { localStorage.setItem('neoquest_progress', JSON.stringify(p)); } catch {} }
+  function getCumulPts()   { return getProgress().totalPts || 0; }
+  function addPts(n) {
+    const p = getProgress();
+    const prev = p.totalPts || 0;
+    p.totalPts = prev + n;
+    saveProgress(p);
+    if(typeof nqCheckLevelUp === 'function') nqCheckLevelUp(prev, p.totalPts);
+    const badge = document.getElementById('nq-level-badge');
+    if(badge && typeof nqInjectLevelBadge === 'function') { badge.remove(); nqInjectLevelBadge(); }
+  }
+  function getUnlocked()   { return getProgress().badges || []; }
+  function unlockBadge(id) { const p=getProgress(); if(!(p.badges||[]).includes(id)){p.badges=[...(p.badges||[]),id];saveProgress(p);} }
+
+  function resetProgress() {
+    if(!confirm('Réinitialiser toute ta progression ?')) return;
+    try { localStorage.removeItem('neoquest_progress'); localStorage.removeItem('neoquest_weak'); localStorage.removeItem('neoquest_fc_weak'); } catch {}
+    renderBadgesDisplay([]); renderBadgeShowcase([]);
+    const nb = document.getElementById('quiz-new-badges'); if(nb) nb.innerHTML = '';
+    alert('Progression réinitialisée !');
+  }
+
+  // ── Shuffle ──
+  function shuffle(a) { const b=[...a]; for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];} return b; }
+
+  // ── Sound engine ──
+  let audioCtx = null;
+  function getAudio() { if(!audioCtx) audioCtx=new(window.AudioContext||window.webkitAudioContext)(); return audioCtx; }
+  function playTone(freq,type,duration,volume=0.18,delay=0) {
+    try { const ctx=getAudio(),o=ctx.createOscillator(),g=ctx.createGain(); o.connect(g);g.connect(ctx.destination);
+      o.type=type;o.frequency.value=freq; const t=ctx.currentTime+delay;
+      g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(volume,t+0.02);g.gain.exponentialRampToValueAtTime(0.001,t+duration);
+      o.start(t);o.stop(t+duration); } catch(e) {}
+  }
+  function soundCorrect() { playTone(523,'sine',0.12,0.15);playTone(659,'sine',0.12,0.15,0.1);playTone(784,'sine',0.18,0.15,0.2); }
+  function soundWrong()   { playTone(220,'sawtooth',0.18,0.12);playTone(180,'sawtooth',0.22,0.12,0.15); }
+  function soundFanfare() { [[523,0],[659,0.1],[784,0.2],[1047,0.35],[784,0.5],[1047,0.65]].forEach(([f,d])=>playTone(f,'sine',0.18,0.2,d)); }
+  function soundFlip()    { try { const ctx=getAudio(),o=ctx.createOscillator(),g=ctx.createGain(); o.connect(g);g.connect(ctx.destination);
+    o.type='sine';o.frequency.setValueAtTime(600,ctx.currentTime);o.frequency.exponentialRampToValueAtTime(300,ctx.currentTime+0.12);
+    g.gain.setValueAtTime(0.08,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.18);
+    o.start();o.stop(ctx.currentTime+0.18); } catch(e) {} }
+
+  // ── Confetti ──
+  function launchConfetti() {
+    const canvas=document.getElementById('confetti-canvas');
+    const ctx=canvas.getContext('2d');
+    canvas.width=window.innerWidth;canvas.height=window.innerHeight;
+    const pieces=Array.from({length:160},()=>({x:Math.random()*canvas.width,y:Math.random()*-canvas.height,r:Math.random()*7+4,d:Math.random()*3+1,color:['#a855f7','#22d3ee','#fbbf24','#f472b6','#4ade80'][Math.floor(Math.random()*5)],tiltSpeed:Math.random()*0.1+0.05,angle:0}));
+    let frame;
+    function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);pieces.forEach(p=>{ctx.beginPath();ctx.lineWidth=p.r/2;ctx.strokeStyle=p.color;ctx.moveTo(p.x+Math.sin(p.angle)*15+p.r/4,p.y);ctx.lineTo(p.x+Math.sin(p.angle)*15,p.y+p.r);ctx.stroke();p.y+=p.d;p.angle+=p.tiltSpeed;});if(pieces.some(p=>p.y<canvas.height))frame=requestAnimationFrame(draw);else ctx.clearRect(0,0,canvas.width,canvas.height);}
+    draw();setTimeout(()=>{cancelAnimationFrame(frame);ctx.clearRect(0,0,canvas.width,canvas.height);},5000);
+  }
+
+  // ── Spaced repetition ──
+  function getWeakQuestions(){try{return JSON.parse(localStorage.getItem('neoquest_weak')||'{}');}catch{return{};}}
+  function recordResult(question,correct){const w=getWeakQuestions();if(!correct)w[question]=(w[question]||0)+1;else if(w[question])w[question]=Math.max(0,w[question]-1);try{localStorage.setItem('neoquest_weak',JSON.stringify(w));}catch{}}
+  function weightedShuffle(questions){const weak=getWeakQuestions(),pool=[];questions.forEach(q=>{const weight=1+(weak[q.question]||0)*2;for(let i=0;i<weight;i++)pool.push(q);});return shuffle(pool);}
+
+  // ── Badges theme ──
+  let BADGES = [
+    {id:'novice', label:'Novice',  emoji:'🥉',threshold:50, desc:'50 pts cumulés'},
+    {id:'initie', label:'Initié',  emoji:'🥈',threshold:150,desc:'150 pts cumulés'},
+    {id:'maitre', label:'Maître',  emoji:'🥇',threshold:300,desc:'300 pts cumulés'},
+  ];
+  let DIFF_LABELS = {facile:'⭐ Facile',medium:'🔥 Medium',hard:'💀 Hard'};
+  const DIFF_POINTS = {facile:10,medium:30,hard:50};
+  const DIFF_CLASS  = {facile:'diff-facile',medium:'diff-medium',hard:'diff-hard'};
+  const MAX_PTS     = 3*10+6*30+3*50;
+  const QUIZ_SIZE   = 12;
+
+  function applyChapterTheme(chap){
+    if(chap.badges_custom){const map={novice:'🥉',initie:'🥈',maitre:'🥇'},thresh={novice:50,initie:150,maitre:300};BADGES=['novice','initie','maitre'].map(id=>({id,label:chap.badges_custom[id]?.label||id,emoji:map[id],threshold:thresh[id],desc:chap.badges_custom[id]?.desc||''}));}
+    if(chap.diff_custom){DIFF_LABELS={facile:'⭐'+(chap.diff_custom.facile||'Facile'),medium:'🔥'+(chap.diff_custom.medium||'Medium'),hard:'💀'+(chap.diff_custom.hard||'Hard')};}
+  }
+
+  // ── FLASHCARDS ──
+  const FC_SIZE=10;
+  let fcPile=[],fcAcquises=0,fcTotal=0,fcFlipped=false,fcAllCards=[];
+
+  function getFCWeak(){try{return JSON.parse(localStorage.getItem('neoquest_fc_weak')||'{}');}catch{return{};}}
+  function saveFCWeak(w){try{localStorage.setItem('neoquest_fc_weak',JSON.stringify(w));}catch{}}
+  function markFCRevoir(q){const w=getFCWeak();w[q]=(w[q]||0)+1;saveFCWeak(w);}
+  function markFCAcquis(q){const w=getFCWeak();delete w[q];saveFCWeak(w);}
+
+  function initFlashcards(cards){fcAllCards=cards;pickFCPile();}
+  function pickFCPile(){
+    const weak=getFCWeak();
+    const sorted=[...fcAllCards].sort((a,b)=>(weak[b.question]||0)-(weak[a.question]||0));
+    fcPile=sorted.slice(0,FC_SIZE);fcTotal=fcPile.length;fcAcquises=0;fcFlipped=false;
+    document.getElementById('fc-complete').classList.remove('visible');
+    document.getElementById('fc-stack').style.display='block';
+    document.getElementById('fc-actions').classList.remove('visible');
+    document.getElementById('fc-gesture-hint').style.display='block';
+    renderFCCard();
+  }
+  function renderFCCard(){
+    if(fcPile.length===0){showFCComplete();return;}
+    const card=fcPile[0];const el=document.getElementById('fc-card');
+    el.style.transition='none';el.classList.remove('flipped','exit-right','exit-left');void el.offsetWidth;el.style.transition='';
+    fcFlipped=false;document.getElementById('fc-actions').classList.remove('visible');
+    const ibtn=document.getElementById('fc-indice-btn'),itxt=document.getElementById('fc-indice-text');
+    itxt.style.display='none';
+    if(card.indice){ibtn.style.display='inline-flex';ibtn.disabled=false;ibtn.style.opacity='1';ibtn.textContent='💡 Indice';}
+    else ibtn.style.display='none';
+    const weak=getFCWeak(),wc=weak[card.question]||0;
+    document.getElementById('fc-question').textContent=card.question;
+    document.getElementById('fc-reponse').textContent=card.reponse;
+    document.getElementById('fc-pile-info').textContent=wc>0?`⚠️ Vue ${wc+1}x — ${fcPile.length} restante${fcPile.length>1?'s':''}`:`${fcPile.length} carte${fcPile.length>1?'s':''} restante${fcPile.length>1?'s':''}`;
+    document.getElementById('fc-mastered').textContent=`✨ ${fcAcquises} / ${fcTotal} cartes maîtrisées`;
+  }
+  function showFCIndice(){
+    const card=fcPile[0];if(!card||!card.indice)return;
+    document.getElementById('fc-indice-text').textContent=card.indice;document.getElementById('fc-indice-text').style.display='block';
+    const btn=document.getElementById('fc-indice-btn');btn.disabled=true;btn.style.opacity='0.45';btn.textContent='💡 Indice révélé';
+  }
+  function flipCard(){
+    if(fcPile.length===0)return;soundFlip();pomoActivity('flashcard');
+    const el=document.getElementById('fc-card');el.classList.toggle('flipped');
+    fcFlipped=el.classList.contains('flipped');
+    document.getElementById('fc-actions').classList.toggle('visible',fcFlipped);
+  }
+  function fcAcquis(){markFCAcquis(fcPile[0].question);document.getElementById('fc-card').classList.add('exit-right');fcAcquises++;setTimeout(()=>{fcPile.shift();renderFCCard();},340);}
+  function fcRevoir(){markFCRevoir(fcPile[0].question);document.getElementById('fc-card').classList.add('exit-left');setTimeout(()=>{const c=fcPile.shift();fcPile.push(c);renderFCCard();},340);}
+  function showFCComplete(){document.getElementById('fc-stack').style.display='none';document.getElementById('fc-actions').classList.remove('visible');document.getElementById('fc-gesture-hint').style.display='none';document.getElementById('fc-complete').classList.add('visible');document.getElementById('fc-mastered').textContent=`✨ ${fcAcquises} / ${fcTotal} cartes maîtrisées`;}
+  function reshuffleFC(){pickFCPile();}
+
+  // Swipe & click
+  document.addEventListener('DOMContentLoaded',()=>{
+    const card=document.getElementById('fc-card');
+    card.addEventListener('click',flipCard);
+    let tx=0,dragging=false;
+    card.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;dragging=false;},{passive:true});
+    card.addEventListener('touchmove',e=>{const dx=e.touches[0].clientX-tx;if(Math.abs(dx)>10){dragging=true;card.style.transform=`translateX(${dx*0.4}px) rotate(${dx*0.08}deg)`;card.style.opacity=Math.max(0.4,1-Math.abs(dx)/280);}},{passive:true});
+    card.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx;card.style.transform='';card.style.opacity='';if(!dragging)return;dragging=false;if(!fcFlipped){flipCard();return;}if(dx>60)fcAcquis();else if(dx<-60)fcRevoir();});
+    let mx=0,md=false;
+    card.addEventListener('mousedown',e=>{mx=e.clientX;md=false;});
+    card.addEventListener('mousemove',e=>{if(e.buttons!==1)return;const dx=e.clientX-mx;if(Math.abs(dx)>10){md=true;card.style.transform=`translateX(${dx*0.3}px) rotate(${dx*0.05}deg)`;}});
+    card.addEventListener('mouseup',e=>{const dx=e.clientX-mx;card.style.transform='';if(!md)return;md=false;if(!fcFlipped){flipCard();return;}if(dx>80)fcAcquis();else if(dx<-80)fcRevoir();});
+  });
+
+  // ── QUIZ ──
+  let allQuestions=[],quizData=[],quizIndex=0,quizPts=0,quizAnswered=false,quizHistory=[],hintUsed=false,streak=0,isRevisionMode=false;
+
+  function initQuiz(questions){allQuestions=questions;isRevisionMode=false;pickAndStart();}
+  function startRevisionMode(){const failed=quizHistory.filter(h=>!h.correct).map(h=>h.questionObj);if(!failed.length)return;isRevisionMode=true;allQuestions=failed;pickAndStart();}
+
+  function pickAndStart(){
+    const easy=weightedShuffle(allQuestions.filter(q=>q.difficulte==='facile'));
+    const med =weightedShuffle(allQuestions.filter(q=>q.difficulte==='medium'));
+    const hard=weightedShuffle(allQuestions.filter(q=>q.difficulte==='hard'));
+    quizData=[...easy.slice(0,3),...med.slice(0,6),...hard.slice(0,3)];
+    if(quizData.length<QUIZ_SIZE){const used=new Set(quizData.map(q=>q.question));quizData=[...quizData,...weightedShuffle(allQuestions.filter(q=>!used.has(q.question)))].slice(0,QUIZ_SIZE);}
+    quizIndex=0;quizPts=0;quizAnswered=false;quizHistory=[];streak=0;
+    const info=document.getElementById('quiz-bank-info');
+    if(info)info.textContent=isRevisionMode?`🔄 Mode révision — ${quizData.length} question${quizData.length>1?'s':''}`:(allQuestions.length>QUIZ_SIZE?`🎲 12 questions tirées parmi ${allQuestions.length} — chaque session est unique !`:`❓ ${allQuestions.length} question${allQuestions.length>1?'s':''}`);
+    document.getElementById('quiz-streak-badge').classList.add('hidden');
+    document.getElementById('quiz-final').classList.add('hidden');
+    document.getElementById('quiz-content').classList.remove('hidden');
+    renderQuiz();
+  }
+
+  function renderQuiz(){
+    if(quizIndex>=quizData.length){showQuizFinal();return;}
+    const q=quizData[quizIndex];quizAnswered=false;
+    const content=document.getElementById('quiz-content');
+    content.classList.remove('quiz-slide-in');void content.offsetWidth;content.classList.add('quiz-slide-in');
+    document.getElementById('quiz-prog-bar').style.width=`${Math.round((quizIndex/quizData.length)*100)}%`;
+    document.getElementById('quiz-prog-label').textContent=`Question ${quizIndex+1} / ${quizData.length}`;
+    document.getElementById('quiz-pts-label').textContent=isRevisionMode?'Mode révision':`${quizPts} pts`;
+    const diff=q.difficulte||'facile';
+    const db=document.getElementById('quiz-diff-badge');db.textContent=DIFF_LABELS[diff];db.className=`diff-badge ${DIFF_CLASS[diff]}`;
+    document.getElementById('quiz-pts-badge').style.display=isRevisionMode?'none':'inline-flex';
+    document.getElementById('quiz-pts-badge').textContent=`+${DIFF_POINTS[diff]} pts`;
+    hintUsed=false;
+    const hintBox=document.getElementById('hint-box');hintBox.classList.add('hidden');
+    const hintBtn=document.getElementById('hint-btn');hintBtn.disabled=false;hintBtn.style.opacity='1';hintBtn.textContent='💡 Indice';
+    hintBtn.style.visibility=q.indice?'visible':'hidden';
+    document.getElementById('quiz-q-num').textContent=`Question ${quizIndex+1} / ${quizData.length}`;
+    document.getElementById('quiz-question').textContent=q.question;
+    document.getElementById('quiz-feedback').classList.add('hidden');
+    document.getElementById('quiz-next-btn').classList.add('hidden');
+    const choixEl=document.getElementById('quiz-choix');choixEl.innerHTML='';
+    q.choix.forEach((c,i)=>{const btn=document.createElement('button');btn.className='quiz-opt';btn.textContent=c;btn.onclick=()=>answer(i,q.bonne_reponse,q.difficulte||'facile');choixEl.appendChild(btn);});
+  }
+
+  function showHint(){
+    const q=quizData[quizIndex];if(!q.indice||hintUsed)return;hintUsed=true;
+    document.getElementById('hint-text').textContent=q.indice;
+    const box=document.getElementById('hint-box');box.classList.remove('hidden');box.style.display='flex';
+    const halved=Math.floor(DIFF_POINTS[q.difficulte||'facile']/2);
+    document.getElementById('quiz-pts-badge').textContent=`+${halved} pts (indice)`;
+    const btn=document.getElementById('hint-btn');btn.disabled=true;btn.style.opacity='0.45';btn.textContent='💡 Indice utilisé';
+  }
+
+  function answer(selected,correct,diff){
+    if(quizAnswered)return;quizAnswered=true;
+    const q=quizData[quizIndex];
+    pomoActivity('quiz');
+    document.querySelectorAll('.quiz-opt').forEach((btn,i)=>{btn.disabled=true;if(i===correct)btn.classList.add('correct');else if(i===selected)btn.classList.add('wrong');else btn.classList.add('muted');});
+    const isCorrect=selected===correct;
+    const basePts=DIFF_POINTS[diff];
+    const pts=isRevisionMode?0:(isCorrect?(hintUsed?Math.floor(basePts/2):basePts):0);
+    recordResult(q.question,isCorrect);
+    if(isCorrect){streak++;soundCorrect();}else{streak=0;soundWrong();}
+    const streakEl=document.getElementById('quiz-streak-badge');
+    if(streak>=2){streakEl.className='streak-badge';streakEl.textContent=`🔥 ×${streak}`;streakEl.classList.remove('hidden');}else streakEl.classList.add('hidden');
+    if(isCorrect&&!isRevisionMode){
+      quizPts+=pts;
+      const pop=document.createElement('span');pop.className='points-pop';pop.textContent=`+${pts}`;pop.style.color=diff==='hard'?'#f472b6':diff==='medium'?'#c084fc':'#22d3ee';document.getElementById('quiz-choix').appendChild(pop);setTimeout(()=>pop.remove(),1000);
+    }
+    document.getElementById('quiz-pts-label').textContent=isRevisionMode?'Mode révision':`${quizPts} pts`;
+    if(!isRevisionMode){const cumul=getCumulPts()+quizPts;BADGES.forEach(b=>{if(cumul>=b.threshold){const p=getProgress();if(!(p.badges||[]).includes(b.id)){unlockBadge(b.id);setTimeout(()=>showBadgeOverlay(b),600);renderBadgeShowcase(getUnlocked());}}}); }
+    quizHistory.push({question:q.question,questionObj:q,correct:isCorrect,pts,hintUsed,correctAnswer:q.choix[correct],diff});
+    const fb=document.getElementById('quiz-feedback');fb.classList.remove('hidden');
+    const hintNote=(!isRevisionMode&&isCorrect&&hintUsed)?` <span style="font-size:0.78rem;color:#fbbf24;font-weight:700;">(indice : ×½)</span>`:'';
+    const correctTitle=isRevisionMode?'👍 Bravo ! (mode révision — sans points)':`👍 Bravo ! +${pts} pts${hintNote}`;
+    const explication=q.explication||null;
+    fb.innerHTML=`<div class="neo-feedback ${isCorrect?'ok':'ko'}"><img src="Neo_assis-Photoroom.png" alt="Neo" style="${isCorrect?'filter:drop-shadow(0 0 12px #22d3ee)':'transform:scaleX(-1);filter:drop-shadow(0 0 12px #f472b6)'};" /><div class="neo-feedback-text"><div class="neo-feedback-title ${isCorrect?'ok':'ko'}">${isCorrect?correctTitle:'😬 Pas tout à fait…'}</div>${!isCorrect?`<div class="neo-feedback-answer">✅ ${q.choix[correct]}</div>`:''}${explication?`<div class="neo-feedback-expl">${explication}</div>`:''}</div></div>`;
+    const nb=document.getElementById('quiz-next-btn');nb.classList.remove('hidden');nb.textContent=quizIndex<quizData.length-1?'Question suivante →':'Voir mon score 🏆';
+    const hintBtn2=document.getElementById('hint-btn');hintBtn2.disabled=true;hintBtn2.style.opacity='0.35';
+  }
+
+  function quizNext(){
+    const content=document.getElementById('quiz-content');
+    content.classList.add('quiz-slide-out');
+    setTimeout(()=>{content.classList.remove('quiz-slide-out');quizIndex++;renderQuiz();},220);
+  }
+
+  function showQuizFinal(){
+    document.getElementById('quiz-content').classList.add('hidden');
+    document.getElementById('quiz-final').classList.remove('hidden');
+    document.getElementById('quiz-prog-bar').style.width='100%';
+    document.getElementById('quiz-prog-label').textContent='Terminé !';
+    document.getElementById('quiz-pts-label').textContent=isRevisionMode?'Mode révision':`${quizPts} pts`;
+    const pct=Math.round((quizPts/MAX_PTS)*100);
+    const emoji=pct>=80?'🏆':pct>=50?'💪':'📖';
+    const msg=pct>=80?'Excellent travail !':pct>=50?'Bien joué, continue !':'Révise encore un peu !';
+    document.getElementById('quiz-final-emoji').textContent=emoji;
+    document.getElementById('quiz-final-title').textContent=msg;
+    document.getElementById('quiz-final-pts').textContent=`${quizPts} pts gagnés !`;
+    document.getElementById('quiz-final-score').textContent=`${quizPts} / ${MAX_PTS} pts possibles cette session`;
+    const recapEl=document.getElementById('quiz-recap');
+    recapEl.innerHTML=quizHistory.map(h=>`<div class="recap-row"><span style="color:${h.correct?'#22d3ee':'#f472b6'};font-size:1rem;">${h.correct?'✅':'❌'}</span><span style="flex:1;margin:0 0.75rem;font-size:0.82rem;color:#cbd5e1;">${h.question}${h.hintUsed?' <span style="color:#fbbf24;font-size:0.72rem;">💡</span>':''}</span><span style="font-weight:800;color:${h.correct?'#fbbf24':'#64748b'};font-size:0.85rem;">${h.correct?'+'+h.pts+' pts':'0 pt'}</span></div>`).join('');
+    const chapNom=document.getElementById('chap-nom').textContent;
+    const waText=encodeURIComponent(`🦊 NeoQuest TV — Quiz "${chapNom}"
+
+${emoji} ${msg}
+Score : ${quizPts} / ${MAX_PTS} pts (${pct}%)
+
+Tente de me battre ! 👉 https://neoquest.tv`);
+    document.getElementById('btn-whatsapp-share').href=`https://wa.me/?text=${waText}`;
+    if(!isRevisionMode){addPts(quizPts);const p=getProgress();p.quizCount=(p.quizCount||0)+1;saveProgress(p);}
+    const newlyUnlocked=[];
+    renderBadgesDisplay(getUnlocked());renderBadgeShowcase(getUnlocked(),newlyUnlocked);
+    if(newlyUnlocked.some(b=>b.id==='maitre')){soundFanfare();setTimeout(launchConfetti,400);}
+    const failedCount=quizHistory.filter(h=>!h.correct).length;
+    const revBtn=document.getElementById('btn-revision');
+    if(failedCount>0){revBtn.classList.remove('hidden');revBtn.textContent=`🔄 Réviser mes ${failedCount} erreur${failedCount>1?'s':''}`;}else revBtn.classList.add('hidden');
+  }
+
+  function showBadgeOverlay(b){
+    const overlay=document.createElement('div');overlay.className='badge-overlay';
+    overlay.innerHTML=`<div class="badge-overlay-icon">${b.emoji}</div><div class="badge-overlay-title">Badge débloqué !</div><div class="badge-overlay-label">« ${b.label} »</div><div class="badge-overlay-desc">${b.desc}</div>`;
+    document.body.appendChild(overlay);
+    if(b.id==='maitre'){soundFanfare();setTimeout(launchConfetti,300);}
+    setTimeout(()=>{overlay.classList.add('out');setTimeout(()=>overlay.remove(),400);},1800);
+  }
+
+  function renderBadgesDisplay(unlocked){
+    const el=document.getElementById('badges-display');if(!el)return;
+    const cumul=getCumulPts();
+    el.innerHTML=BADGES.map(b=>{const isU=unlocked.includes(b.id);return`<div class="badge-card ${isU?'unlocked':'locked'}"><span style="font-size:1.8rem;">${b.emoji}</span><div><p style="font-weight:900;color:${isU?'#fbbf24':'#64748b'};">${b.label}</p><p style="font-size:0.75rem;color:#64748b;">${b.desc} ${isU?'✓':`— ${cumul}/${b.threshold} pts`}</p></div></div>`;}).join('');
+    renderBadgeShowcase(unlocked);
+  }
+
+  function renderBadgeShowcase(unlocked,newlyUnlocked=[]){
+    const grid=document.getElementById('badge-showcase');if(!grid)return;
+    const cumul=getCumulPts();document.getElementById('cumul-pts-label').textContent=`Total cumulé : ${cumul} pts`;
+    grid.innerHTML='';
+    BADGES.forEach(b=>{
+      const isU=unlocked.includes(b.id),isNew=newlyUnlocked.some(n=>n.id===b.id);
+      const card=document.createElement('div');card.className=`showcase-card ${isU?(isNew?'just-unlocked':'unlocked'):'locked'}`;
+      const pct=Math.min(100,Math.round((cumul/b.threshold)*100));
+      card.innerHTML=`<span class="badge-lock-icon">${isU?'':'🔒'}</span><span class="badge-emoji">${b.emoji}</span><span class="badge-label">${b.label}</span><span class="badge-threshold">${isU?'✓ Débloqué !':`${cumul} / ${b.threshold} pts`}</span>`;
+      if(!isU){const bar=document.createElement('div');bar.style.cssText='width:100%;margin-top:0.3rem;';bar.innerHTML=`<div style="background:rgba(255,255,255,0.07);border-radius:9999px;height:4px;overflow:hidden;"><div style="width:${pct}%;height:100%;border-radius:9999px;background:linear-gradient(90deg,#a855f7,#22d3ee);transition:width 0.8s ease;"></div></div>`;card.appendChild(bar);}
+      grid.appendChild(card);
+    });
+  }
+
+  function quizRestart(){pickAndStart();document.getElementById('section-quiz').scrollIntoView({behavior:'smooth',block:'start'});}
+</script>
+
+<!-- ── CHRONO POMODORO (flottant) ── -->
+<style>
+  .pomo-wrap { position:relative; overflow:hidden; transition:box-shadow 0.8s ease, border-color 0.8s ease; }
+  .pomo-wrap.glow-1 { box-shadow:0 0 8px rgba(34,211,238,0.25); border-color:rgba(34,211,238,0.4)!important; }
+  .pomo-wrap.glow-2 { box-shadow:0 0 14px rgba(34,211,238,0.4); border-color:rgba(34,211,238,0.55)!important; }
+  .pomo-wrap.glow-3 { box-shadow:0 0 22px rgba(34,211,238,0.55); border-color:rgba(34,211,238,0.7)!important; }
+  .pomo-wrap.glow-4 { box-shadow:0 0 32px rgba(34,211,238,0.7); border-color:rgba(34,211,238,0.85)!important; }
+  .pomo-wrap.glow-5 { box-shadow:0 0 44px rgba(34,211,238,0.85),0 0 80px rgba(168,85,247,0.3); border-color:#22d3ee!important; }
+  .pomo-wrap.glow-done { box-shadow:0 0 60px rgba(34,211,238,1),0 0 120px rgba(168,85,247,0.5); border-color:#22d3ee!important; animation:glowPulseP 1s ease infinite; }
+  @keyframes glowPulseP { 0%,100%{box-shadow:0 0 40px rgba(34,211,238,0.8)} 50%{box-shadow:0 0 80px rgba(34,211,238,1)} }
+  .pomo-wrap.break-mode { border-color:rgba(251,191,36,0.6)!important; box-shadow:0 0 20px rgba(251,191,36,0.3); }
+  .pdur-btn { padding:3px 0; border-radius:5px; background:rgba(255,255,255,0.03); border:1px solid rgba(168,85,247,0.2); color:#64748b; font-weight:700; font-size:11px; cursor:pointer; font-family:'Nunito',sans-serif; transition:all 0.2s; }
+  .pdur-btn:hover  { border-color:rgba(168,85,247,0.6); color:#c4b5fd; }
+  .pdur-btn.active { background:rgba(34,211,238,0.12); border-color:#22d3ee; color:#22d3ee; }
+  .pbtn-start { flex:1; padding:8px; border-radius:8px; background:linear-gradient(135deg,#7c3aed,#06b6d4); border:none; color:#fff; font-weight:800; font-size:13px; cursor:pointer; font-family:'Nunito',sans-serif; }
+  .pbtn-reset { padding:8px 10px; border-radius:8px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); color:#64748b; font-weight:700; font-size:13px; cursor:pointer; font-family:'Nunito',sans-serif; }
+  .pbtn-reset:hover { color:#fff; }
+  .p-book { width:8px; border-radius:2px 2px 0 0; transition:height 0.8s ease, opacity 0.8s ease; }
+  .p-sdot { width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,0.1); transition:background 0.4s; }
+  .p-sdot.done { background:#22d3ee; }
+  @keyframes pBubblePop { 0%{transform:scale(0.85);opacity:0} 60%{transform:scale(1.06)} 100%{transform:scale(1);opacity:1} }
+  .pbubble-pop { animation:pBubblePop 0.35s ease forwards; }
+  .p-compact-dot { width:7px; height:7px; border-radius:50%; background:#22d3ee; flex-shrink:0; }
+  .p-compact-dot.prunning { animation:pdotPulse 1s ease infinite; }
+  .p-compact-dot.ppaused  { background:#f472b6; }
+  .p-compact-dot.pbreak   { background:#fbbf24; animation:pdotPulse 1s ease infinite; }
+  @keyframes pdotPulse { 0%,100%{opacity:1} 50%{opacity:0.25} }
+</style>
+
+<div style="position:fixed;bottom:1.25rem;right:1.25rem;z-index:1000;font-family:'Nunito',sans-serif;">
+
+  <!-- Pill compacte -->
+  <div id="p-compact" onclick="pExpand()" style="display:none;align-items:center;gap:8px;background:rgba(8,6,26,0.92);backdrop-filter:blur(16px);border:1px solid rgba(34,211,238,0.4);border-radius:9999px;padding:5px 12px 5px 5px;cursor:pointer;box-shadow:0 0 16px rgba(34,211,238,0.2);">
+    <img src="Neo_assis-Photoroom.png" alt="Neo" style="width:28px;height:28px;object-fit:contain;border-radius:50%;background:rgba(168,85,247,0.15);padding:2px;" id="p-cneo-img" />
+    <span id="p-ctime" style="font-size:14px;font-weight:900;color:#e2e8f0;font-variant-numeric:tabular-nums;">--:--</span>
+    <svg width="24" height="24" style="transform:rotate(-90deg);flex-shrink:0;">
+      <circle cx="12" cy="12" r="9" fill="none" stroke="rgba(34,211,238,0.2)" stroke-width="2.5"/>
+      <circle id="p-cring" cx="12" cy="12" r="9" fill="none" stroke="#22d3ee" stroke-width="2.5"
+        stroke-linecap="round" stroke-dasharray="56.5" stroke-dashoffset="0" style="transition:stroke-dashoffset 1s linear;"/>
+    </svg>
+  </div>
+
+  <!-- Panel complet -->
+  <div id="p-full" class="pomo-wrap" style="background:rgba(8,6,26,0.95);backdrop-filter:blur(20px);border:1px solid rgba(168,85,247,0.35);border-radius:1.25rem;padding:1.1rem;width:252px;box-shadow:0 0 30px rgba(168,85,247,0.15);">
+
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+      <span style="font-weight:900;font-size:0.9rem;color:#fff;">⏱️ Chrono NeoQuest</span>
+      <button onclick="pCollapse()" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:2px 8px;font-size:11px;color:#64748b;cursor:pointer;font-family:'Nunito',sans-serif;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#64748b'">— Réduire</button>
+    </div>
+
+    <!-- Neo -->
+    <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:0.6rem;position:relative;">
+      <div id="p-neo-glow" style="position:absolute;width:70px;height:70px;border-radius:50%;background:rgba(34,211,238,0.12);filter:blur(14px);opacity:0.1;transition:opacity 0.8s,transform 0.8s;top:50%;left:50%;transform:translate(-50%,-50%);"></div>
+      <div id="p-neo" style="font-size:48px;line-height:1;position:relative;z-index:1;transition:filter 0.5s;">🦊</div>
+      <div id="p-books" style="display:flex;gap:2px;justify-content:center;align-items:flex-end;height:18px;margin-top:4px;"></div>
+    </div>
+
+    <!-- Bulle message -->
+    <div id="p-bubble" style="background:rgba(255,255,255,0.05);border:1px solid rgba(168,85,247,0.2);border-radius:10px;padding:6px 10px;font-size:11px;color:#cbd5e1;line-height:1.4;text-align:center;margin-bottom:0.75rem;">Choisis ta durée et c'est parti !</div>
+
+    <!-- Ring -->
+    <div style="display:flex;justify-content:center;margin-bottom:0.75rem;">
+      <div style="position:relative;width:100px;height:100px;">
+        <svg width="100" height="100" style="transform:rotate(-90deg);">
+          <circle cx="50" cy="50" r="43" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="6"/>
+          <circle id="p-ring" cx="50" cy="50" r="43" fill="none" stroke="url(#pmg)" stroke-width="6"
+            stroke-linecap="round" stroke-dasharray="270.2" stroke-dashoffset="0" style="transition:stroke-dashoffset 1s linear;"/>
+          <defs><linearGradient id="pmg" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#7F77DD" id="pmg1"/><stop offset="100%" stop-color="#22d3ee" id="pmg2"/>
+          </linearGradient></defs>
+        </svg>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+          <span id="p-time" style="font-size:1.4rem;font-weight:900;color:#fff;line-height:1;font-variant-numeric:tabular-nums;">--:--</span>
+          <span id="p-phase" style="font-size:9px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;">Prêt</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Durées -->
+    <div id="p-setup">
+      <div style="font-size:10px;color:#64748b;text-align:center;margin-bottom:5px;font-weight:700;">Durée de travail</div>
+      <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:3px;margin-bottom:8px;">
+        <button class="pdur-btn" onclick="pSetD(5)">5'</button>
+        <button class="pdur-btn" onclick="pSetD(10)">10'</button>
+        <button class="pdur-btn" onclick="pSetD(15)">15'</button>
+        <button class="pdur-btn active" onclick="pSetD(30)">30'</button>
+        <button class="pdur-btn" onclick="pSetD(45)">45'</button>
+        <button class="pdur-btn" onclick="pSetD(60)">60'</button>
+      </div>
+      <div style="font-size:9px;color:#475569;text-align:center;margin-bottom:8px;">☕ Pause 5 min après chaque session</div>
+      <div style="font-size:10px;color:#64748b;text-align:center;margin-bottom:5px;font-weight:700;">Nombre de cycles</div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:3px;margin-bottom:8px;">
+        <button class="pdur-btn" onclick="pSetCycles(1)">1</button>
+        <button class="pdur-btn active" onclick="pSetCycles(2)">2</button>
+        <button class="pdur-btn" onclick="pSetCycles(3)">3</button>
+        <button class="pdur-btn" onclick="pSetCycles(4)">4</button>
+        <button class="pdur-btn" onclick="pSetCycles(5)">5</button>
+        </div>
+    </div>
+
+    <!-- Boutons -->
+    <div style="display:flex;gap:5px;margin-bottom:8px;">
+      <button class="pbtn-start" id="p-startbtn" onclick="pStart()">▶ Démarrer</button>
+      <button class="pbtn-reset" onclick="pReset()">↺</button>
+    </div>
+
+    <!-- Sessions dots -->
+    <div style="display:flex;justify-content:center;gap:4px;margin-bottom:4px;" id="p-sess"></div>
+    <div style="text-align:center;font-size:10px;color:#475569;font-weight:700;" id="p-cycles-lbl">Cycle 1 / 2</div>
+  </div>
+</div>
+
+<script>
+  const P_BREAK=5*60, P_RING=270.2, P_CRING=56.5, P_IDLE=30;
+  const P_DURS=[5,10,15,30,45,60];
+  const P_BOOK_COLORS=['#7F77DD','#22d3ee','#f472b6','#fbbf24','#4ade80','#a855f7','#06b6d4','#c084fc'];
+  const P_MESSAGES=[
+    {pct:0,  txt:"C'est parti pour la quête du savoir ! 🚀"},
+    {pct:10, txt:"Bien démarré ! Chaque minute compte."},
+    {pct:20, txt:"Tu construis ton savoir brique par brique 🧱"},
+    {pct:30, txt:"Neo est fier de toi, continue !"},
+    {pct:40, txt:"Tu es dans la zone ! Reste focus 🎯"},
+    {pct:50, txt:"La moitié du chemin est faite ! 💪"},
+    {pct:60, txt:"Le savoir s'accumule dans ta tête 🧠"},
+    {pct:70, txt:"Dernière ligne droite, ne lâche rien !"},
+    {pct:80, txt:"80% ! Les grands explorateurs ne s'arrêtent pas 🗺️"},
+    {pct:90, txt:"Presque fini ! Encore un effort ⚡"},
+    {pct:95, txt:"Les dernières secondes sont les plus précieuses ✨"},
+  ];
+  const P_BREAK_MSGS=["Ding ! Pose ton stylo, va boire un verre d'eau ! 🍎","Repose tes yeux, regarde au loin 30 secondes 👀","Étire-toi, bouge un peu ! 🌿","Pause méritée ! Tu as bien bossé 🌟"];
+  const P_IDLE_MSG="C'est pas grave, on reprend la quête quand tu es prêt !";
+
+  let pDur=30*60,pRem=pDur,pRun=false,pBreak=false,pStarted=false;
+  let pIdle=0,pSess=0,pLastBubbleMin=-1,pTicker=null,pMaxCycles=2,pIdlePaused=false;
+
+  function pFmt(s){return`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;}
+
+  function pGetNeo(pct){
+    if(pBreak)   return'😌';
+    if(!pStarted)return'🦊';
+    if(pct<40)   return'🤩';
+    if(pct<75)   return'😤';
+    if(pct<95)   return'😅';
+    return'🥵';
+  }
+
+  function pGetMsg(pct){
+    if(pBreak)return P_BREAK_MSGS[pSess%P_BREAK_MSGS.length];
+    let best=P_MESSAGES[0];
+    for(const m of P_MESSAGES){if(pct>=m.pct)best=m;}
+    return best.txt;
+  }
+
+  function pSetBubble(txt){
+    const el=document.getElementById('p-bubble');
+    el.style.opacity='0';
+    setTimeout(()=>{el.textContent=txt;el.classList.add('pbubble-pop');el.style.opacity='1';setTimeout(()=>el.classList.remove('pbubble-pop'),350);},200);
+  }
+
+  function pRenderBooks(pct){
+    const row=document.getElementById('p-books');
+    const n=8, left=Math.ceil(n*(1-pct/100));
+    row.innerHTML='';
+    for(let i=0;i<n;i++){
+      const b=document.createElement('div');
+      b.className='p-book';
+      b.style.height=(i<left?(10+i*1.5):0)+'px';
+      b.style.opacity=i<left?'1':'0';
+      b.style.background=P_BOOK_COLORS[i];
+      row.appendChild(b);
+    }
+  }
+
+  function pGlowLevel(pct){
+    const w=document.getElementById('p-full');
+    w.className='pomo-wrap';
+    if(pBreak){w.classList.add('break-mode');return;}
+    if(pct>=95)w.classList.add('glow-5');
+    else if(pct>=75)w.classList.add('glow-4');
+    else if(pct>=55)w.classList.add('glow-3');
+    else if(pct>=35)w.classList.add('glow-2');
+    else if(pct>=15)w.classList.add('glow-1');
+  }
+
+  function pUpdateUI(){
+    const total=pBreak?P_BREAK:pDur;
+    const pct=Math.round((1-pRem/total)*100);
+    const off=P_RING*(pRem/total);
+    const coff=P_CRING*(pRem/total);
+    document.getElementById('p-ring').style.strokeDashoffset=off;
+    document.getElementById('p-cring').style.strokeDashoffset=coff;
+    document.getElementById('p-time').textContent=pFmt(pRem);
+    document.getElementById('p-ctime').textContent=pFmt(pRem);
+    const ph=pBreak?'☕ Pause':(pRun?'📚 Travail':(pIdlePaused?'⏸ Inactif':(pStarted?'⏸ Pausé':'Prêt')));
+    document.getElementById('p-phase').textContent=ph;
+    // Compact Neo image tint based on state
+    const cimg=document.getElementById('p-cneo-img');
+    if(cimg){cimg.style.filter=pBreak?'hue-rotate(40deg)':'';}
+    document.getElementById('p-neo').textContent=pGetNeo(pct);
+    const g=document.getElementById('p-neo-glow');
+    g.style.opacity=pStarted?Math.min(0.9,0.1+pct/100*0.8):'0.1';
+    g.style.transform=`translate(-50%,-50%) scale(${1+pct/200})`;
+    const mg1=document.getElementById('pmg1'),mg2=document.getElementById('pmg2');
+    if(pBreak){mg1.setAttribute('stop-color','#f97316');mg2.setAttribute('stop-color','#fbbf24');}
+    else{mg1.setAttribute('stop-color','#7F77DD');mg2.setAttribute('stop-color','#22d3ee');}
+    if(pStarted&&!pBreak)pRenderBooks(pct);
+    pGlowLevel(pct);
+    const sr=document.getElementById('p-sess');
+    sr.innerHTML='';
+    for(let i=0;i<pMaxCycles;i++){const d=document.createElement('div');d.className='p-sdot'+(i<pSess?' done':'');sr.appendChild(d);}
+    // Cycles label
+    const cl=document.getElementById('p-cycles-lbl');
+    if(cl)cl.textContent=pSess>=pMaxCycles?'🎉 Objectif atteint !':`Cycle ${pSess+1} / ${pMaxCycles}`;
+  }
+
+  function pTick(){
+    if(!pRun)return;
+    pIdle++;
+    if(pIdle>=P_IDLE&&!pBreak){
+      pRun=false;pIdlePaused=true;
+      // Le bouton reste "⏸ Pause" → un seul clic pour reprendre
+      document.getElementById('p-startbtn').textContent='▶ Reprendre';
+      document.getElementById('p-startbtn').onclick=pResumeFromIdle;
+      pUpdateUI();return;
+    }
+    const total=pBreak?P_BREAK:pDur;
+    const pct=Math.round((1-pRem/total)*100);
+    // Bulle toutes les 5 minutes
+    const elapsed=Math.floor((total-pRem)/60);
+    if(elapsed>0&&elapsed%5===0&&elapsed!==pLastBubbleMin){
+      pLastBubbleMin=elapsed;pSetBubble(pGetMsg(pct));
+    }
+    if(pRem>0){pRem--;pUpdateUI();}
+    else{
+      pRun=false;
+      if(!pBreak){
+        pSess++;
+        if(pSess>=pMaxCycles){
+          // Tous les cycles terminés
+          pBreak=false;pStarted=false;
+          document.getElementById('p-setup').style.display='block';
+          document.getElementById('p-startbtn').textContent='▶ Démarrer';
+          document.getElementById('p-startbtn').onclick=pStart;
+          pSetBubble('🎉 Bravo ! Tu as complété tous tes cycles !');
+          pPlayDone('work');
+          const w=document.getElementById('p-full');
+          w.classList.add('glow-done');setTimeout(()=>w.classList.remove('glow-done'),3000);
+        } else {
+          pBreak=true;pRem=P_BREAK;pRun=true;pIdle=0;
+          pSetBubble(P_BREAK_MSGS[pSess%P_BREAK_MSGS.length]);
+          pPlayDone('work');
+          const w=document.getElementById('p-full');
+          w.classList.add('glow-done');setTimeout(()=>w.classList.remove('glow-done'),3000);
+        }
+      } else {
+        pBreak=false;pRem=pDur;pRun=true;pIdle=0;pLastBubbleMin=-1;
+        pSetBubble(pGetMsg(0));pPlayDone('break');
+        document.getElementById('p-startbtn').textContent='⏸ Pause';
+        document.getElementById('p-startbtn').onclick=pPause;
+      }
+      pUpdateUI();
+    }
+  }
+
+  function pPlayDone(type){
+    try{
+      const ctx=getAudio();
+      if(type==='work'){
+        [[523,0,0.2],[659,0.15,0.2],[784,0.3,0.2],[1047,0.5,0.35]].forEach(([f,d,l])=>{
+          const o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);
+          o.type='sine';o.frequency.value=f;const t=ctx.currentTime+d;
+          g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(0.15,t+0.02);g.gain.exponentialRampToValueAtTime(0.001,t+l);
+          o.start(t);o.stop(t+l);
+        });
+      } else {
+        const o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);
+        o.type='sine';o.frequency.value=440;
+        g.gain.setValueAtTime(0.1,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.6);
+        o.start();o.stop(ctx.currentTime+0.6);
+      }
+    }catch(e){}
+  }
+
+  function pResumeFromIdle(){
+    pRun=true;pIdlePaused=false;pIdle=0;
+    document.getElementById('p-startbtn').textContent='⏸ Pause';
+    document.getElementById('p-startbtn').onclick=pPause;
+    pUpdateUI();
+  }
+  function pStart(){
+    pRun=true;pStarted=true;pIdle=0;pLastBubbleMin=-1;pIdlePaused=false;pSess=0;
+    document.getElementById('p-setup').style.display='none';
+    document.getElementById('p-startbtn').textContent='⏸ Pause';
+    document.getElementById('p-startbtn').onclick=pPause;
+    pSetBubble(pGetMsg(0));pRenderBooks(0);pUpdateUI();
+  }
+  function pPause(){
+    pRun=false;pIdlePaused=false;
+    document.getElementById('p-startbtn').textContent='▶ Reprendre';
+    document.getElementById('p-startbtn').onclick=pResumeFromIdle;
+    pSetBubble(P_IDLE_MSG);pUpdateUI();
+  }
+  function pReset(){
+    pRun=false;pBreak=false;pStarted=false;pRem=pDur;pIdle=0;pLastBubbleMin=-1;pSess=0;pIdlePaused=false;
+    document.getElementById('p-setup').style.display='block';
+    document.getElementById('p-startbtn').textContent='▶ Démarrer';
+    document.getElementById('p-startbtn').onclick=pStart;
+    document.getElementById('p-full').className='pomo-wrap';
+    pSetBubble("Choisis ta durée et c'est parti !");
+    document.getElementById('p-books').innerHTML='';pUpdateUI();
+  }
+  function pSetD(min){
+    pDur=min*60;pRem=pDur;
+    document.querySelectorAll('.pdur-btn').forEach((b,i)=>{if(P_DURS[i]===min)b.classList.add('active');});
+    // Only deactivate duration buttons, not cycles buttons
+    document.querySelectorAll('.pdur-btn').forEach((b,i)=>{ if(i<P_DURS.length) b.classList.toggle('active',P_DURS[i]===min); });
+    pUpdateUI();
+  }
+  function pSetCycles(n){
+    pMaxCycles=n;
+    // Toggle active on cycles buttons (last 5 .pdur-btn buttons)
+    const allBtns=document.querySelectorAll('.pdur-btn');
+    const cycleBtns=Array.from(allBtns).slice(6);
+    cycleBtns.forEach((b,i)=>b.classList.toggle('active',i+1===n));
+    pUpdateUI();
+  }
+  function pCollapse(){
+    document.getElementById('p-full').style.display='none';
+    document.getElementById('p-compact').style.display='flex';
+    pUpdateUI();
+  }
+  function pExpand(){
+    document.getElementById('p-compact').style.display='none';
+    document.getElementById('p-full').style.display='block';
+    pUpdateUI();
+  }
+
+  // Appelée par flipCard, answer, et vidéo
+  function pomoActivity(src){
+    pIdle=0;
+    if(pStarted&&!pRun&&!pBreak){
+      pRun=true;pIdlePaused=false;
+      document.getElementById('p-startbtn').textContent='⏸ Pause';
+      document.getElementById('p-startbtn').onclick=pPause;
+    }
+  }
+
+  pTicker=setInterval(pTick,1000);
+  pRenderBooks(0);pUpdateUI();
+</script>
+</body>
+</html>

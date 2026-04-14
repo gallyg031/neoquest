@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#a855f7" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="apple-touch-icon" href="Neo_assis-Photoroom.png" />
+  <title>NeoQuest TV — L'Aventure de l'Apprentissage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="xp.js"></script>
+  <style>
+    :root { --bg:#08061a; --violet:#a855f7; --cyan:#22d3ee; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { background:var(--bg); font-family:'Nunito',sans-serif; color:#e2e8f0; overflow-x:hidden; }
+    body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events:none; z-index:9999; opacity:0.3; }
+    .blob { position:fixed; border-radius:50%; filter:blur(120px); pointer-events:none; z-index:0; }
+    .blob-1 { width:500px; height:500px; background:rgba(168,85,247,0.15); top:-100px; left:-100px; }
+    .blob-2 { width:400px; height:400px; background:rgba(34,211,238,0.10); bottom:-80px; right:-80px; }
+    .stars { position:fixed; inset:0; pointer-events:none; z-index:0; background-image:radial-gradient(1px 1px at 15% 22%,rgba(255,255,255,0.5) 0%,transparent 100%),radial-gradient(1px 1px at 72% 8%,rgba(255,255,255,0.4) 0%,transparent 100%),radial-gradient(1px 1px at 88% 55%,rgba(255,255,255,0.35) 0%,transparent 100%),radial-gradient(1.5px 1.5px at 55% 45%,rgba(168,85,247,0.6) 0%,transparent 100%),radial-gradient(1.5px 1.5px at 25% 70%,rgba(34,211,238,0.5) 0%,transparent 100%); }
+    nav { background:rgba(8,6,26,0.8); backdrop-filter:blur(20px); border-bottom:1px solid rgba(168,85,247,0.15); }
+    .nav-link { color:#c4b5fd; font-weight:700; font-size:0.9rem; text-decoration:none; transition:color 0.2s; }
+    .nav-link:hover { color:#e9d5ff; }
+    .logo-text { background:linear-gradient(90deg,#a855f7,#22d3ee); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; font-weight:900; }
+    .banner-fade { position:absolute; bottom:0; left:0; right:0; height:80px; background:linear-gradient(to bottom,transparent,var(--bg)); }
+    .glass { background:rgba(255,255,255,0.04); backdrop-filter:blur(18px); border:1px solid rgba(168,85,247,0.2); border-radius:1.25rem; transition:transform 0.3s,box-shadow 0.3s,border-color 0.3s; }
+    .glass-hover:hover { transform:translateY(-8px); box-shadow:0 12px 40px rgba(168,85,247,0.2); border-color:rgba(168,85,247,0.5); cursor:pointer; }
+    .btn-neon { display:inline-block; background:linear-gradient(135deg,#7c3aed,#06b6d4); border-radius:9999px; padding:0.85rem 2.2rem; font-weight:800; font-size:1rem; color:#fff; box-shadow:0 0 24px rgba(124,58,237,0.4); transition:transform 0.2s,box-shadow 0.2s; text-decoration:none; }
+    .btn-neon:hover { transform:scale(1.06); box-shadow:0 0 40px rgba(124,58,237,0.7); }
+    .badge { display:inline-flex; align-items:center; gap:0.4rem; background:rgba(168,85,247,0.12); border:1px solid rgba(168,85,247,0.35); border-radius:9999px; padding:0.3rem 0.9rem; font-size:0.78rem; font-weight:700; color:#c4b5fd; text-transform:uppercase; letter-spacing:0.04em; }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
+    .float { animation:float 4s ease-in-out infinite; }
+    .reveal { opacity:0; transform:translateY(24px); transition:opacity 0.6s ease,transform 0.6s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+    .divider { height:1px; background:linear-gradient(90deg,transparent,rgba(168,85,247,0.4),rgba(34,211,238,0.4),transparent); max-width:700px; margin:0 auto; }
+    .mat-glow { position:absolute; inset:0; opacity:0; transition:opacity 0.3s; border-radius:1.25rem; pointer-events:none; }
+    .glass-hover:hover .mat-glow { opacity:1; }
+    ::-webkit-scrollbar { width:6px; }
+    ::-webkit-scrollbar-track { background:#08061a; }
+    ::-webkit-scrollbar-thumb { background:linear-gradient(var(--violet),var(--cyan)); border-radius:3px; }
+  </style>
+</head>
+<body>
+<div class="stars"></div>
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+
+<!-- NAVBAR -->
+<nav class="relative z-50 w-full px-6 py-4 flex items-center justify-between">
+  <a href="index.html" class="flex items-center gap-2 no-underline">
+    <svg width="30" height="30" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="15" stroke="url(#lg)" stroke-width="1.5"/><circle cx="16" cy="16" r="3" fill="url(#lg)"/><path d="M9 12L16 8L23 12L23 20L16 24L9 20Z" stroke="url(#lg)" stroke-width="1.5" fill="none"/><defs><linearGradient id="lg" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse"><stop stop-color="#a855f7"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs></svg>
+    <span class="logo-text text-xl">NeoQuest TV</span>
+  </a>
+  <div class="hidden md:flex items-center gap-8">
+    <a href="#matieres" class="nav-link">Matières</a>
+    <a href="#comment" class="nav-link">Comment ça marche</a>
+  </div>
+  <button id="menuBtn" class="md:hidden text-purple-300"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+<a href="profil.html" id="nav-profile" title="Mon profil" style="display:flex;align-items:center;gap:0.5rem;text-decoration:none;">
+    <div style="position:relative;">
+      <img id="nav-avatar" src="Neo_assis-Photoroom.png" alt="Profil" style="width:34px;height:34px;object-fit:contain;border-radius:50%;border:2px solid rgba(168,85,247,0.5);background:rgba(168,85,247,0.1);padding:2px;transition:border-color 0.2s;" onmouseover="this.style.borderColor='rgba(34,211,238,0.8)'" onmouseout="this.style.borderColor='rgba(168,85,247,0.5)'" />
+    </div>
+    <span id="nav-pseudo" style="font-size:0.8rem;font-weight:700;color:#c4b5fd;display:none;"></span>
+  </a>
+</nav>
+<script>
+  (function(){
+    try {
+      const p = JSON.parse(localStorage.getItem('neoquest_profile') || '{}');
+      if(p.avatar) {
+        const img = document.getElementById('nav-avatar');
+        if(img) { img.src = p.avatar; if(p.avatarStyle) img.style.filter = p.avatarStyle; }
+      }
+      if(p.pseudo) {
+        const el = document.getElementById('nav-pseudo');
+        if(el) { el.textContent = p.pseudo; el.style.display = 'inline'; }
+      }
+    } catch(e) {}
+  })();
+</script>
+<div id="mobileMenu" class="hidden md:hidden relative z-40 px-6 py-4 flex flex-col gap-4" style="background:rgba(8,6,26,0.95);border-bottom:1px solid rgba(168,85,247,0.15);">
+  <a href="#matieres" class="nav-link text-base">Matières</a>
+  <a href="#comment" class="nav-link text-base">Comment ça marche</a>
+</div>
+
+<!-- BANNER -->
+<div class="relative z-10 w-full">
+  <img src="neobanner2.jpg" alt="NeoQuest TV" class="w-full object-cover" style="max-height:300px;object-position:center;" />
+  <div class="banner-fade"></div>
+</div>
+
+<!-- HERO -->
+<section class="relative z-10 px-6 py-16 md:py-24">
+  <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+    <div class="reveal">
+      <div class="badge mb-6">✦ L'Aventure de l'Apprentissage</div>
+      <h1 class="font-black text-4xl md:text-5xl lg:text-6xl leading-tight mb-6" style="background:linear-gradient(135deg,#fff 30%,#c4b5fd);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
+        Le savoir est ton super-pouvoir
+      </h1>
+      <p class="text-slate-400 text-lg mb-8 max-w-md leading-relaxed">
+        Vidéos, fiches, flashcards et quiz pour explorer toutes les matières — du primaire au collège.
+      </p>
+      <a href="#matieres" class="btn-neon">⚡ Choisir une matière</a>
+    </div>
+    <div class="flex justify-center reveal" style="transition-delay:0.2s;">
+      <div class="float relative">
+        <div style="position:absolute;inset:-20px;border-radius:50%;background:radial-gradient(circle,rgba(168,85,247,0.25) 0%,transparent 70%);filter:blur(30px);"></div>
+        <img src="Neo assis-Photoroom.png" alt="Neo la mascotte" class="relative z-10 w-56 md:w-72" style="filter:drop-shadow(0 0 30px rgba(168,85,247,0.6)) drop-shadow(0 0 60px rgba(34,211,238,0.2));" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider reveal"></div>
+
+<!-- MATIERES -->
+<section id="matieres" class="relative z-10 px-6 py-20">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-14 reveal">
+      <div class="badge mb-4">📚 Toutes les matières</div>
+      <h2 class="font-black text-3xl md:text-4xl text-white mb-3">Quelle aventure aujourd'hui ?</h2>
+      <p class="text-slate-400">Clique sur une matière pour explorer les cours</p>
+    </div>
+    <div id="matieres-grid" class="grid grid-cols-2 md:grid-cols-3 gap-5"></div>
+  </div>
+</section>
+
+<div class="divider reveal"></div>
+
+<!-- COMMENT ÇA MARCHE -->
+<section id="comment" class="relative z-10 px-6 py-20">
+  <div class="max-w-4xl mx-auto text-center">
+    <div class="badge mb-6 reveal">🗺️ Comment ça marche</div>
+    <h2 class="font-black text-3xl md:text-4xl text-white mb-12 reveal">4 étapes vers la maîtrise</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
+      <div class="glass p-6 text-center reveal" style="transition-delay:0.05s;">
+        <div class="text-4xl mb-3">🎬</div>
+        <p class="font-bold text-white text-sm">Regarde la vidéo</p>
+        <p class="text-slate-400 text-xs mt-1">Comprends le cours en quelques minutes</p>
+      </div>
+      <div class="glass p-6 text-center reveal" style="transition-delay:0.1s;">
+        <div class="text-4xl mb-3">📄</div>
+        <p class="font-bold text-white text-sm">Télécharge la fiche</p>
+        <p class="text-slate-400 text-xs mt-1">Garde l'essentiel sous la main</p>
+      </div>
+      <div class="glass p-6 text-center reveal" style="transition-delay:0.15s;">
+        <div class="text-4xl mb-3">🃏</div>
+        <p class="font-bold text-white text-sm">Flashcards</p>
+        <p class="text-slate-400 text-xs mt-1">Mémorise sans t'en rendre compte</p>
+      </div>
+      <div class="glass p-6 text-center reveal" style="transition-delay:0.2s;">
+        <div class="text-4xl mb-3">❓</div>
+        <p class="font-bold text-white text-sm">Quiz</p>
+        <p class="text-slate-400 text-xs mt-1">Teste tes connaissances !</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="relative z-10 px-6 py-10" style="border-top:1px solid rgba(168,85,247,0.15);">
+  <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+    <span class="logo-text font-black text-lg">NeoQuest TV</span>
+    <div class="flex gap-6">
+      <a href="https://youtube.com" target="_blank" class="text-slate-500 hover:text-red-400 transition-colors"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 00-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 00.5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 002.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 002.1-2.1c.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg></a>
+      <a href="https://instagram.com" target="_blank" class="text-slate-500 hover:text-pink-400 transition-colors"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 3.3.1 4.8 1.7 4.9 4.9.1 1.3.1 1.6.1 4.8 0 3.2 0 3.6-.1 4.8-.1 3.2-1.7 4.8-4.9 4.9-1.3.1-1.6.1-4.9.1-3.2 0-3.6 0-4.8-.1-3.3-.1-4.8-1.7-4.9-4.9C2.2 15.6 2.2 15.2 2.2 12c0-3.2 0-3.6.1-4.8C2.4 3.9 4 2.3 7.2 2.3c1.2-.1 1.6-.1 4.8-.1zM12 0C8.7 0 8.3 0 7.1.1 2.7.3.3 2.7.1 7.1.0 8.3 0 8.7 0 12c0 3.3 0 3.7.1 4.9.2 4.4 2.6 6.8 7 7C8.3 24 8.7 24 12 24c3.3 0 3.7 0 4.9-.1 4.4-.2 6.8-2.6 7-7 .1-1.2.1-1.6.1-4.9 0-3.3 0-3.7-.1-4.9C23.7 2.7 21.3.3 16.9.1 15.7 0 15.3 0 12 0zm0 5.8a6.2 6.2 0 100 12.4A6.2 6.2 0 0012 5.8zM12 16a4 4 0 110-8 4 4 0 010 8zm6.4-11.8a1.44 1.44 0 100 2.88 1.44 1.44 0 000-2.88z"/></svg></a>
+      <a href="https://tiktok.com" target="_blank" class="text-slate-500 hover:text-cyan-300 transition-colors"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12.5 0h3.5a7 7 0 005 5v3.5a10.4 10.4 0 01-5-1.3V17a7 7 0 11-7-7h1v3.5a3.5 3.5 0 103.5 3.5V0z"/></svg></a>
+    </div>
+    <p class="text-slate-600 text-sm">© 2024 NeoQuest TV</p>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('menuBtn').addEventListener('click', () => document.getElementById('mobileMenu').classList.toggle('hidden'));
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  fetch('data.json')
+    .then(r => r.json())
+    .then(data => {
+      const grid = document.getElementById('matieres-grid');
+      data.matieres.forEach((mat, i) => {
+        const hasContent = mat.niveaux && mat.niveaux.length > 0;
+        const card = document.createElement(hasContent ? 'a' : 'div');
+        if (hasContent) card.href = `cours.html?matiere=${mat.id}`;
+        card.className = `glass ${hasContent ? 'glass-hover' : ''} mat-card p-6 flex flex-col items-center gap-3 text-center reveal relative overflow-hidden`;
+        card.style.transitionDelay = `${i * 0.07}s`;
+        if (!hasContent) card.style.opacity = '0.4';
+
+        const logoHTML = mat.logo
+          ? `<img src="${mat.logo}" alt="${mat.nom}" style="width:110px;height:110px;object-fit:contain;filter:drop-shadow(0 0 14px ${mat.couleur}88);" />`
+          : `<div style="width:110px;height:110px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:${mat.couleur}18;border:2px dashed ${mat.couleur}44;font-size:2rem;color:${mat.couleur}99;">?</div>`;
+
+        card.innerHTML = `
+          <div class="mat-glow" style="background:radial-gradient(circle at center,${mat.couleur}25 0%,transparent 70%);"></div>
+          ${logoHTML}
+          <span class="font-black text-lg text-white">${mat.nom}</span>
+          <span style="font-size:0.75rem;color:${hasContent ? mat.couleur : '#64748b'};font-weight:700;">${hasContent ? 'Disponible ✓' : 'Bientôt...'}</span>
+        `;
+        grid.appendChild(card);
+        observer.observe(card);
+      });
+    });
+</script>
+<script>
+  if("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js")
+      .then(() => console.log("[NeoQuest] Service Worker enregistré"))
+      .catch(e => console.warn("[NeoQuest] SW erreur:", e));
+  }
+</script>
+</body>
+</html>
