@@ -1,4 +1,4 @@
-{
+window.__neoData = {
   "matieres": [
     {
       "id": "histoire-geo",
@@ -1130,4 +1130,4 @@
       "niveaux": []
     }
   ]
-}
+};

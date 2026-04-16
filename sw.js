@@ -12,7 +12,7 @@ const ASSETS = [
   '/data/data.json',
   '/manifest.json',
   '/img/Neo_assis-Photoroom.png',
-  '/img/NeoGeo3DlogoTranspbright.png',
+  '/img/NeoGeo-Transp.png',
   '/img/neobanner2.jpg',
   'https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap',
   'https://cdn.tailwindcss.com',

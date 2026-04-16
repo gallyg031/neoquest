@@ -13,6 +13,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="js/xp.js"></script>
+  <script src="data/data.js"></script>
   <style>
     :root { --bg:#08061a; --violet:#a855f7; --cyan:#22d3ee; --accent:#a855f7; }
     * { box-sizing:border-box; margin:0; padding:0; }
@@ -478,9 +479,8 @@
   const niveauId   = params.get('niveau');
   const chapitreId = params.get('chapitre');
 
-  fetch('data/data.json')
-    .then(r => r.json())
-    .then(data => {
+  {
+    const data = window.__neoData;
       const mat    = data.matieres.find(m => m.id === matiereId);
       const niveau = mat?.niveaux.find(n => n.id === niveauId);
       let chap = null;
@@ -509,7 +509,7 @@
       document.getElementById('pdf-link').href = chap.pdf;
       initFlashcards(chap.flashcards);
       initQuiz(chap.quiz);
-    });
+  }
 
   // ── Sections accordion ──
   function toggleSection(name) {

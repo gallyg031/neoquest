@@ -6,7 +6,12 @@
       "Bash(mv \"Neo assis-Photoroom.png\" img/)",
       "Bash(mv NeoGeo3DlogoTranspbright.png img/)",
       "Bash(mv neobanner2.jpg img/)",
-      "Bash(mv xp.js js/)"
+      "Bash(mv xp.js js/)",
+      "Bash(npx --version)",
+      "Bash(echo -n \"window.__neoData = \")",
+      "Bash(cat data/data.json)",
+      "Bash(echo \";\")",
+      "Bash(xxd data/data.json)"
     ]
   }
 }
