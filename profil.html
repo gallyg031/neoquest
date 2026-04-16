@@ -143,19 +143,19 @@
     <div>
       <label style="font-size:0.82rem;font-weight:700;color:#94a3b8;display:block;margin-bottom:0.75rem;">Ton avatar Neo</label>
       <div class="avatar-grid" id="avatar-grid">
-        <div class="avatar-card" data-avatar="Neo_assis-Photoroom.png" data-name="Neo Studieux" onclick="selectAvatar(this)">
+        <div class="avatar-card" data-avatar="img/Neo_assis-Photoroom.png" data-name="Neo Studieux" onclick="selectAvatar(this)">
           <img src="img/Neo_assis-Photoroom.png" alt="Neo Studieux" />
           <div class="avatar-name">Studieux</div>
         </div>
-        <div class="avatar-card" data-avatar="NeoGeo-Transp.png" data-name="Neo Explorateur" onclick="selectAvatar(this)">
+        <div class="avatar-card" data-avatar="img/NeoGeo-Transp.png" data-name="Neo Explorateur" onclick="selectAvatar(this)">
           <img src="img/NeoGeo-Transp.png" alt="Neo Explorateur" />
           <div class="avatar-name">Explorateur</div>
         </div>
-        <div class="avatar-card" data-avatar="Neo_assis-Photoroom.png" data-name="Neo Scientifique" onclick="selectAvatar(this)">
+        <div class="avatar-card" data-avatar="img/Neo_assis-Photoroom.png" data-name="Neo Scientifique" onclick="selectAvatar(this)">
           <img src="img/Neo_assis-Photoroom.png" alt="Neo Scientifique" style="filter:hue-rotate(120deg);" />
           <div class="avatar-name">Scientifique</div>
         </div>
-        <div class="avatar-card" data-avatar="Neo_assis-Photoroom.png" data-name="Neo Tech" onclick="selectAvatar(this)">
+        <div class="avatar-card" data-avatar="img/Neo_assis-Photoroom.png" data-name="Neo Tech" onclick="selectAvatar(this)">
           <img src="img/Neo_assis-Photoroom.png" alt="Neo Tech" style="filter:hue-rotate(200deg);" />
           <div class="avatar-name">Tech</div>
         </div>
@@ -225,7 +225,7 @@
 
     // Pseudo & avatar
     const pseudo = profile.pseudo || 'Explorateur';
-    const avatar = profile.avatar || 'Neo_assis-Photoroom.png';
+    const avatar = profile.avatar || 'img/Neo_assis-Photoroom.png';
     const avatarStyle = profile.avatarStyle || '';
 
     document.getElementById('profile-name-display').textContent = pseudo;
@@ -284,7 +284,7 @@
   }
 
   // ── Avatar selection ──
-  let selectedAvatar = 'Neo_assis-Photoroom.png';
+  let selectedAvatar = 'img/Neo_assis-Photoroom.png';
   let selectedAvatarStyle = '';
 
   function selectAvatar(card) {
@@ -330,7 +330,7 @@
 
   // ── Init ──
   const profile = getProfile();
-  selectedAvatar      = profile.avatar      || 'Neo_assis-Photoroom.png';
+  selectedAvatar      = profile.avatar      || 'img/Neo_assis-Photoroom.png';
   selectedAvatarStyle = profile.avatarStyle || '';
   loadProfile();
 </script>
