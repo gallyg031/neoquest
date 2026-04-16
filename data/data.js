@@ -7,28 +7,6 @@ window.__neoData = {
       "couleur": "#a855f7",
       "niveaux": [
         {
-          "id": "cm1",
-          "nom": "CM1",
-          "themes": [
-            {
-              "id": "prehistoire",
-              "nom": "La Préhistoire",
-              "chapitres": []
-            }
-          ]
-        },
-        {
-          "id": "6eme",
-          "nom": "6ème",
-          "themes": [
-            {
-              "id": "antiquite",
-              "nom": "L'Antiquité",
-              "chapitres": []
-            }
-          ]
-        },
-        {
           "id": "5eme",
           "nom": "5ème",
           "themes": [
@@ -895,7 +873,7 @@ window.__neoData = {
                 {
                   "id": "etat-monarchique",
                   "nom": "L'affirmation de l'État monarchique dans le Royaume des Capétiens et des Valois",
-                  "youtube": "",
+                  "youtube": "-FdMTfLOZ4k",
                   "pdf": "fiches/histoire-5eme-etat-monarchique.pdf",
                   "badges_custom": {
                     "novice": {

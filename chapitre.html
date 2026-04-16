@@ -529,6 +529,14 @@
     const prev = p.totalPts || 0;
     p.totalPts = prev + n;
     saveProgress(p);
+    // Suivi par chapitre (pour le statut dans cours.html)
+    try {
+      const key = `neoquest_chap_${chapitreId}`;
+      const chd = JSON.parse(localStorage.getItem(key) || '{}');
+      chd.pts = (chd.pts || 0) + n;
+      chd.quizDone = (chd.quizDone || 0) + 1;
+      localStorage.setItem(key, JSON.stringify(chd));
+    } catch(e) {}
     if(typeof nqCheckLevelUp === 'function') nqCheckLevelUp(prev, p.totalPts);
     const badge = document.getElementById('nq-level-badge');
     if(badge && typeof nqInjectLevelBadge === 'function') { badge.remove(); nqInjectLevelBadge(); }
