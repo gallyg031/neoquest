@@ -1,6 +1,6 @@
 // NeoQuest TV — Service Worker
 // Version du cache — incrémenter à chaque mise à jour du site
-const CACHE_NAME = 'neoquest-v1';
+const CACHE_NAME = 'neoquest-v2';
 
 // Fichiers à mettre en cache pour le mode hors-ligne
 const ASSETS = [
@@ -11,7 +11,7 @@ const ASSETS = [
   '/profil.html',
   '/data/data.json',
   '/manifest.json',
-  '/img/Neo_assis-Photoroom.png',
+  '/img/Neo_assis.png',
   '/img/NeoGeo-Transp.png',
   '/img/neobanner2.jpg',
   'https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap',

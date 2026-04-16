@@ -8,7 +8,7 @@
   <meta name="theme-color" content="#a855f7" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <link rel="apple-touch-icon" href="img/Neo_assis-Photoroom.png" />
+  <link rel="apple-touch-icon" href="img/Neo_assis.png" />
   <title>NeoQuest TV — Chapitre</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
@@ -255,7 +255,7 @@
   <a id="nav-back" href="index.html" class="nav-link">← Retour aux cours</a>
 <a href="profil.html" id="nav-profile" title="Mon profil" style="display:flex;align-items:center;gap:0.5rem;text-decoration:none;">
     <div style="position:relative;">
-      <img id="nav-avatar" src="img/Neo_assis-Photoroom.png" alt="Profil" style="width:34px;height:34px;object-fit:contain;border-radius:50%;border:2px solid rgba(168,85,247,0.5);background:rgba(168,85,247,0.1);padding:2px;transition:border-color 0.2s;" onmouseover="this.style.borderColor='rgba(34,211,238,0.8)'" onmouseout="this.style.borderColor='rgba(168,85,247,0.5)'" />
+      <img id="nav-avatar" src="img/Neo_assis.png" alt="Profil" style="width:34px;height:34px;object-fit:contain;border-radius:50%;border:2px solid rgba(168,85,247,0.5);background:rgba(168,85,247,0.1);padding:2px;transition:border-color 0.2s;" onmouseover="this.style.borderColor='rgba(34,211,238,0.8)'" onmouseout="this.style.borderColor='rgba(168,85,247,0.5)'" />
     </div>
     <span id="nav-pseudo" style="font-size:0.8rem;font-weight:700;color:#c4b5fd;display:none;"></span>
   </a>
@@ -300,6 +300,13 @@
       <div style="border-radius:0.75rem;overflow:hidden;background:#08061a;">
         <div class="video-wrapper">
           <iframe id="yt-frame" src="" title="Vidéo NeoQuest" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe>
+          <div id="yt-fallback" style="display:none;position:absolute;inset:0;background:rgba(8,6,26,0.95);flex-direction:column;align-items:center;justify-content:center;gap:1rem;padding:1.5rem;text-align:center;">
+            <div style="font-size:2.5rem;">🎬</div>
+            <p style="color:#94a3b8;font-size:0.9rem;max-width:280px;line-height:1.6;">La vidéo ne peut pas être lue ici.<br/>Regarde-la directement sur YouTube.</p>
+            <a id="yt-fallback-link" href="#" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.6rem;background:linear-gradient(135deg,#7c3aed,#06b6d4);border-radius:9999px;padding:0.75rem 1.8rem;font-weight:800;color:#fff;text-decoration:none;font-size:0.95rem;font-family:'Nunito',sans-serif;">
+              ▶ Voir sur YouTube
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -415,7 +422,7 @@
           <button id="hint-btn" onclick="showHint()" title="Indice de Neo" style="display:flex;align-items:center;gap:0.4rem;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.35);border-radius:9999px;padding:0.3rem 0.8rem;color:#fbbf24;font-weight:800;font-size:0.8rem;cursor:pointer;font-family:'Nunito',sans-serif;transition:all 0.2s;">💡 Indice</button>
         </div>
         <div id="hint-box" class="hidden mb-4" style="background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.3);border-radius:0.85rem;padding:0.85rem 1rem;display:flex;align-items:flex-start;gap:0.75rem;">
-          <img src="img/Neo_assis-Photoroom.png" alt="Neo" style="width:44px;height:44px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 8px #fbbf24);" />
+          <img src="img/Neo_assis.png" alt="Neo" style="width:44px;height:44px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 8px #fbbf24);" />
           <div>
             <p style="font-weight:900;color:#fbbf24;font-size:0.82rem;margin-bottom:0.25rem;">💡 Petit rappel de Neo :</p>
             <p id="hint-text" style="color:#fde68a;font-size:0.88rem;line-height:1.5;"></p>
@@ -479,7 +486,23 @@
   const niveauId   = params.get('niveau');
   const chapitreId = params.get('chapitre');
 
-  {
+  // ── Déclarations de variables (doivent précéder l'IIFE pour éviter la TDZ) ──
+  let audioCtx = null;
+  let BADGES = [
+    {id:'novice', label:'Novice',  emoji:'🥉',threshold:50, desc:'50 pts cumulés'},
+    {id:'initie', label:'Initié',  emoji:'🥈',threshold:150,desc:'150 pts cumulés'},
+    {id:'maitre', label:'Maître',  emoji:'🥇',threshold:300,desc:'300 pts cumulés'},
+  ];
+  let DIFF_LABELS = {facile:'⭐ Facile',medium:'🔥 Medium',hard:'💀 Hard'};
+  const DIFF_POINTS = {facile:10,medium:30,hard:50};
+  const DIFF_CLASS  = {facile:'diff-facile',medium:'diff-medium',hard:'diff-hard'};
+  const MAX_PTS     = 3*10+6*30+3*50;
+  const QUIZ_SIZE   = 12;
+  const FC_SIZE = 10;
+  let fcPile=[],fcAcquises=0,fcTotal=0,fcFlipped=false,fcAllCards=[];
+  let allQuestions=[],quizData=[],quizIndex=0,quizPts=0,quizAnswered=false,quizHistory=[],hintUsed=false,streak=0,isRevisionMode=false;
+
+  (function() {
     const data = window.__neoData;
       const mat    = data.matieres.find(m => m.id === matiereId);
       const niveau = mat?.niveaux.find(n => n.id === niveauId);
@@ -497,19 +520,32 @@
       document.getElementById('bc-chapitre').textContent = chap.nom;
       document.getElementById('nav-back').href = `cours.html?matiere=${matiereId}`;
       document.getElementById('chap-nom').textContent = chap.nom;
-      document.getElementById('chap-badge').textContent = `${mat.emoji} ${mat.nom} — ${niveau.nom}`;
+      document.getElementById('chap-badge').textContent = `${mat.emoji || ''} ${mat.nom} — ${niveau.nom}`.trim();
       document.getElementById('chap-badge').style.color = couleur;
       document.getElementById('chap-badge').style.borderColor = couleur + '55';
       document.getElementById('chap-badge').style.background = couleur + '18';
 
       applyChapterTheme(chap);
       renderBadgeShowcase(getUnlocked());
-      document.getElementById('yt-frame').src = `https://www.youtube.com/embed/${chap.youtube}?enablejsapi=1`;
+      const ytId = chap.youtube;
+      document.getElementById('yt-frame').src = `https://www.youtube.com/embed/${ytId}?enablejsapi=1`;
       document.getElementById('yt-frame').parentElement.addEventListener('click', () => pomoActivity('video'));
+      window.addEventListener('message', function ytErr(e) {
+        if (e.origin !== 'https://www.youtube.com') return;
+        try {
+          const d = JSON.parse(e.data);
+          if (d.event === 'onError') {
+            document.getElementById('yt-frame').style.display = 'none';
+            document.getElementById('yt-fallback-link').href = `https://www.youtube.com/watch?v=${ytId}`;
+            document.getElementById('yt-fallback').style.display = 'flex';
+            window.removeEventListener('message', ytErr);
+          }
+        } catch(_) {}
+      });
       document.getElementById('pdf-link').href = chap.pdf;
       initFlashcards(chap.flashcards);
       initQuiz(chap.quiz);
-  }
+  })();
 
   // ── Sections accordion ──
   function toggleSection(name) {
@@ -556,7 +592,6 @@
   function shuffle(a) { const b=[...a]; for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];} return b; }
 
   // ── Sound engine ──
-  let audioCtx = null;
   function getAudio() { if(!audioCtx) audioCtx=new(window.AudioContext||window.webkitAudioContext)(); return audioCtx; }
   function playTone(freq,type,duration,volume=0.18,delay=0) {
     try { const ctx=getAudio(),o=ctx.createOscillator(),g=ctx.createGain(); o.connect(g);g.connect(ctx.destination);
@@ -589,16 +624,6 @@
   function weightedShuffle(questions){const weak=getWeakQuestions(),pool=[];questions.forEach(q=>{const weight=1+(weak[q.question]||0)*2;for(let i=0;i<weight;i++)pool.push(q);});return shuffle(pool);}
 
   // ── Badges theme ──
-  let BADGES = [
-    {id:'novice', label:'Novice',  emoji:'🥉',threshold:50, desc:'50 pts cumulés'},
-    {id:'initie', label:'Initié',  emoji:'🥈',threshold:150,desc:'150 pts cumulés'},
-    {id:'maitre', label:'Maître',  emoji:'🥇',threshold:300,desc:'300 pts cumulés'},
-  ];
-  let DIFF_LABELS = {facile:'⭐ Facile',medium:'🔥 Medium',hard:'💀 Hard'};
-  const DIFF_POINTS = {facile:10,medium:30,hard:50};
-  const DIFF_CLASS  = {facile:'diff-facile',medium:'diff-medium',hard:'diff-hard'};
-  const MAX_PTS     = 3*10+6*30+3*50;
-  const QUIZ_SIZE   = 12;
 
   function applyChapterTheme(chap){
     if(chap.badges_custom){const map={novice:'🥉',initie:'🥈',maitre:'🥇'},thresh={novice:50,initie:150,maitre:300};BADGES=['novice','initie','maitre'].map(id=>({id,label:chap.badges_custom[id]?.label||id,emoji:map[id],threshold:thresh[id],desc:chap.badges_custom[id]?.desc||''}));}
@@ -606,8 +631,6 @@
   }
 
   // ── FLASHCARDS ──
-  const FC_SIZE=10;
-  let fcPile=[],fcAcquises=0,fcTotal=0,fcFlipped=false,fcAllCards=[];
 
   function getFCWeak(){try{return JSON.parse(localStorage.getItem('neoquest_fc_weak')||'{}');}catch{return{};}}
   function saveFCWeak(w){try{localStorage.setItem('neoquest_fc_weak',JSON.stringify(w));}catch{}}
@@ -671,8 +694,6 @@
   });
 
   // ── QUIZ ──
-  let allQuestions=[],quizData=[],quizIndex=0,quizPts=0,quizAnswered=false,quizHistory=[],hintUsed=false,streak=0,isRevisionMode=false;
-
   function initQuiz(questions){allQuestions=questions;isRevisionMode=false;pickAndStart();}
   function startRevisionMode(){const failed=quizHistory.filter(h=>!h.correct).map(h=>h.questionObj);if(!failed.length)return;isRevisionMode=true;allQuestions=failed;pickAndStart();}
 
@@ -747,7 +768,7 @@
     const hintNote=(!isRevisionMode&&isCorrect&&hintUsed)?` <span style="font-size:0.78rem;color:#fbbf24;font-weight:700;">(indice : ×½)</span>`:'';
     const correctTitle=isRevisionMode?'👍 Bravo ! (mode révision — sans points)':`👍 Bravo ! +${pts} pts${hintNote}`;
     const explication=q.explication||null;
-    fb.innerHTML=`<div class="neo-feedback ${isCorrect?'ok':'ko'}"><img src="img/Neo_assis-Photoroom.png" alt="Neo" style="${isCorrect?'filter:drop-shadow(0 0 12px #22d3ee)':'transform:scaleX(-1);filter:drop-shadow(0 0 12px #f472b6)'};" /><div class="neo-feedback-text"><div class="neo-feedback-title ${isCorrect?'ok':'ko'}">${isCorrect?correctTitle:'😬 Pas tout à fait…'}</div>${!isCorrect?`<div class="neo-feedback-answer">✅ ${q.choix[correct]}</div>`:''}${explication?`<div class="neo-feedback-expl">${explication}</div>`:''}</div></div>`;
+    fb.innerHTML=`<div class="neo-feedback ${isCorrect?'ok':'ko'}"><img src="img/Neo_assis.png" alt="Neo" style="${isCorrect?'filter:drop-shadow(0 0 12px #22d3ee)':'transform:scaleX(-1);filter:drop-shadow(0 0 12px #f472b6)'};" /><div class="neo-feedback-text"><div class="neo-feedback-title ${isCorrect?'ok':'ko'}">${isCorrect?correctTitle:'😬 Pas tout à fait…'}</div>${!isCorrect?`<div class="neo-feedback-answer">✅ ${q.choix[correct]}</div>`:''}${explication?`<div class="neo-feedback-expl">${explication}</div>`:''}</div></div>`;
     const nb=document.getElementById('quiz-next-btn');nb.classList.remove('hidden');nb.textContent=quizIndex<quizData.length-1?'Question suivante →':'Voir mon score 🏆';
     const hintBtn2=document.getElementById('hint-btn');hintBtn2.disabled=true;hintBtn2.style.opacity='0.35';
   }
@@ -855,7 +876,7 @@ Tente de me battre ! 👉 https://neoquest.tv`);
 
   <!-- Pill compacte -->
   <div id="p-compact" onclick="pExpand()" style="display:none;align-items:center;gap:8px;background:rgba(8,6,26,0.92);backdrop-filter:blur(16px);border:1px solid rgba(34,211,238,0.4);border-radius:9999px;padding:5px 12px 5px 5px;cursor:pointer;box-shadow:0 0 16px rgba(34,211,238,0.2);">
-    <img src="img/Neo_assis-Photoroom.png" alt="Neo" style="width:28px;height:28px;object-fit:contain;border-radius:50%;background:rgba(168,85,247,0.15);padding:2px;" id="p-cneo-img" />
+    <img src="img/Neo_assis.png" alt="Neo" style="width:28px;height:28px;object-fit:contain;border-radius:50%;background:rgba(168,85,247,0.15);padding:2px;" id="p-cneo-img" />
     <span id="p-ctime" style="font-size:14px;font-weight:900;color:#e2e8f0;font-variant-numeric:tabular-nums;">--:--</span>
     <svg width="24" height="24" style="transform:rotate(-90deg);flex-shrink:0;">
       <circle cx="12" cy="12" r="9" fill="none" stroke="rgba(34,211,238,0.2)" stroke-width="2.5"/>

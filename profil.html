@@ -86,7 +86,7 @@
   <!-- En-tête profil -->
   <div class="text-center mb-10">
     <div class="relative inline-block mb-4">
-      <img id="profile-avatar-display" src="img/Neo_assis-Photoroom.png" alt="Avatar"
+      <img id="profile-avatar-display" src="img/Neo_assis.png" alt="Avatar"
         style="width:100px;height:100px;object-fit:contain;filter:drop-shadow(0 0 20px rgba(168,85,247,0.6));" />
       <div style="position:absolute;inset:-4px;border-radius:50%;border:2px solid rgba(34,211,238,0.5);pointer-events:none;"></div>
     </div>
@@ -143,20 +143,20 @@
     <div>
       <label style="font-size:0.82rem;font-weight:700;color:#94a3b8;display:block;margin-bottom:0.75rem;">Ton avatar Neo</label>
       <div class="avatar-grid" id="avatar-grid">
-        <div class="avatar-card" data-avatar="img/Neo_assis-Photoroom.png" data-name="Neo Studieux" onclick="selectAvatar(this)">
-          <img src="img/Neo_assis-Photoroom.png" alt="Neo Studieux" />
+        <div class="avatar-card" data-avatar="img/Neo_assis.png" data-name="Neo Studieux" onclick="selectAvatar(this)">
+          <img src="img/Neo_assis.png" alt="Neo Studieux" />
           <div class="avatar-name">Studieux</div>
         </div>
         <div class="avatar-card" data-avatar="img/NeoGeo-Transp.png" data-name="Neo Explorateur" onclick="selectAvatar(this)">
           <img src="img/NeoGeo-Transp.png" alt="Neo Explorateur" />
           <div class="avatar-name">Explorateur</div>
         </div>
-        <div class="avatar-card" data-avatar="img/Neo_assis-Photoroom.png" data-name="Neo Scientifique" onclick="selectAvatar(this)">
-          <img src="img/Neo_assis-Photoroom.png" alt="Neo Scientifique" style="filter:hue-rotate(120deg);" />
+        <div class="avatar-card" data-avatar="img/Neo_assis.png" data-name="Neo Scientifique" onclick="selectAvatar(this)">
+          <img src="img/Neo_assis.png" alt="Neo Scientifique" style="filter:hue-rotate(120deg);" />
           <div class="avatar-name">Scientifique</div>
         </div>
-        <div class="avatar-card" data-avatar="img/Neo_assis-Photoroom.png" data-name="Neo Tech" onclick="selectAvatar(this)">
-          <img src="img/Neo_assis-Photoroom.png" alt="Neo Tech" style="filter:hue-rotate(200deg);" />
+        <div class="avatar-card" data-avatar="img/Neo_assis.png" data-name="Neo Tech" onclick="selectAvatar(this)">
+          <img src="img/Neo_assis.png" alt="Neo Tech" style="filter:hue-rotate(200deg);" />
           <div class="avatar-name">Tech</div>
         </div>
       </div>
@@ -225,7 +225,7 @@
 
     // Pseudo & avatar
     const pseudo = profile.pseudo || 'Explorateur';
-    const avatar = profile.avatar || 'img/Neo_assis-Photoroom.png';
+    const avatar = profile.avatar || 'img/Neo_assis.png';
     const avatarStyle = profile.avatarStyle || '';
 
     document.getElementById('profile-name-display').textContent = pseudo;
@@ -284,7 +284,7 @@
   }
 
   // ── Avatar selection ──
-  let selectedAvatar = 'img/Neo_assis-Photoroom.png';
+  let selectedAvatar = 'img/Neo_assis.png';
   let selectedAvatarStyle = '';
 
   function selectAvatar(card) {
@@ -330,7 +330,7 @@
 
   // ── Init ──
   const profile = getProfile();
-  selectedAvatar      = profile.avatar      || 'img/Neo_assis-Photoroom.png';
+  selectedAvatar      = profile.avatar      || 'img/Neo_assis.png';
   selectedAvatarStyle = profile.avatarStyle || '';
   loadProfile();
 </script>

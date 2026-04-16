@@ -873,7 +873,6 @@ window.__neoData = {
                 {
                   "id": "etat-monarchique",
                   "nom": "L'affirmation de l'État monarchique dans le Royaume des Capétiens et des Valois",
-                  "youtube": "-FdMTfLOZ4k",
                   "pdf": "fiches/histoire-5eme-etat-monarchique.pdf",
                   "badges_custom": {
                     "novice": {
@@ -1703,35 +1702,40 @@ window.__neoData = {
             }
           ]
         }
-      ]
+      ],
+      "emoji": "🏛️"
     },
     {
       "id": "svt",
       "nom": "SVT",
       "logo": "",
       "couleur": "#4ade80",
-      "niveaux": []
+      "niveaux": [],
+      "emoji": "🌿"
     },
     {
       "id": "physique-chimie",
       "nom": "Physique-Chimie",
       "logo": "",
       "couleur": "#f97316",
-      "niveaux": []
+      "niveaux": [],
+      "emoji": "⚗️"
     },
     {
       "id": "maths",
       "nom": "Maths",
       "logo": "",
       "couleur": "#facc15",
-      "niveaux": []
+      "niveaux": [],
+      "emoji": "📐"
     },
     {
       "id": "francais",
       "nom": "Français",
       "logo": "",
       "couleur": "#f472b6",
-      "niveaux": []
+      "niveaux": [],
+      "emoji": "📖"
     }
   ]
 };
