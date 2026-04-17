@@ -291,7 +291,7 @@
   </div>
 
   <div class="badge mb-4" id="chap-badge">Chapitre</div>
-  <h1 id="chap-nom" class="font-black text-3xl md:text-4xl text-white mb-10"></h1>
+  <h1 id="chap-nom" class="font-black text-3xl md:text-4xl text-white mb-8"></h1>
 
   <!-- ── VIDÉO ── -->
   <section class="glass p-6 mb-6">
@@ -303,171 +303,14 @@
           <div id="yt-fallback" style="display:none;position:absolute;inset:0;background:rgba(8,6,26,0.95);flex-direction:column;align-items:center;justify-content:center;gap:1rem;padding:1.5rem;text-align:center;">
             <div style="font-size:2.5rem;">🎬</div>
             <p style="color:#94a3b8;font-size:0.9rem;max-width:280px;line-height:1.6;">La vidéo ne peut pas être lue ici.<br/>Regarde-la directement sur YouTube.</p>
-            <a id="yt-fallback-link" href="#" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.6rem;background:linear-gradient(135deg,#7c3aed,#06b6d4);border-radius:9999px;padding:0.75rem 1.8rem;font-weight:800;color:#fff;text-decoration:none;font-size:0.95rem;font-family:'Nunito',sans-serif;">
-              ▶ Voir sur YouTube
-            </a>
+            <a id="yt-fallback-link" href="#" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.6rem;background:linear-gradient(135deg,#7c3aed,#06b6d4);border-radius:9999px;padding:0.75rem 1.8rem;font-weight:800;color:#fff;text-decoration:none;font-size:0.95rem;font-family:'Nunito',sans-serif;">▶ Voir sur YouTube</a>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ── FICHE PDF ── -->
-  <section class="glass p-6 mb-6">
-    <div class="section-title">📄 Fiche de révision</div>
-    <p class="text-slate-400 mb-5 text-sm">Télécharge la fiche illustrée pour réviser offline ou l'imprimer.</p>
-    <a id="pdf-link" href="#" class="btn-download" download>
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-      Télécharger la fiche PDF
-    </a>
-  </section>
-
-  <!-- ── FLASHCARDS ── -->
-  <section id="section-flashcards" style="margin-bottom:1.5rem;border-radius:1.25rem;overflow:hidden;border:1px solid rgba(168,85,247,0.25);background:rgba(168,85,247,0.04);backdrop-filter:blur(18px);">
-    <!-- En-tête section -->
-    <div style="padding:1.25rem 1.5rem;border-bottom:1px solid rgba(168,85,247,0.15);display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;" onclick="toggleSection('flashcards')">
-      <div style="display:flex;align-items:center;gap:0.75rem;">
-        <div style="width:36px;height:36px;border-radius:0.6rem;background:rgba(168,85,247,0.15);border:1px solid rgba(168,85,247,0.4);display:flex;align-items:center;justify-content:center;font-size:1.1rem;">🃏</div>
-        <div>
-          <div style="font-weight:900;font-size:1rem;color:#fff;">Flashcards</div>
-          <div style="font-size:0.72rem;color:#a855f7;font-weight:700;" id="fc-section-sub">Mémorise les notions clés</div>
-        </div>
-      </div>
-      <span id="fc-chevron" style="color:#a855f7;font-size:1.2rem;transition:transform 0.3s;">▾</span>
-    </div>
-    <!-- Corps -->
-    <div id="fc-body" style="padding:1.25rem 1.5rem;">
-      <div class="fc-wrapper">
-        <div class="fc-topbar">
-          <div>
-            <div class="fc-mastered" id="fc-mastered">0 / 0 cartes maîtrisées</div>
-            <div class="fc-pile-info" id="fc-pile-info"></div>
-          </div>
-          <button onclick="reshuffleFC()" style="display:inline-flex;align-items:center;gap:0.4rem;background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.35);border-radius:9999px;padding:0.25rem 0.8rem;font-size:0.78rem;font-weight:700;color:#c4b5fd;cursor:pointer;font-family:'Nunito',sans-serif;" onmouseover="this.style.background='rgba(168,85,247,0.2)'" onmouseout="this.style.background='rgba(168,85,247,0.1)'">
-            🔀 Nouvelle pile
-          </button>
-        </div>
-        <div id="fc-indice-bar" style="margin-bottom:0.6rem;min-height:2rem;">
-          <button id="fc-indice-btn" onclick="showFCIndice()" style="display:none;align-items:center;gap:0.4rem;background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.3);border-radius:9999px;padding:0.25rem 0.9rem;font-size:0.78rem;font-weight:700;color:#fbbf24;cursor:pointer;font-family:'Nunito',sans-serif;">💡 Indice</button>
-          <div id="fc-indice-text" style="display:none;background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.25);border-radius:0.6rem;padding:0.5rem 0.8rem;font-size:0.82rem;color:#fde68a;line-height:1.5;"></div>
-        </div>
-        <div class="fc-stack" id="fc-stack">
-          <div class="fc-scene">
-            <div class="fc-card" id="fc-card">
-              <div class="fc-face fc-front">
-                <div class="fc-label">Question</div>
-                <div class="fc-text" id="fc-question"></div>
-                <div class="fc-hint" id="fc-swipe-hint">Clique ou glisse pour voir la réponse</div>
-              </div>
-              <div class="fc-face fc-back">
-                <div class="fc-label">Réponse</div>
-                <div class="fc-text" id="fc-reponse"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div style="text-align:center;font-size:0.72rem;color:#475569;margin-top:0.4rem;" id="fc-gesture-hint">← Glisse à gauche : À revoir &nbsp;·&nbsp; Glisse à droite : Acquis →</div>
-        <div class="fc-actions" id="fc-actions">
-          <button class="fc-btn-revoir" onclick="fcRevoir()">↩️ À revoir</button>
-          <button class="fc-btn-acquis" onclick="fcAcquis()">✦ Acquis !</button>
-        </div>
-        <div class="fc-complete" id="fc-complete">
-          <div style="font-size:3.5rem;margin-bottom:0.5rem;">🎉</div>
-          <p style="font-weight:900;font-size:1.3rem;color:#22d3ee;margin-bottom:0.3rem;">Pile maîtrisée !</p>
-          <p style="color:#64748b;font-size:0.9rem;margin-bottom:1.5rem;">Tu as acquis toutes les cartes de cette session.</p>
-          <button onclick="reshuffleFC()" style="display:inline-flex;align-items:center;gap:0.5rem;background:linear-gradient(135deg,#7c3aed,#06b6d4);border:none;border-radius:9999px;padding:0.75rem 1.8rem;font-weight:800;color:#fff;font-size:0.95rem;cursor:pointer;font-family:'Nunito',sans-serif;">🔀 Nouvelle pile</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── QUIZ ── -->
-  <section id="section-quiz" style="margin-bottom:1.5rem;border-radius:1.25rem;overflow:hidden;border:1px solid rgba(34,211,238,0.25);background:rgba(34,211,238,0.03);backdrop-filter:blur(18px);">
-    <!-- En-tête section -->
-    <div style="padding:1.25rem 1.5rem;border-bottom:1px solid rgba(34,211,238,0.15);display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;" onclick="toggleSection('quiz')">
-      <div style="display:flex;align-items:center;gap:0.75rem;">
-        <div style="width:36px;height:36px;border-radius:0.6rem;background:rgba(34,211,238,0.12);border:1px solid rgba(34,211,238,0.4);display:flex;align-items:center;justify-content:center;font-size:1.1rem;">❓</div>
-        <div>
-          <div style="font-weight:900;font-size:1rem;color:#fff;">Quiz</div>
-          <div style="font-size:0.72rem;color:#22d3ee;font-weight:700;" id="quiz-section-sub">Teste tes connaissances</div>
-        </div>
-      </div>
-      <span id="quiz-chevron" style="color:#22d3ee;font-size:1.2rem;transition:transform 0.3s;">▾</span>
-    </div>
-    <!-- Corps -->
-    <div id="quiz-body" style="padding:1.25rem 1.5rem;">
-      <p id="quiz-bank-info" style="color:#64748b;font-size:0.78rem;font-weight:700;margin-bottom:1rem;"></p>
-      <div style="margin-bottom:1.25rem;">
-        <div style="display:flex;justify-content:space-between;font-size:0.75rem;font-weight:700;margin-bottom:0.3rem;">
-          <span style="color:#94a3b8;" id="quiz-prog-label">Question 1 / 12</span>
-          <div style="display:flex;align-items:center;gap:0.5rem;">
-            <span id="quiz-streak-badge" class="hidden"></span>
-            <span id="quiz-pts-label" style="color:#fbbf24;">0 pts</span>
-          </div>
-        </div>
-        <div class="prog-track"><div class="prog-fill" id="quiz-prog-bar" style="width:0%"></div></div>
-        <div style="display:flex;justify-content:space-between;margin-top:3px;">
-          <span style="font-size:10px;color:#22d3ee;font-weight:700;">Facile</span>
-          <span style="font-size:10px;color:#c084fc;font-weight:700;">Medium</span>
-          <span style="font-size:10px;color:#f472b6;font-weight:700;">Hard</span>
-        </div>
-      </div>
-
-      <div id="quiz-content">
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:0.5rem;margin-bottom:0.75rem;">
-          <div style="display:flex;align-items:center;gap:0.5rem;">
-            <span id="quiz-diff-badge" class="diff-badge diff-facile">⭐ Facile</span>
-            <span id="quiz-pts-badge" class="diff-badge" style="background:rgba(250,204,21,0.1);border-color:#fbbf2444;color:#fbbf24;">+10 pts</span>
-          </div>
-          <button id="hint-btn" onclick="showHint()" title="Indice de Neo" style="display:flex;align-items:center;gap:0.4rem;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.35);border-radius:9999px;padding:0.3rem 0.8rem;color:#fbbf24;font-weight:800;font-size:0.8rem;cursor:pointer;font-family:'Nunito',sans-serif;transition:all 0.2s;">💡 Indice</button>
-        </div>
-        <div id="hint-box" class="hidden mb-4" style="background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.3);border-radius:0.85rem;padding:0.85rem 1rem;display:flex;align-items:flex-start;gap:0.75rem;">
-          <img src="img/Neo_assis.png" alt="Neo" style="width:44px;height:44px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 8px #fbbf24);" />
-          <div>
-            <p style="font-weight:900;color:#fbbf24;font-size:0.82rem;margin-bottom:0.25rem;">💡 Petit rappel de Neo :</p>
-            <p id="hint-text" style="color:#fde68a;font-size:0.88rem;line-height:1.5;"></p>
-            <p style="color:#92400e;font-size:0.72rem;margin-top:0.35rem;font-weight:700;">⚠️ Points divisés par 2 si bonne réponse</p>
-          </div>
-        </div>
-        <p id="quiz-q-num" style="font-size:0.72rem;color:#a855f7;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.5rem;"></p>
-        <p id="quiz-question" style="font-weight:900;font-size:1.2rem;color:#fff;margin-bottom:1.25rem;line-height:1.5;"></p>
-        <div id="quiz-choix" style="display:flex;flex-direction:column;gap:0.75rem;position:relative;"></div>
-        <div id="quiz-feedback" class="hidden"></div>
-        <div style="margin-top:1rem;display:flex;gap:0.75rem;">
-          <button id="quiz-next-btn" class="btn-quiz-nav hidden" onclick="quizNext()">Question suivante →</button>
-        </div>
-      </div>
-
-      <div id="quiz-final" class="hidden" style="padding:1rem 0;">
-        <div style="text-align:center;margin-bottom:1.5rem;">
-          <div id="quiz-final-emoji" style="font-size:3.5rem;margin-bottom:0.5rem;"></div>
-          <p style="font-weight:900;font-size:1.3rem;color:#fff;margin-bottom:0.25rem;" id="quiz-final-title"></p>
-          <p style="font-weight:900;font-size:1.8rem;color:#fbbf24;margin-bottom:0.25rem;" id="quiz-final-pts"></p>
-          <p style="color:#64748b;font-size:0.85rem;" id="quiz-final-score"></p>
-        </div>
-        <div class="glass p-4 mb-5">
-          <p style="font-weight:700;color:#64748b;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.75rem;">📋 Récapitulatif</p>
-          <div id="quiz-recap" style="display:flex;flex-direction:column;"></div>
-        </div>
-        <div id="quiz-new-badges" style="display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1.25rem;align-items:center;"></div>
-        <div class="glass p-4 mb-5">
-          <p style="font-weight:700;color:#64748b;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.75rem;">🏅 Mes badges</p>
-          <div style="display:flex;flex-direction:column;gap:0.5rem;" id="badges-display"></div>
-        </div>
-        <div style="display:flex;flex-wrap:wrap;gap:0.75rem;justify-content:center;">
-          <a id="btn-whatsapp-share" href="#" target="_blank" class="btn-whatsapp">
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            Partager sur WhatsApp
-          </a>
-          <button id="btn-revision" class="btn-revision hidden" onclick="startRevisionMode()">🔄 Réviser mes erreurs</button>
-          <button class="btn-download" onclick="quizRestart()">⚡ Nouveau quiz</button>
-          <button class="btn-reset" onclick="resetProgress()">🗑️ Réinitialiser</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── VITRINE DES BADGES ── -->
+  <!-- ── BADGES ── -->
   <section class="glass p-6 mb-6" id="badge-showcase-section">
     <div class="section-title">🏅 Mes badges</div>
     <p class="text-slate-400 text-sm mb-5">Cumule des points dans les quiz pour débloquer tes badges !</p>
@@ -478,7 +321,217 @@
     </div>
   </section>
 
+  <!-- ── 2 CARTES : FLASHCARDS + QUIZ ── -->
+  <style>
+    @property --angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+    @keyframes borderSpin { to { --angle: 360deg; } }
+    .act-card { position:relative; border-radius:16px; padding:1.25rem; cursor:pointer; transition:transform 0.2s; isolation:isolate; }
+    .act-card::before { content:''; position:absolute; inset:-1.5px; border-radius:17.5px; z-index:-1; animation:borderSpin 4s linear infinite; }
+    .act-card::after  { content:''; position:absolute; inset:0; border-radius:16px; z-index:-1; }
+    .act-card:hover { transform:translateY(-3px); }
+    .act-card:active { transform:scale(0.98); }
+    .act-card-fc::before  { background:conic-gradient(from var(--angle), #7F77DD 0%, #22d3ee 30%, #a855f7 60%, #7F77DD 100%); }
+    .act-card-fc::after   { background:#0e0820; }
+    .act-card-quiz::before { background:conic-gradient(from var(--angle), #1D9E75 0%, #22d3ee 30%, #5DCAA5 60%, #1D9E75 100%); }
+    .act-card-quiz::after  { background:#040f1a; }
+    @keyframes borderPulse {
+      0%,100% { opacity:0.5; }
+      50%      { opacity:1; }
+    }
+    .act-card-fc::before { animation:borderSpin 6s linear infinite, borderPulse 2.5s ease-in-out infinite; }
+    .act-cta { display:inline-flex; align-items:center; gap:5px; border-radius:99px; padding:5px 13px; font-size:12px; font-weight:500; transition:gap 0.25s ease; }
+    .act-card:hover .act-cta { gap:10px; }
+    .act-cta-fc   { background:rgba(127,119,221,0.12); border:1px solid rgba(127,119,221,0.4); color:#AFA9EC; }
+    .act-cta-quiz { background:rgba(29,158,117,0.1);   border:1px solid rgba(29,158,117,0.35); color:#5DCAA5; }
+    @keyframes quizCtaGlow { 0%,100%{box-shadow:0 0 8px rgba(29,158,117,0.4),0 0 16px rgba(29,158,117,0.2);border-color:rgba(29,158,117,0.5);} 50%{box-shadow:0 0 18px rgba(29,158,117,0.8),0 0 32px rgba(34,211,238,0.35);border-color:rgba(34,211,238,0.7);} }
+    .act-cta-quiz-glow { animation:quizCtaGlow 2s ease-in-out infinite; }
+  </style>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:1.5rem;">
+
+    <!-- Carte Neo-Flash -->
+    <div class="act-card act-card-fc" onclick="openModal('fc')">
+      <img src="img/NeoFlashcardsvolTRANSP.png" style="position:absolute;right:-12px;bottom:-12px;width:90px;height:90px;object-fit:contain;opacity:0.07;pointer-events:none;filter:blur(2px);z-index:0;" />
+      <div style="position:relative;z-index:1;">
+        <div style="display:flex;justify-content:center;margin-bottom:0.75rem;">
+          <img src="img/NeoFlashcardsvolTRANSP.png" alt="Neo-Flash" style="width:72px;height:72px;object-fit:contain;" />
+        </div>
+        <div id="fc-stat-row" style="display:flex;align-items:center;justify-content:center;gap:6px;font-size:12px;margin-bottom:0;">
+          <div style="width:6px;height:6px;border-radius:50%;background:#7F77DD;flex-shrink:0;"></div>
+          <span style="color:#6b7280;">À revoir</span>
+          <span style="font-weight:500;color:#AFA9EC;" id="fc-card-stat">—</span>
+        </div>
+        <div style="display:flex;justify-content:center;margin-top:0.9rem;">
+          <div class="act-cta act-cta-fc">Prépare ta quête <span>→</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Carte Quiz -->
+    <div class="act-card act-card-quiz" onclick="openModal('quiz')">
+      <img src="img/NeoQuizCoupeTRANSP.png" style="position:absolute;right:-12px;bottom:-12px;width:90px;height:90px;object-fit:contain;opacity:0.07;pointer-events:none;filter:blur(2px);z-index:0;" />
+      <div style="position:relative;z-index:1;">
+        <div style="display:flex;justify-content:center;margin-bottom:0.75rem;">
+          <img src="img/NeoQuizCoupeTRANSP.png" alt="Quiz" style="width:72px;height:72px;object-fit:contain;" />
+        </div>
+        <div style="font-weight:500;font-size:15px;color:#fff;margin-bottom:4px;text-align:center;">Quiz</div>
+        <div id="quiz-stat-row" style="display:flex;align-items:center;justify-content:center;gap:6px;font-size:12px;margin-bottom:0;">
+          <div style="width:6px;height:6px;border-radius:50%;background:#1D9E75;flex-shrink:0;"></div>
+          <span style="color:#6b7280;">Meilleur score</span>
+          <span style="font-weight:500;color:#5DCAA5;" id="quiz-card-stat">—</span>
+        </div>
+        <div style="display:flex;justify-content:center;margin-top:0.9rem;">
+          <div class="act-cta act-cta-quiz act-cta-quiz-glow">Relève le défi <span>→</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FICHE PDF (en bas) ── -->
+  <section class="glass p-6 mb-6">
+    <div class="section-title">📄 Fiche de révision</div>
+    <p class="text-slate-400 mb-5 text-sm">Télécharge la fiche illustrée pour réviser offline ou l'imprimer.</p>
+    <a id="pdf-link" href="#" class="btn-download" download>
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+      Télécharger la fiche PDF
+    </a>
+  </section>
+
 </main>
+
+<!-- ── MODAL FLASHCARDS ── -->
+<div id="modal-fc" style="display:none;position:fixed;inset:0;z-index:900;padding:1rem;overflow-y:auto;display:none;align-items:center;justify-content:center;">
+  <div onclick="closeModal('fc')" style="position:fixed;inset:0;background:rgba(8,6,26,0.75);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);"></div>
+  <div style="position:relative;z-index:1;max-width:560px;width:100%;margin:auto;background:rgba(18,12,40,0.85);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);border:1.5px solid rgba(168,85,247,0.35);border-radius:1.5rem;padding:1.5rem;box-shadow:0 0 60px rgba(168,85,247,0.2),0 0 120px rgba(168,85,247,0.08);">
+    <!-- Croix fermeture -->
+    <button onclick="closeModal('fc')" style="position:absolute;top:1rem;right:1rem;background:none;border:none;color:#475569;cursor:pointer;font-size:1.1rem;line-height:1;padding:4px;transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#475569'">✕</button>
+    <!-- Header -->
+    <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:1.25rem;">
+      <div style="width:32px;height:32px;border-radius:8px;background:rgba(168,85,247,0.15);border:1px solid rgba(168,85,247,0.4);display:flex;align-items:center;justify-content:center;">🃏</div>
+      <span style="font-weight:900;font-size:1rem;color:#fff;">Neo-Flash</span>
+    </div>
+    <!-- Contenu FC -->
+    <div class="fc-wrapper">
+      <div class="fc-topbar">
+        <div>
+          <div class="fc-mastered" id="fc-mastered">0 / 0 cartes maîtrisées</div>
+          <div class="fc-pile-info" id="fc-pile-info"></div>
+        </div>
+        <button onclick="reshuffleFC()" style="display:inline-flex;align-items:center;gap:0.4rem;background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.35);border-radius:9999px;padding:0.25rem 0.8rem;font-size:0.78rem;font-weight:700;color:#c4b5fd;cursor:pointer;font-family:'Nunito',sans-serif;" onmouseover="this.style.background='rgba(168,85,247,0.2)'" onmouseout="this.style.background='rgba(168,85,247,0.1)'">🔀 Nouvelle pile</button>
+      </div>
+      <div id="fc-indice-bar" style="margin-bottom:0.6rem;min-height:2rem;">
+        <button id="fc-indice-btn" onclick="showFCIndice()" style="display:none;align-items:center;gap:0.4rem;background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.3);border-radius:9999px;padding:0.25rem 0.9rem;font-size:0.78rem;font-weight:700;color:#fbbf24;cursor:pointer;font-family:'Nunito',sans-serif;">💡 Indice</button>
+        <div id="fc-indice-text" style="display:none;background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.25);border-radius:0.6rem;padding:0.5rem 0.8rem;font-size:0.82rem;color:#fde68a;line-height:1.5;"></div>
+      </div>
+      <div class="fc-stack" id="fc-stack">
+        <div class="fc-scene">
+          <div class="fc-card" id="fc-card">
+            <div class="fc-face fc-front">
+              <div class="fc-label">Question</div>
+              <div class="fc-text" id="fc-question"></div>
+              <div class="fc-hint" id="fc-swipe-hint">Clique ou glisse pour voir la réponse</div>
+            </div>
+            <div class="fc-face fc-back">
+              <div class="fc-label">Réponse</div>
+              <div class="fc-text" id="fc-reponse"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center;font-size:0.72rem;color:#475569;margin-top:0.4rem;" id="fc-gesture-hint">← Glisse à gauche : À revoir &nbsp;·&nbsp; Glisse à droite : Acquis →</div>
+      <div class="fc-actions" id="fc-actions">
+        <button class="fc-btn-revoir" onclick="fcRevoir()">↩️ À revoir</button>
+        <button class="fc-btn-acquis" onclick="fcAcquis()">✦ Acquis !</button>
+      </div>
+      <div class="fc-complete" id="fc-complete">
+        <div style="font-size:3.5rem;margin-bottom:0.5rem;">🎉</div>
+        <p style="font-weight:900;font-size:1.3rem;color:#22d3ee;margin-bottom:0.3rem;">Pile maîtrisée !</p>
+        <p style="color:#64748b;font-size:0.9rem;margin-bottom:1.5rem;">Tu as acquis toutes les cartes de cette session.</p>
+        <button onclick="reshuffleFC()" style="display:inline-flex;align-items:center;gap:0.5rem;background:linear-gradient(135deg,#7c3aed,#06b6d4);border:none;border-radius:9999px;padding:0.75rem 1.8rem;font-weight:800;color:#fff;font-size:0.95rem;cursor:pointer;font-family:'Nunito',sans-serif;">🔀 Nouvelle pile</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── MODAL QUIZ ── -->
+<div id="modal-quiz" style="display:none;position:fixed;inset:0;z-index:900;padding:1rem;overflow-y:auto;display:none;align-items:center;justify-content:center;">
+  <div onclick="closeModal('quiz')" style="position:fixed;inset:0;background:rgba(8,6,26,0.75);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);"></div>
+  <div style="position:relative;z-index:1;max-width:560px;width:100%;margin:auto;background:rgba(12,18,40,0.85);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);border:1.5px solid rgba(34,211,238,0.3);border-radius:1.5rem;padding:1.5rem;box-shadow:0 0 60px rgba(34,211,238,0.15),0 0 120px rgba(34,211,238,0.06);">
+    <!-- Croix fermeture -->
+    <button onclick="closeModal('quiz')" style="position:absolute;top:1rem;right:1rem;background:none;border:none;color:#475569;cursor:pointer;font-size:1.1rem;line-height:1;padding:4px;transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#475569'">✕</button>
+    <!-- Header -->
+    <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:1.25rem;">
+      <div style="width:32px;height:32px;border-radius:8px;background:rgba(34,211,238,0.12);border:1px solid rgba(34,211,238,0.4);display:flex;align-items:center;justify-content:center;">❓</div>
+      <span style="font-weight:900;font-size:1rem;color:#fff;">Quiz</span>
+    </div>
+    <!-- Contenu Quiz -->
+    <p id="quiz-bank-info" style="color:#64748b;font-size:0.78rem;font-weight:700;margin-bottom:1rem;"></p>
+    <div style="margin-bottom:1.25rem;">
+      <div style="display:flex;justify-content:space-between;font-size:0.75rem;font-weight:700;margin-bottom:0.3rem;">
+        <span style="color:#94a3b8;" id="quiz-prog-label">Question 1 / 12</span>
+        <div style="display:flex;align-items:center;gap:0.5rem;">
+          <span id="quiz-streak-badge" class="hidden"></span>
+          <span id="quiz-pts-label" style="color:#fbbf24;">0 pts</span>
+        </div>
+      </div>
+      <div class="prog-track"><div class="prog-fill" id="quiz-prog-bar" style="width:0%"></div></div>
+      <div style="display:flex;justify-content:space-between;margin-top:3px;">
+        <span style="font-size:10px;color:#22d3ee;font-weight:700;">Facile</span>
+        <span style="font-size:10px;color:#c084fc;font-weight:700;">Medium</span>
+        <span style="font-size:10px;color:#f472b6;font-weight:700;">Hard</span>
+      </div>
+    </div>
+    <div id="quiz-content">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:0.5rem;margin-bottom:0.75rem;">
+        <div style="display:flex;align-items:center;gap:0.5rem;">
+          <span id="quiz-diff-badge" class="diff-badge diff-facile">⭐ Facile</span>
+          <span id="quiz-pts-badge" class="diff-badge" style="background:rgba(250,204,21,0.1);border-color:#fbbf2444;color:#fbbf24;">+10 pts</span>
+        </div>
+        <button id="hint-btn" onclick="showHint()" title="Indice de Neo" style="display:flex;align-items:center;gap:0.4rem;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.35);border-radius:9999px;padding:0.3rem 0.8rem;color:#fbbf24;font-weight:800;font-size:0.8rem;cursor:pointer;font-family:'Nunito',sans-serif;transition:all 0.2s;">💡 Indice</button>
+      </div>
+      <div id="hint-box" class="hidden mb-4" style="background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.3);border-radius:0.85rem;padding:0.85rem 1rem;display:flex;align-items:flex-start;gap:0.75rem;">
+        <img src="img/Neo_assis.png" alt="Neo" style="width:44px;height:44px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 8px #fbbf24);" />
+        <div>
+          <p style="font-weight:900;color:#fbbf24;font-size:0.82rem;margin-bottom:0.25rem;">💡 Petit rappel de Neo :</p>
+          <p id="hint-text" style="color:#fde68a;font-size:0.88rem;line-height:1.5;"></p>
+          <p style="color:#92400e;font-size:0.72rem;margin-top:0.35rem;font-weight:700;">⚠️ Points divisés par 2 si bonne réponse</p>
+        </div>
+      </div>
+      <p id="quiz-q-num" style="font-size:0.72rem;color:#a855f7;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.5rem;"></p>
+      <p id="quiz-question" style="font-weight:900;font-size:1.2rem;color:#fff;margin-bottom:1.25rem;line-height:1.5;"></p>
+      <div id="quiz-choix" style="display:flex;flex-direction:column;gap:0.75rem;position:relative;"></div>
+      <div id="quiz-feedback" class="hidden"></div>
+      <div style="margin-top:1rem;display:flex;gap:0.75rem;">
+        <button id="quiz-next-btn" class="btn-quiz-nav hidden" onclick="quizNext()">Question suivante →</button>
+      </div>
+    </div>
+    <div id="quiz-final" class="hidden" style="padding:1rem 0;">
+      <div style="text-align:center;margin-bottom:1.5rem;">
+        <div id="quiz-final-emoji" style="font-size:3.5rem;margin-bottom:0.5rem;"></div>
+        <p style="font-weight:900;font-size:1.3rem;color:#fff;margin-bottom:0.25rem;" id="quiz-final-title"></p>
+        <p style="font-weight:900;font-size:1.8rem;color:#fbbf24;margin-bottom:0.25rem;" id="quiz-final-pts"></p>
+        <p style="color:#64748b;font-size:0.85rem;" id="quiz-final-score"></p>
+      </div>
+      <div class="glass p-4 mb-5">
+        <p style="font-weight:700;color:#64748b;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.75rem;">📋 Récapitulatif</p>
+        <div id="quiz-recap" style="display:flex;flex-direction:column;"></div>
+      </div>
+      <div id="quiz-new-badges" style="display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1.25rem;align-items:center;"></div>
+      <div class="glass p-4 mb-5">
+        <p style="font-weight:700;color:#64748b;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.75rem;">🏅 Mes badges</p>
+        <div style="display:flex;flex-direction:column;gap:0.5rem;" id="badges-display"></div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.75rem;justify-content:center;">
+        <a id="btn-whatsapp-share" href="#" target="_blank" class="btn-whatsapp">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Partager sur WhatsApp
+        </a>
+        <button id="btn-revision" class="btn-revision hidden" onclick="startRevisionMode()">🔄 Réviser mes erreurs</button>
+        <button class="btn-download" onclick="quizRestart()">⚡ Nouveau quiz</button>
+        <button class="btn-reset" onclick="resetProgress()">🗑️ Réinitialiser</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
   const params = new URLSearchParams(window.location.search);
@@ -547,14 +600,47 @@
       initQuiz(chap.quiz);
   })();
 
-  // ── Sections accordion ──
-  function toggleSection(name) {
-    const body    = document.getElementById(name === 'flashcards' ? 'fc-body' : 'quiz-body');
-    const chevron = document.getElementById(name === 'flashcards' ? 'fc-chevron' : 'quiz-chevron');
-    const isOpen  = body.style.display !== 'none';
-    body.style.display      = isOpen ? 'none' : 'block';
-    chevron.style.transform = isOpen ? 'rotate(-90deg)' : 'rotate(0deg)';
+  // ── Stats des cartes d'activité ──
+  (function() {
+    try {
+      const weak = JSON.parse(localStorage.getItem('neoquest_fc_weak') || '{}');
+      const count = Object.keys(weak).length;
+      const fcStat = document.getElementById('fc-card-stat');
+      const fcStatRow = document.getElementById('fc-stat-row');
+      if(count > 0) {
+        if(fcStat) fcStat.textContent = count + ' carte' + (count > 1 ? 's' : '');
+        if(fcStatRow) fcStatRow.style.marginBottom = '0.9rem';
+      } else {
+        if(fcStatRow) fcStatRow.style.display = 'none';
+      }
+    } catch(e) {}
+    try {
+      const chd = JSON.parse(localStorage.getItem('neoquest_chap_' + chapitreId) || '{}');
+      const quizStat = document.getElementById('quiz-card-stat');
+      const quizStatRow = document.getElementById('quiz-stat-row');
+      if(chd.bestScore > 0) {
+        if(quizStat) quizStat.textContent = chd.bestScore + ' pts';
+        if(quizStatRow) quizStatRow.style.marginBottom = '0.9rem';
+      } else {
+        if(quizStatRow) quizStatRow.style.display = 'none';
+      }
+    } catch(e) {}
+  })();
+  function openModal(type) {
+    const id = type === 'fc' ? 'modal-fc' : 'modal-quiz';
+    document.getElementById(id).style.display = 'flex';
+    document.body.style.overflow = 'hidden';
   }
+  function closeModal(type) {
+    const id = type === 'fc' ? 'modal-fc' : 'modal-quiz';
+    document.getElementById(id).style.display = 'none';
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => {
+    if(e.key === 'Escape') { closeModal('fc'); closeModal('quiz'); }
+  });
+  // toggleSection gardé pour compatibilité (inutilisé mais référencé nulle part)
+  function toggleSection() {}
 
   // ── LocalStorage ──
   function getProgress() { try { return JSON.parse(localStorage.getItem('neoquest_progress') || '{}'); } catch { return {}; } }
@@ -802,7 +888,21 @@ Score : ${quizPts} / ${MAX_PTS} pts (${pct}%)
 
 Tente de me battre ! 👉 https://neoquest.tv`);
     document.getElementById('btn-whatsapp-share').href=`https://wa.me/?text=${waText}`;
-    if(!isRevisionMode){addPts(quizPts);const p=getProgress();p.quizCount=(p.quizCount||0)+1;saveProgress(p);}
+    if(!isRevisionMode){
+      addPts(quizPts);
+      const p=getProgress();p.quizCount=(p.quizCount||0)+1;saveProgress(p);
+      // Meilleur score par chapitre
+      try {
+        const key=`neoquest_chap_${chapitreId}`;
+        const chd=JSON.parse(localStorage.getItem(key)||'{}');
+        if(quizPts > (chd.bestScore||0)) {
+          chd.bestScore=quizPts;
+          localStorage.setItem(key,JSON.stringify(chd));
+          const el=document.getElementById('quiz-card-stat');
+          if(el) el.textContent=quizPts+' pts';
+        }
+      } catch(e) {}
+    }
     const newlyUnlocked=[];
     renderBadgesDisplay(getUnlocked());renderBadgeShowcase(getUnlocked(),newlyUnlocked);
     if(newlyUnlocked.some(b=>b.id==='maitre')){soundFanfare();setTimeout(launchConfetti,400);}
@@ -840,7 +940,7 @@ Tente de me battre ! 👉 https://neoquest.tv`);
     });
   }
 
-  function quizRestart(){pickAndStart();document.getElementById('section-quiz').scrollIntoView({behavior:'smooth',block:'start'});}
+  function quizRestart(){ pickAndStart(); }
 </script>
 
 <!-- ── CHRONO POMODORO (flottant) ── -->
