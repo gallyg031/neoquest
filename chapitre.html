@@ -350,38 +350,49 @@
 
     <!-- Carte Neo-Flash -->
     <div class="act-card act-card-fc" onclick="openModal('fc')">
-      <img src="img/NeoFlashcardsvolTRANSP.png" style="position:absolute;right:-12px;bottom:-12px;width:90px;height:90px;object-fit:contain;opacity:0.07;pointer-events:none;filter:blur(2px);z-index:0;" />
-      <div style="position:relative;z-index:1;">
-        <div style="display:flex;justify-content:center;margin-bottom:0.75rem;">
-          <img src="img/NeoFlashcardsvolTRANSP.png" alt="Neo-Flash" style="width:72px;height:72px;object-fit:contain;" />
+      <!-- Grille fond -->
+      <div style="position:absolute;inset:0;border-radius:16px;background-image:radial-gradient(rgba(127,119,221,0.18) 1px,transparent 1px);background-size:18px 18px;z-index:0;pointer-events:none;"></div>
+      <!-- Glow centre -->
+      <div style="position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);width:120px;height:120px;background:rgba(127,119,221,0.18);border-radius:50%;filter:blur(30px);z-index:0;pointer-events:none;"></div>
+      <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:0.6rem;padding:0.5rem 0 0.25rem;height:100%;">
+        <!-- Logo -->
+        <img src="img/NeoFlashcardsdoubleTRANSP.png" alt="Neo-Flash" style="width:120px;height:120px;object-fit:contain;filter:drop-shadow(0 0 18px rgba(127,119,221,0.6));margin-bottom:0.1rem;" />
+        <!-- Titre -->
+        <div style="font-weight:900;font-size:1rem;color:#fff;letter-spacing:0.02em;">Neo-Flash</div>
+        <!-- Sous-titre -->
+        <div style="font-size:0.72rem;color:#6b7280;text-align:center;line-height:1.4;max-width:140px;">Mémorise les notions clés en moins de 5 min</div>
+        <!-- Stat -->
+        <div id="fc-stat-row" style="display:flex;align-items:center;gap:5px;font-size:11px;margin-bottom:0;">
+          <div style="width:5px;height:5px;border-radius:50%;background:#7F77DD;"></div>
+          <span style="color:#6b7280;">À revoir :</span>
+          <span style="font-weight:700;color:#AFA9EC;" id="fc-card-stat">—</span>
         </div>
-        <div id="fc-stat-row" style="display:flex;align-items:center;justify-content:center;gap:6px;font-size:12px;margin-bottom:0;">
-          <div style="width:6px;height:6px;border-radius:50%;background:#7F77DD;flex-shrink:0;"></div>
-          <span style="color:#6b7280;">À revoir</span>
-          <span style="font-weight:500;color:#AFA9EC;" id="fc-card-stat">—</span>
-        </div>
-        <div style="display:flex;justify-content:center;margin-top:0.9rem;">
-          <div class="act-cta act-cta-fc">Prépare ta quête <span>→</span></div>
-        </div>
+        <!-- CTA -->
+        <div class="act-cta act-cta-fc" style="margin-top:auto;">Prépare ta quête <span>→</span></div>
       </div>
     </div>
 
     <!-- Carte Quiz -->
     <div class="act-card act-card-quiz" onclick="openModal('quiz')">
-      <img src="img/NeoQuizCoupeTRANSP.png" style="position:absolute;right:-12px;bottom:-12px;width:90px;height:90px;object-fit:contain;opacity:0.07;pointer-events:none;filter:blur(2px);z-index:0;" />
-      <div style="position:relative;z-index:1;">
-        <div style="display:flex;justify-content:center;margin-bottom:0.75rem;">
-          <img src="img/NeoQuizCoupeTRANSP.png" alt="Quiz" style="width:72px;height:72px;object-fit:contain;" />
+      <!-- Grille fond -->
+      <div style="position:absolute;inset:0;border-radius:16px;background-image:radial-gradient(rgba(29,158,117,0.15) 1px,transparent 1px);background-size:18px 18px;z-index:0;pointer-events:none;"></div>
+      <!-- Glow centre -->
+      <div style="position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);width:120px;height:120px;background:rgba(29,158,117,0.15);border-radius:50%;filter:blur(30px);z-index:0;pointer-events:none;"></div>
+      <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:0.6rem;padding:0.5rem 0 0.25rem;height:100%;">
+        <!-- Logo -->
+        <img src="img/NeoQuizCoupeTRANSP.png" alt="Quiz" style="width:120px;height:120px;object-fit:contain;filter:drop-shadow(0 0 18px rgba(29,158,117,0.55));margin-bottom:0.1rem;" />
+        <!-- Titre -->
+        <div style="font-weight:900;font-size:1rem;color:#fff;letter-spacing:0.02em;">Quiz</div>
+        <!-- Sous-titre -->
+        <div style="font-size:0.72rem;color:#6b7280;text-align:center;line-height:1.4;max-width:140px;">Teste tes connaissances et grimpe au classement</div>
+        <!-- Stat -->
+        <div id="quiz-stat-row" style="display:flex;align-items:center;gap:5px;font-size:11px;margin-bottom:0;">
+          <div style="width:5px;height:5px;border-radius:50%;background:#1D9E75;"></div>
+          <span style="color:#6b7280;">Meilleur score :</span>
+          <span style="font-weight:700;color:#5DCAA5;" id="quiz-card-stat">—</span>
         </div>
-        <div style="font-weight:500;font-size:15px;color:#fff;margin-bottom:4px;text-align:center;">Quiz</div>
-        <div id="quiz-stat-row" style="display:flex;align-items:center;justify-content:center;gap:6px;font-size:12px;margin-bottom:0;">
-          <div style="width:6px;height:6px;border-radius:50%;background:#1D9E75;flex-shrink:0;"></div>
-          <span style="color:#6b7280;">Meilleur score</span>
-          <span style="font-weight:500;color:#5DCAA5;" id="quiz-card-stat">—</span>
-        </div>
-        <div style="display:flex;justify-content:center;margin-top:0.9rem;">
-          <div class="act-cta act-cta-quiz act-cta-quiz-glow">Relève le défi <span>→</span></div>
-        </div>
+        <!-- CTA -->
+        <div class="act-cta act-cta-quiz act-cta-quiz-glow" style="margin-top:auto;">Relève le défi <span>→</span></div>
       </div>
     </div>
   </div>
@@ -401,34 +412,32 @@
 <!-- ── MODAL FLASHCARDS ── -->
 <div id="modal-fc" style="display:none;position:fixed;inset:0;z-index:900;padding:1rem;overflow-y:auto;display:none;align-items:center;justify-content:center;">
   <div onclick="closeModal('fc')" style="position:fixed;inset:0;background:rgba(8,6,26,0.75);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);"></div>
-  <div style="position:relative;z-index:1;max-width:560px;width:100%;margin:auto;background:rgba(18,12,40,0.85);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);border:1.5px solid rgba(168,85,247,0.35);border-radius:1.5rem;padding:1.5rem;box-shadow:0 0 60px rgba(168,85,247,0.2),0 0 120px rgba(168,85,247,0.08);">
-    <!-- Croix fermeture -->
+  <div style="position:relative;z-index:1;max-width:560px;width:100%;margin:auto;background:rgba(18,12,40,0.85);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);border:1.5px solid rgba(168,85,247,0.35);border-radius:1.5rem;padding:1.5rem;padding-right:1.5rem;box-shadow:0 0 60px rgba(168,85,247,0.2),0 0 120px rgba(168,85,247,0.08);">
     <button onclick="closeModal('fc')" style="position:absolute;top:1rem;right:1rem;background:none;border:none;color:#475569;cursor:pointer;font-size:1.1rem;line-height:1;padding:4px;transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#475569'">✕</button>
-    <!-- Header -->
-    <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:1.25rem;">
-      <div style="width:32px;height:32px;border-radius:8px;background:rgba(168,85,247,0.15);border:1px solid rgba(168,85,247,0.4);display:flex;align-items:center;justify-content:center;">🃏</div>
-      <span style="font-weight:900;font-size:1rem;color:#fff;">Neo-Flash</span>
+
+    <!-- Header : favicon2 + titre + compteur + reshuffle (marge droite pour éviter la croix) -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;padding-right:1.75rem;">
+      <div style="display:flex;align-items:center;gap:0.6rem;">
+        <img src="favicon2.png" style="width:22px;height:22px;object-fit:contain;" />
+        <span style="font-weight:900;font-size:1rem;color:#fff;">Neo-Flash</span>
+        <span id="fc-mastered" style="font-size:0.75rem;font-weight:700;color:#22d3ee;"></span>
+      </div>
+      <button onclick="reshuffleFC()" style="display:inline-flex;align-items:center;gap:0.35rem;background:rgba(168,85,247,0.08);border:1px solid rgba(168,85,247,0.25);border-radius:8px;padding:0.3rem 0.75rem;font-size:0.75rem;font-weight:700;color:#a78bfa;cursor:pointer;font-family:'Nunito',sans-serif;transition:all 0.2s;" onmouseover="this.style.background='rgba(168,85,247,0.18)';this.style.borderColor='rgba(168,85,247,0.5)';this.style.color='#c4b5fd'" onmouseout="this.style.background='rgba(168,85,247,0.08)';this.style.borderColor='rgba(168,85,247,0.25)';this.style.color='#a78bfa'">↺ Nouvelle pile</button>
     </div>
+
     <!-- Contenu FC -->
     <div class="fc-wrapper">
-      <div class="fc-topbar">
-        <div>
-          <div class="fc-mastered" id="fc-mastered">0 / 0 cartes maîtrisées</div>
-          <div class="fc-pile-info" id="fc-pile-info"></div>
-        </div>
-        <button onclick="reshuffleFC()" style="display:inline-flex;align-items:center;gap:0.4rem;background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.35);border-radius:9999px;padding:0.25rem 0.8rem;font-size:0.78rem;font-weight:700;color:#c4b5fd;cursor:pointer;font-family:'Nunito',sans-serif;" onmouseover="this.style.background='rgba(168,85,247,0.2)'" onmouseout="this.style.background='rgba(168,85,247,0.1)'">🔀 Nouvelle pile</button>
-      </div>
       <div id="fc-indice-bar" style="margin-bottom:0.6rem;min-height:2rem;">
         <button id="fc-indice-btn" onclick="showFCIndice()" style="display:none;align-items:center;gap:0.4rem;background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.3);border-radius:9999px;padding:0.25rem 0.9rem;font-size:0.78rem;font-weight:700;color:#fbbf24;cursor:pointer;font-family:'Nunito',sans-serif;">💡 Indice</button>
         <div id="fc-indice-text" style="display:none;background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.25);border-radius:0.6rem;padding:0.5rem 0.8rem;font-size:0.82rem;color:#fde68a;line-height:1.5;"></div>
       </div>
       <div class="fc-stack" id="fc-stack">
         <div class="fc-scene">
-          <div class="fc-card" id="fc-card">
+          <div class="fc-card" id="fc-card" style="transition:transform 0.65s cubic-bezier(.4,0,.2,1),box-shadow 0.2s;" onmouseover="if(!this.classList.contains('flipped'))this.style.boxShadow='0 0 30px rgba(168,85,247,0.5),0 0 60px rgba(168,85,247,0.2)'" onmouseout="this.style.boxShadow=''">
             <div class="fc-face fc-front">
               <div class="fc-label">Question</div>
               <div class="fc-text" id="fc-question"></div>
-              <div class="fc-hint" id="fc-swipe-hint">Clique ou glisse pour voir la réponse</div>
+              <div class="fc-hint" id="fc-swipe-hint" style="font-size:0.72rem;color:#475569;margin-top:0.6rem;">Clique pour voir la réponse</div>
             </div>
             <div class="fc-face fc-back">
               <div class="fc-label">Réponse</div>
@@ -437,16 +446,17 @@
           </div>
         </div>
       </div>
-      <div style="text-align:center;font-size:0.72rem;color:#475569;margin-top:0.4rem;" id="fc-gesture-hint">← Glisse à gauche : À revoir &nbsp;·&nbsp; Glisse à droite : Acquis →</div>
+
+      <!-- Consignes swipe : visibles uniquement après retournement -->
       <div class="fc-actions" id="fc-actions">
-        <button class="fc-btn-revoir" onclick="fcRevoir()">↩️ À revoir</button>
-        <button class="fc-btn-acquis" onclick="fcAcquis()">✦ Acquis !</button>
+        <button class="fc-btn-revoir" onclick="fcRevoir()">← À revoir</button>
+        <button class="fc-btn-acquis" onclick="fcAcquis()">Acquis ! →</button>
       </div>
       <div class="fc-complete" id="fc-complete">
         <div style="font-size:3.5rem;margin-bottom:0.5rem;">🎉</div>
         <p style="font-weight:900;font-size:1.3rem;color:#22d3ee;margin-bottom:0.3rem;">Pile maîtrisée !</p>
         <p style="color:#64748b;font-size:0.9rem;margin-bottom:1.5rem;">Tu as acquis toutes les cartes de cette session.</p>
-        <button onclick="reshuffleFC()" style="display:inline-flex;align-items:center;gap:0.5rem;background:linear-gradient(135deg,#7c3aed,#06b6d4);border:none;border-radius:9999px;padding:0.75rem 1.8rem;font-weight:800;color:#fff;font-size:0.95rem;cursor:pointer;font-family:'Nunito',sans-serif;">🔀 Nouvelle pile</button>
+        <button onclick="reshuffleFC()" style="display:inline-flex;align-items:center;gap:0.5rem;background:linear-gradient(135deg,#7c3aed,#06b6d4);border:none;border-radius:9999px;padding:0.75rem 1.8rem;font-weight:800;color:#fff;font-size:0.95rem;cursor:pointer;font-family:'Nunito',sans-serif;">↺ Nouvelle pile</button>
       </div>
     </div>
   </div>
@@ -731,7 +741,7 @@
     document.getElementById('fc-complete').classList.remove('visible');
     document.getElementById('fc-stack').style.display='block';
     document.getElementById('fc-actions').classList.remove('visible');
-    document.getElementById('fc-gesture-hint').style.display='block';
+    
     renderFCCard();
   }
   function renderFCCard(){
@@ -739,6 +749,7 @@
     const card=fcPile[0];const el=document.getElementById('fc-card');
     el.style.transition='none';el.classList.remove('flipped','exit-right','exit-left');void el.offsetWidth;el.style.transition='';
     fcFlipped=false;document.getElementById('fc-actions').classList.remove('visible');
+    
     const ibtn=document.getElementById('fc-indice-btn'),itxt=document.getElementById('fc-indice-text');
     itxt.style.display='none';
     if(card.indice){ibtn.style.display='inline-flex';ibtn.disabled=false;ibtn.style.opacity='1';ibtn.textContent='💡 Indice';}
@@ -746,8 +757,7 @@
     const weak=getFCWeak(),wc=weak[card.question]||0;
     document.getElementById('fc-question').textContent=card.question;
     document.getElementById('fc-reponse').textContent=card.reponse;
-    document.getElementById('fc-pile-info').textContent=wc>0?`⚠️ Vue ${wc+1}x — ${fcPile.length} restante${fcPile.length>1?'s':''}`:`${fcPile.length} carte${fcPile.length>1?'s':''} restante${fcPile.length>1?'s':''}`;
-    document.getElementById('fc-mastered').textContent=`✨ ${fcAcquises} / ${fcTotal} cartes maîtrisées`;
+    document.getElementById('fc-mastered').textContent=`✨ ${fcAcquises} / ${fcTotal}`;
   }
   function showFCIndice(){
     const card=fcPile[0];if(!card||!card.indice)return;
@@ -759,11 +769,34 @@
     const el=document.getElementById('fc-card');el.classList.toggle('flipped');
     fcFlipped=el.classList.contains('flipped');
     document.getElementById('fc-actions').classList.toggle('visible',fcFlipped);
+    
   }
   function fcAcquis(){markFCAcquis(fcPile[0].question);document.getElementById('fc-card').classList.add('exit-right');fcAcquises++;setTimeout(()=>{fcPile.shift();renderFCCard();},340);}
   function fcRevoir(){markFCRevoir(fcPile[0].question);document.getElementById('fc-card').classList.add('exit-left');setTimeout(()=>{const c=fcPile.shift();fcPile.push(c);renderFCCard();},340);}
-  function showFCComplete(){document.getElementById('fc-stack').style.display='none';document.getElementById('fc-actions').classList.remove('visible');document.getElementById('fc-gesture-hint').style.display='none';document.getElementById('fc-complete').classList.add('visible');document.getElementById('fc-mastered').textContent=`✨ ${fcAcquises} / ${fcTotal} cartes maîtrisées`;}
-  function reshuffleFC(){pickFCPile();}
+  function showFCComplete(){document.getElementById('fc-stack').style.display='none';document.getElementById('fc-actions').classList.remove('visible');document.getElementById('fc-complete').classList.add('visible');document.getElementById('fc-mastered').textContent=`✨ ${fcAcquises} / ${fcTotal}`;}
+  function reshuffleFC(){
+    const card = document.getElementById('fc-card');
+    if(card) {
+      card.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+      card.style.transform = 'scale(0.85) rotateY(20deg)';
+      card.style.opacity = '0';
+    }
+    setTimeout(() => {
+      // Tri pondéré + shuffle dans chaque groupe pour varier l'ordre
+      const weak = getFCWeak();
+      const withWeights = fcAllCards.map(c => ({c, w: weak[c.question]||0}));
+      // Sépare fort/faible, mélange chaque groupe, remet les faibles en tête
+      const strong = shuffle(withWeights.filter(x => x.w === 0)).map(x => x.c);
+      const weakCards = shuffle(withWeights.filter(x => x.w > 0).sort((a,b)=>b.w-a.w)).map(x => x.c);
+      fcPile = [...weakCards, ...strong].slice(0, FC_SIZE);
+      fcTotal = fcPile.length; fcAcquises = 0; fcFlipped = false;
+      document.getElementById('fc-complete').classList.remove('visible');
+      document.getElementById('fc-stack').style.display = 'block';
+      document.getElementById('fc-actions').classList.remove('visible');
+      if(card) { card.style.transition = ''; card.style.transform = ''; card.style.opacity = ''; }
+      renderFCCard();
+    }, 300);
+  }
 
   // Swipe & click
   document.addEventListener('DOMContentLoaded',()=>{
