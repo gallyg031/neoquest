@@ -6,10 +6,8 @@
   <link rel="icon" type="image/png" href="favicon2.png" />
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#a855f7" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <link rel="apple-touch-icon" href="img/Neo_assis.png" />
-  <title>NeoQuest TV — Cours</title>
+  <title>NeoQuest TV — Royaume</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="js/xp.js"></script>
@@ -17,213 +15,137 @@
   <style>
     :root { --bg:#08061a; --violet:#a855f7; --cyan:#22d3ee; --accent:#a855f7; }
     * { box-sizing:border-box; margin:0; padding:0; }
-    body { background:var(--bg); font-family:'Nunito',sans-serif; color:#e2e8f0; overflow-x:hidden; }
+    body { background:var(--bg); font-family:'Nunito',sans-serif; color:#e2e8f0; overflow-x:hidden; padding-bottom:90px; }
     body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events:none; z-index:9999; opacity:0.3; }
-
-    /* Blobs */
     .blob { position:fixed; border-radius:50%; filter:blur(130px); pointer-events:none; z-index:0; }
     .blob-1 { width:550px; height:550px; background:rgba(168,85,247,0.15); top:-150px; left:-150px; }
     .blob-2 { width:400px; height:400px; background:rgba(34,211,238,0.08); bottom:-80px; right:-80px; }
-
-    /* Navbar */
-    nav { background:rgba(8,6,26,0.85); backdrop-filter:blur(20px); border-bottom:1px solid rgba(168,85,247,0.15); position:sticky; top:0; z-index:50; }
+    nav { background:rgba(8,6,26,0.85); backdrop-filter:blur(20px); border-bottom:1px solid rgba(168,85,247,0.15); position:sticky; top:0; z-index:100; }
     .logo-text { background:linear-gradient(90deg,#a855f7,#22d3ee); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; font-weight:900; }
-    .nav-link { color:#c4b5fd; font-weight:700; font-size:0.9rem; text-decoration:none; transition:color 0.2s; }
-    .nav-link:hover { color:#fff; }
+    .nav-link { color:#c4b5fd; font-weight:700; font-size:0.9rem; text-decoration:none; }
 
-    /* ── BANNIÈRE HÉRO ── */
-    .hero-banner {
-      position: relative;
-      z-index: 10;
-      width: 100%;
-      overflow: hidden;
-      padding: 3rem 2rem 2.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 2rem;
-    }
-    .hero-banner::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, var(--accent-20, rgba(168,85,247,0.20)) 0%, transparent 60%);
-      z-index: 0;
-    }
-    .hero-banner::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 60px;
-      background: linear-gradient(to bottom, transparent, var(--bg));
-      z-index: 1;
-    }
-    .hero-banner-border {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--accent, #a855f7), transparent);
-      opacity: 0.4;
-      z-index: 2;
-    }
-    .hero-left {
-      position: relative;
-      z-index: 3;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-    .hero-right {
-      position: relative;
-      z-index: 3;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .hero-logo {
-      width: clamp(120px, 18vw, 200px);
-      object-fit: contain;
-      filter: drop-shadow(0 0 40px var(--accent, #a855f7));
-      animation: float 5s ease-in-out infinite;
-    }
-    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+    /* ── HEADER ── */
+    .kingdom-header { position:relative; width:100%; min-height:220px; display:flex; align-items:flex-end; overflow:hidden; }
+    .kingdom-banner-img { position:absolute; inset:0; background-size:cover; background-position:center 30%; transition:transform 8s ease; }
+    .kingdom-header:hover .kingdom-banner-img { transform:scale(1.03); }
+    .kingdom-banner-overlay { position:absolute; inset:0; background:linear-gradient(to bottom, rgba(8,6,26,0.1) 0%, rgba(8,6,26,0.55) 50%, rgba(8,6,26,0.97) 100%); }
+    .kingdom-header-content { position:relative; z-index:2; width:100%; padding:2rem 2.5rem 1.5rem; max-width:1000px; margin:0 auto; }
+    .kingdom-name { font-weight:900; font-size:clamp(2rem,5vw,3.2rem); line-height:1; color:#fff; letter-spacing:0.04em; text-shadow:0 0 40px var(--accent); text-transform:uppercase; }
+    .kingdom-tagline { font-size:0.88rem; color:#94a3b8; margin-top:0.4rem; }
 
-    .breadcrumb { display:flex; align-items:center; gap:0.5rem; font-size:0.82rem; color:#64748b; }
-    .breadcrumb a { color:#94a3b8; text-decoration:none; transition:color 0.2s; }
-    .breadcrumb a:hover { color:#c4b5fd; }
+    /* ── LAYOUT DEUX PHASES ── */
+    .kingdom-layout { position:relative; z-index:10; }
 
-    .mat-title {
-      font-weight: 900;
-      font-size: clamp(2rem, 5vw, 3.2rem);
-      line-height: 1.1;
-      color: #fff;
-    }
-    .mat-subtitle { color:#94a3b8; font-size:1rem; font-weight:600; margin-top:0.3rem; }
+    /* Phase globe : centré */
+    .globe-phase { display:flex; flex-direction:column; align-items:center; padding:2rem 1rem; }
+    .globe-phase .kingdom-body { display:none; }
+    .globe-phase .globe-sidebar { width:100%; display:flex; flex-direction:column; align-items:center; }
 
-    /* ── CONTENU ── */
-    main { position:relative; z-index:10; max-width:900px; margin:0 auto; padding:2rem 1.5rem 4rem; }
-
-    /* Niveaux */
-    .niveaux-label { font-size:0.82rem; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.8rem; }
-    .niveau-btn {
-      border: 2px solid rgba(168,85,247,0.3);
-      border-radius: 9999px;
-      padding: 0.6rem 1.6rem;
-      font-weight: 800;
-      font-size: 0.95rem;
-      color: #c4b5fd;
-      background: transparent;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-family: 'Nunito', sans-serif;
-    }
-    .niveau-btn:hover { background:rgba(168,85,247,0.15); border-color:rgba(168,85,247,0.6); color:#fff; }
-    .niveau-btn.active { color:#fff; }
-
-    /* Thème block */
-    .theme-block {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(168,85,247,0.15);
-      border-radius: 1.25rem;
-      overflow: hidden;
-      margin-bottom: 1.5rem;
-    }
-    .theme-header {
-      padding: 1.2rem 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      border-bottom: 1px solid rgba(168,85,247,0.1);
-    }
-    .theme-dot {
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-    .theme-count {
-      margin-left: auto;
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: #475569;
-      background: rgba(255,255,255,0.04);
-      border-radius: 9999px;
-      padding: 0.2rem 0.7rem;
+    /* Phase map : deux colonnes */
+    .map-phase { display:flex; flex-direction:row; align-items:flex-start; }
+    .map-phase .kingdom-body { display:block; flex:1; min-width:0; }
+    .map-phase .globe-sidebar {
+      width:240px; flex-shrink:0;
+      position:sticky; top:64px;
+      height:calc(100vh - 64px);
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      border-right:1px solid rgba(168,85,247,0.1);
+      background:rgba(8,6,26,0.7); backdrop-filter:blur(10px);
+      padding:1rem 0.5rem;
     }
 
-    /* Chapitre card */
-    .chapitre-card {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 1.1rem 1.5rem;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-      text-decoration: none;
-      color: inherit;
-      transition: background 0.2s;
-      position: relative;
+    /* Globe image */
+    @keyframes floatG { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+    #globe-wrap {
+      position:relative;
+      transition:width 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.5s ease, filter 0.5s ease, opacity 0.5s ease;
     }
-    .chapitre-card:last-child { border-bottom: none; }
-    .chapitre-card:hover { background: rgba(168,85,247,0.07); }
+    .globe-phase #globe-wrap { width:min(600px,80vw); animation:floatG 6s ease-in-out infinite; }
+    .map-phase   #globe-wrap { width:240px; overflow:hidden; }
+    .map-phase #fresnel-modal { display:none; }
+    #globe-wrap.teleporting { transform:scale(2); filter:blur(10px) brightness(1.5); opacity:0; pointer-events:none; transition:transform 0.5s ease, filter 0.5s ease, opacity 0.5s ease; }
 
-    /* Icône statut */
-    .chap-status {
-      width: 38px; height: 38px;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1rem;
-      flex-shrink: 0;
-      transition: all 0.3s;
+    .globe-img-modal { width:100%; display:block; filter:drop-shadow(0 0 30px rgba(34,211,238,0.2)); }
+    .fresnel-modal { position:absolute; border-radius:50%; background:transparent; pointer-events:none; z-index:0;
+      animation:fresnelP 4s ease-in-out infinite; }
+    @keyframes fresnelP {
+      0%,100%{box-shadow:0 0 30px 8px rgba(34,211,238,0.22),0 0 60px 18px rgba(168,85,247,0.15);}
+      50%{box-shadow:0 0 45px 12px rgba(34,211,238,0.35),0 0 90px 28px rgba(168,85,247,0.22);}
     }
-    .chap-status.not-started { background:rgba(255,255,255,0.05); border:1.5px solid rgba(255,255,255,0.1); }
-    .chap-status.in-progress { background:rgba(251,191,36,0.12); border:1.5px solid rgba(251,191,36,0.4); }
-    .chap-status.mastered    { background:rgba(34,211,238,0.12);  border:1.5px solid rgba(34,211,238,0.5); }
 
-    /* Contenu texte */
-    .chap-body { flex:1; min-width:0; }
-    .chap-name { font-weight:700; color:#e2e8f0; font-size:0.98rem; line-height:1.3; }
-    .chap-meta { display:flex; align-items:center; gap:0.75rem; margin-top:0.3rem; flex-wrap:wrap; }
-    .chap-count { font-size:0.72rem; color:#475569; font-weight:600; }
-    .chap-badge-status {
-      font-size:0.68rem; font-weight:700; padding:1px 8px; border-radius:9999px;
-    }
-    .chap-badge-status.not-started { background:rgba(255,255,255,0.05); color:#475569; }
-    .chap-badge-status.in-progress { background:rgba(251,191,36,0.12); color:#fbbf24; }
-    .chap-badge-status.mastered    { background:rgba(34,211,238,0.12);  color:#22d3ee; }
+    /* Zones cliquables */
+    .g-zone { position:absolute; width:140px; height:140px; border-radius:50%; transform:translate(-50%,-50%); cursor:pointer; transition:width 0.6s, height 0.6s; }
+    .map-phase .g-zone { width:100px; height:100px; }
+    .g-ring { position:absolute; inset:-5px; border-radius:50%; border:2px solid var(--col); box-shadow:0 0 14px var(--col); opacity:0; transition:opacity 0.3s, box-shadow 0.3s; }
+    .g-dot  { position:absolute; inset:0; border-radius:50%; background:var(--col); opacity:0; transition:opacity 0.3s; }
+    .g-zone:hover .g-dot  { opacity:0.25; }
+    .g-zone:hover .g-ring { opacity:1; box-shadow:0 0 24px var(--col),0 0 48px var(--col); animation:gPulse 2s ease-in-out infinite; }
+    @keyframes gPulse { 0%,100%{opacity:0.7} 50%{opacity:1} }
+    .g-zone:hover { transform:translate(-50%,-50%) scale(1.08); }
+    .g-tip { position:absolute; bottom:calc(100% + 14px); left:50%; transform:translateX(-50%) translateY(4px); text-align:center; opacity:0; transition:opacity 0.25s,transform 0.25s; pointer-events:none; white-space:nowrap; z-index:50; }
+    .g-zone:hover .g-tip { opacity:1; transform:translateX(-50%) translateY(0); }
+    .g-tip-name { font-size:15px; font-weight:900; color:#fff; text-shadow:0 0 12px var(--col),0 0 24px var(--col); letter-spacing:0.06em; text-transform:uppercase; }
+    .g-tip-sub  { font-size:10px; color:rgba(196,181,253,0.7); margin-top:3px; font-weight:700; }
 
-    /* Mini barre de progression */
-    .chap-progress-track {
-      height: 3px; border-radius: 9999px;
-      background: rgba(255,255,255,0.07);
-      margin-top: 0.4rem;
-      overflow: hidden;
-      max-width: 160px;
-    }
-    .chapitre-card:hover .chap-thumb { opacity:1; transform:scale(1.03); }
-    .chap-thumb { transition:opacity 0.2s, transform 0.2s; }
+    /* Fog canvas */
+    #globe-fog-canvas { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:15; opacity:0; transition:opacity 0.35s; }
+    #globe-wrap.has-active #globe-fog-canvas { opacity:1; }
 
-    /* Vide */
-    #empty-state { text-align:center; padding:5rem 0; }
+    .globe-sidebar-label { font-size:10px; font-weight:800; color:rgba(196,181,253,0.4); letter-spacing:0.15em; text-transform:uppercase; margin-bottom:0.4rem; text-align:center; }
+    .globe-sidebar-province { font-size:11px; font-weight:800; color:#c4b5fd; margin-top:0.5rem; text-align:center; }
+
+    /* ── BODY ── */
+    .kingdom-body { padding:2rem 1.5rem 3rem; position:relative; z-index:10; }
+
+    /* ── MAP ── */
+    .province-map-wrap { position:relative; width:100%; border-radius:1.25rem; margin-bottom:1rem; }
+    .province-map-img { width:100%; display:block; border-radius:1.25rem; }
+    .map-svg { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+    .map-node-icon { transition:transform 0.2s ease; }
+    @keyframes nodePulse { 0%,100%{opacity:0.7} 50%{opacity:1} }
+    @keyframes neoFloat { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(-8px)} }
+
+    /* ── STICKY BAR ── */
+    .sticky-bar { position:fixed; bottom:0; left:0; right:0; z-index:200; background:rgba(8,6,26,0.96); backdrop-filter:blur(20px); border-top:1px solid rgba(168,85,247,0.2); padding:0.75rem 1.5rem; display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+    .sticky-bar-track { width:100px; height:4px; background:rgba(255,255,255,0.08); border-radius:9999px; overflow:hidden; margin-top:4px; }
+    .sticky-bar-fill { height:100%; border-radius:9999px; background:linear-gradient(90deg,var(--accent),var(--cyan)); transition:width 0.8s; }
+    .btn-sos { display:inline-flex; align-items:center; gap:0.5rem; background:linear-gradient(135deg,#dc2626,#991b1b); border:none; border-radius:9999px; padding:0.6rem 1.4rem; font-weight:800; font-size:0.85rem; color:#fff; cursor:pointer; font-family:'Nunito',sans-serif; animation:sosPulse 2.5s ease-in-out infinite; }
+    @keyframes sosPulse { 0%,100%{box-shadow:0 0 10px rgba(220,38,38,0.35)} 50%{box-shadow:0 0 24px rgba(220,38,38,0.7)} }
+    @keyframes masterPulse { 0%,100%{box-shadow:0 0 12px rgba(34,211,238,0.4)} 50%{box-shadow:0 0 28px rgba(34,211,238,0.8)} }
 
     ::-webkit-scrollbar { width:6px; }
     ::-webkit-scrollbar-track { background:#08061a; }
     ::-webkit-scrollbar-thumb { background:linear-gradient(var(--violet),var(--cyan)); border-radius:3px; }
+
+    @media (max-width:700px) {
+      .map-phase { flex-direction:column; }
+      .map-phase .globe-sidebar { width:100%; position:relative; top:0; height:auto; border-right:none; border-bottom:1px solid rgba(168,85,247,0.1); padding:0.75rem; }
+      .map-phase #globe-wrap { width:240px; }
+    }
   </style>
 </head>
 <body>
 <div class="blob blob-1"></div>
 <div class="blob blob-2"></div>
 
-<!-- NAVBAR -->
-<nav class="w-full px-6 py-4 flex items-center justify-between">
-  <a href="index.html" class="flex items-center gap-2 no-underline">
+<nav class="w-full px-6 py-3 flex items-center justify-between">
+  <a href="index_hidden.html" class="flex items-center gap-2 no-underline">
     <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="15" stroke="url(#lg)" stroke-width="1.5"/><circle cx="16" cy="16" r="3" fill="url(#lg)"/><path d="M9 12L16 8L23 12L23 20L16 24L9 20Z" stroke="url(#lg)" stroke-width="1.5" fill="none"/><defs><linearGradient id="lg" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse"><stop stop-color="#a855f7"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs></svg>
-    <span class="logo-text text-xl">NeoQuest</span>
+    <span class="logo-text text-xl">NeoQuest TV</span>
   </a>
-  <a href="index.html" class="nav-link">← Accueil</a>
-  <a href="profil.html" id="nav-profile" title="Mon profil" style="display:flex;align-items:center;gap:0.5rem;text-decoration:none;">
-    <img id="nav-avatar" src="img/Neo_assis.png" alt="Profil" style="width:34px;height:34px;object-fit:contain;border-radius:50%;border:2px solid rgba(168,85,247,0.5);background:rgba(168,85,247,0.1);padding:2px;transition:border-color 0.2s;" onmouseover="this.style.borderColor='rgba(34,211,238,0.8)'" onmouseout="this.style.borderColor='rgba(168,85,247,0.5)'" />
-    <span id="nav-pseudo" style="font-size:0.8rem;font-weight:700;color:#c4b5fd;display:none;"></span>
+  <a href="index_hidden.html" class="nav-link">← Multivers</a>
+  <a href="profil.html" id="nav-profile" style="display:flex;align-items:center;gap:10px;text-decoration:none;background:rgba(0,0,0,0.35);border:1px solid rgba(168,85,247,0.25);border-radius:9999px;padding:5px 14px 5px 5px;" onmouseover="this.style.borderColor='rgba(168,85,247,0.55)'" onmouseout="this.style.borderColor='rgba(168,85,247,0.25)'">
+    <div style="position:relative;flex-shrink:0;">
+      <img id="nav-avatar" src="img/Neo_assis.png" alt="Profil" style="width:36px;height:36px;object-fit:contain;border-radius:50%;border:2px solid #22d3ee;background:rgba(168,85,247,0.15);padding:2px;" />
+      <div id="nav-level-badge" style="position:absolute;bottom:-2px;right:-4px;background:#22d3ee;color:#08061a;font-size:9px;font-weight:900;padding:1px 5px;border-radius:9999px;border:1.5px solid #08061a;line-height:1.4;">1</div>
+    </div>
+    <div style="display:none;" id="nav-hero-info">
+      <div id="nav-level-title" style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.05em;line-height:1;"></div>
+      <div id="nav-pseudo" style="font-size:13px;font-weight:900;color:#fff;line-height:1.3;">Héros</div>
+      <div style="width:72px;height:3px;background:rgba(255,255,255,0.08);border-radius:9999px;margin-top:3px;overflow:hidden;">
+        <div id="nav-xp-bar" style="height:100%;border-radius:9999px;background:#22d3ee;box-shadow:0 0 8px #22d3ee;width:0%;transition:width 0.8s ease;"></div>
+      </div>
+    </div>
   </a>
 </nav>
 <script>
@@ -231,213 +153,731 @@
     try {
       const p = JSON.parse(localStorage.getItem('neoquest_profile') || '{}');
       if(p.avatar) { const img = document.getElementById('nav-avatar'); if(img) { img.src = p.avatar; if(p.avatarStyle) img.style.filter = p.avatarStyle; } }
-      if(p.pseudo) { const el = document.getElementById('nav-pseudo'); if(el) { el.textContent = p.pseudo; el.style.display = 'inline'; } }
+      if(p.pseudo) { const el = document.getElementById('nav-pseudo'); if(el) el.textContent = p.pseudo; }
+    } catch(e) {}
+    try {
+      const xp  = (typeof nqGetXP === 'function') ? nqGetXP() : 0;
+      const lvl = (typeof nqGetLevel === 'function') ? nqGetLevel(xp) : {level:1,title:'Curieux Éveillé',color:'#22d3ee'};
+      const pct = (typeof nqGetLevelProgress === 'function') ? nqGetLevelProgress(xp) : 0;
+      document.getElementById('nav-level-badge').textContent = lvl.level;
+      document.getElementById('nav-level-badge').style.background = lvl.color;
+      document.getElementById('nav-level-title').textContent = lvl.title;
+      document.getElementById('nav-level-title').style.color = lvl.color;
+      document.getElementById('nav-xp-bar').style.width = pct + '%';
+      document.getElementById('nav-xp-bar').style.background = lvl.color;
+      document.getElementById('nav-hero-info').style.display = 'block';
     } catch(e) {}
   })();
 </script>
 
-<!-- BANNIÈRE HÉRO -->
-<div class="hero-banner" id="hero-banner">
-  <div class="hero-left">
-    <div class="breadcrumb">
-      <a href="index.html">Accueil</a>
-      <span>›</span>
-      <span id="bc-matiere" style="font-weight:800;"></span>
+<!-- Header Royaume -->
+<div class="kingdom-header">
+  <div class="kingdom-banner-img" id="kingdom-banner-img"></div>
+  <div class="kingdom-banner-overlay"></div>
+  <div class="kingdom-header-content">
+    <div style="font-size:0.78rem;color:#64748b;margin-bottom:0.5rem;">
+      <a href="index_hidden.html" style="color:#94a3b8;text-decoration:none;">Multivers</a>
+      <span style="margin:0 0.4rem;">›</span>
+      <span id="bc-royaume" style="color:#fff;font-weight:800;"></span>
     </div>
-    <h1 class="mat-title" id="mat-nom"></h1>
-    <p class="mat-subtitle" id="mat-subtitle"></p>
+    <div class="kingdom-name" id="kingdom-name"></div>
+    <div class="kingdom-tagline" id="kingdom-tagline"></div>
   </div>
-  <div class="hero-right">
-    <img id="mat-logo" class="hero-logo" src="" alt="" style="display:none;" />
-  </div>
-  <div class="hero-banner-border"></div>
 </div>
 
-<!-- CONTENU -->
-<main>
+<!-- Layout principal -->
+<div class="kingdom-layout globe-phase" id="kingdom-layout">
 
-  <!-- Niveaux -->
-  <div class="mb-8">
-    <p class="niveaux-label">Choisis ton niveau</p>
-    <div id="niveaux-tabs" class="flex flex-wrap gap-3"></div>
+  <!-- Sidebar avec globe -->
+  <div class="globe-sidebar">
+    <div class="globe-sidebar-label">Choisis ta Province</div>
+    <div id="globe-wrap">
+      <div class="fresnel-modal" id="fresnel-modal"></div>
+      <img class="globe-img-modal" id="globe-img" src="img/historyaglobe.png" alt="Planète Historya"/>
+      <canvas id="globe-fog-canvas"></canvas>
+      <div class="g-zone" style="--col:#22d3ee;left:34%;top:20%;" onclick="selectProvince('6eme')">
+        <div class="g-ring"></div><div class="g-dot"></div>
+        <div class="g-tip"><div class="g-tip-name" style="--col:#22d3ee;">L'Origine</div><div class="g-tip-sub">6ème · Antiquité</div></div>
+      </div>
+      <div class="g-zone" style="--col:#a855f7;left:65%;top:20%;" onclick="selectProvince('5eme')">
+        <div class="g-ring"></div><div class="g-dot"></div>
+        <div class="g-tip"><div class="g-tip-name" style="--col:#a855f7;">L'Héritage</div><div class="g-tip-sub">5ème · Moyen Âge</div></div>
+      </div>
+      <div class="g-zone" style="--col:#f472b6;left:34%;top:70%;" onclick="selectProvince('4eme')">
+        <div class="g-ring"></div><div class="g-dot"></div>
+        <div class="g-tip"><div class="g-tip-name" style="--col:#f472b6;">Les Révolutions</div><div class="g-tip-sub">4ème · XVIIIe-XIXe</div></div>
+      </div>
+      <div class="g-zone" style="--col:#fbbf24;left:65%;top:70%;" onclick="selectProvince('3eme')">
+        <div class="g-ring"></div><div class="g-dot"></div>
+        <div class="g-tip"><div class="g-tip-name" style="--col:#fbbf24;">Le Monde Moderne</div><div class="g-tip-sub">3ème · XXe siècle</div></div>
+      </div>
+    </div>
+    <div class="globe-sidebar-province" id="sidebar-province-label"></div>
   </div>
 
-  <!-- Thèmes -->
-  <div id="themes-container"></div>
-
-  <!-- Vide -->
-  <div id="empty-state" class="hidden">
-    <div style="font-size:3.5rem;margin-bottom:1rem;">🚧</div>
-    <p class="font-black text-xl text-white mb-2">Contenu en cours de préparation</p>
-    <p style="color:#64748b;">Reviens bientôt, Neo prépare les cours !</p>
+  <!-- Corps : map + quêtes -->
+  <div class="kingdom-body">
+    <div id="quest-route-container"></div>
+    <div id="empty-state" style="display:none;text-align:center;padding:4rem 0;">
+      <div style="font-size:3rem;margin-bottom:1rem;">🚧</div>
+      <p style="font-weight:900;font-size:1.2rem;color:#fff;margin-bottom:0.5rem;">Province en préparation</p>
+      <p style="color:#64748b;">Reviens bientôt, Neo prépare les quêtes !</p>
+    </div>
   </div>
 
-</main>
+</div>
+
+<!-- Sticky bar -->
+<div class="sticky-bar">
+  <div>
+    <div style="font-size:0.8rem;color:#94a3b8;font-weight:700;"><strong id="sticky-visited" style="color:#fff;">0</strong>/<span id="sticky-total">0</span> Quêtes · <span id="sticky-kingdom-name" style="color:var(--accent);"></span></div>
+    <div class="sticky-bar-track"><div class="sticky-bar-fill" id="sticky-fill" style="width:0%"></div></div>
+  </div>
+  <button class="btn-sos" onclick="launchSOSQuiz()">🆘 SOS Contrôle</button>
+</div>
 
 <script>
+  // ── Fresnel ──
+  function placeFresnel() {
+    const img = document.getElementById('globe-img');
+    const fr  = document.getElementById('fresnel-modal');
+    if (!img || !fr || !img.offsetWidth) return;
+    const iw = img.offsetWidth;
+    const ih = img.offsetHeight;
+    // Image ratio 1.83 — la sphère occupe ~95% de la hauteur, centrée
+    const r  = ih * 0.415;
+    const cx = iw * 0.5;
+    const cy = ih * 0.5;
+    fr.style.width  = (r*2) + 'px';
+    fr.style.height = (r*2) + 'px';
+    fr.style.left   = (cx - r) + 'px';
+    fr.style.top    = (cy - r) + 'px';
+  }
+
+  // ── Fog canvas ──
+  let _persistentZone = null;
+
+  function drawFog(activeZone, persist) {
+    const fogCanvas = document.getElementById('globe-fog-canvas');
+    const globeImg  = document.getElementById('globe-img');
+    const wrap      = document.getElementById('globe-wrap');
+    if (!fogCanvas || !globeImg) return;
+
+    if (persist) { _persistentZone = activeZone; }
+    const zone = activeZone || _persistentZone;
+
+    const iw = globeImg.offsetWidth, ih = globeImg.offsetHeight;
+    fogCanvas.width = iw; fogCanvas.height = ih;
+    const ctx = fogCanvas.getContext('2d');
+    ctx.clearRect(0, 0, iw, ih);
+
+    if (!zone) { wrap.classList.remove('has-active'); return; }
+    wrap.classList.add('has-active');
+
+    const cx = parseFloat(zone.style.left) / 100 * iw;
+    const cy = parseFloat(zone.style.top)  / 100 * ih;
+    const layout = document.getElementById('kingdom-layout');
+    const isSidebar = layout && layout.classList.contains('map-phase');
+    const r = isSidebar ? iw * 0.18 : iw * 0.15;
+
+    ctx.fillStyle = 'rgba(8,6,26,0.7)';
+    ctx.fillRect(0, 0, iw, ih);
+    ctx.save();
+    ctx.globalCompositeOperation = 'destination-out';
+    const grad = ctx.createRadialGradient(cx, cy, r*0.3, cx, cy, r*1.5);
+    grad.addColorStop(0, 'rgba(0,0,0,1)');
+    grad.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r*1.5, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // ── Hover fog ──
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.g-zone').forEach(zone => {
+      zone.addEventListener('mouseenter', () => drawFog(zone));
+      zone.addEventListener('mouseleave', () => drawFog(_persistentZone));
+    });
+
+    // Fresnel init
+    const globeImg = document.getElementById('globe-img');
+    globeImg.addEventListener('load', placeFresnel);
+    if (globeImg.complete) placeFresnel();
+    window.addEventListener("resize", () => { placeFresnel(); drawFog(null); });
+    setTimeout(placeFresnel, 300);
+  });
+
+  document.addEventListener('keydown', e => { if(e.key==='Escape') { } });
+
+  // ── Variables globales ──
   const params    = new URLSearchParams(window.location.search);
   const matiereId = params.get('matiere');
-  let matiereData = null;
-  let couleur     = '#a855f7';
+  let matiereData = null, couleur = '#a855f7', currentNiveau = null;
 
-  (function() {
+  // ── Sélection province ──
+  function selectProvince(id) {
+    const wrap   = document.getElementById('globe-wrap');
+    const layout = document.getElementById('kingdom-layout');
+
+    drawFog(null);
+
+    // Zoom téléportation
+    wrap.classList.add('teleporting');
+
+    setTimeout(() => {
+      // Switch vers map-phase
+      layout.classList.remove('globe-phase');
+      layout.classList.add('map-phase');
+      wrap.classList.remove('teleporting');
+
+      // Trouver la province dans data
+      const data = window.__neoData;
+      if (!data) return;
+      const matiereId = new URLSearchParams(window.location.search).get('matiere');
+      const mat = data.matieres.find(m => m.id === matiereId);
+      if (!mat) return;
+      const niv = mat.niveaux?.find(n => n.id === id);
+      if (!niv) return;
+      const c = niv.couleur_province || couleur;
+
+      document.documentElement.style.setProperty('--accent', c);
+      const lbl = document.getElementById('sidebar-province-label');
+      if (lbl) lbl.textContent = (niv.emoji_province||'') + ' ' + (niv.nom_province || niv.nom);
+
+      renderProvince(niv, c);
+
+      // Garder la zone active en surbrillance
+      // Trouver la zone active
+      let activeZone = null;
+      document.querySelectorAll('.g-zone').forEach(z => {
+        if ((z.getAttribute('onclick') || '').includes(id)) activeZone = z;
+      });
+      // Reset d'abord, puis setter la nouvelle zone persistante
+      _persistentZone = null;
+      drawFog(null);
+      if (activeZone) {
+        _persistentZone = activeZone;
+        drawFog(activeZone, true);
+      }
+
+
+
+      // Animer le container
+      const container = document.getElementById('quest-route-container');
+      if (container) {
+        container.style.cssText = 'opacity:0;transform:scale(0.95);filter:blur(6px);transition:none;';
+        setTimeout(() => {
+          container.style.cssText = 'opacity:1;transform:scale(1);filter:blur(0);transition:opacity 0.6s ease,transform 0.6s ease,filter 0.6s ease;';
+        }, 30);
+      }
+    }, 500);
+  }
+
+  // ── Init principale ──
+  function init() {
+    if (!window.__neoData) { setTimeout(init, 50); return; }
     const data = window.__neoData;
     matiereData = data.matieres.find(m => m.id === matiereId);
-    if (!matiereData) { window.location.href = 'index.html'; return; }
+    if (!matiereData) { window.location.href = 'index_hidden.html'; return; }
 
     couleur = matiereData.couleur || '#a855f7';
-
-    // Couleurs dynamiques
     document.documentElement.style.setProperty('--accent', couleur);
-    document.getElementById('hero-banner').style.background =
-      `linear-gradient(135deg, ${couleur}28 0%, ${couleur}0a 50%, transparent 100%)`;
     document.querySelector('.blob-1').style.background = couleur + '22';
+    document.title = `NeoQuest — ${matiereData.nom_royaume || matiereData.nom}`;
 
-    // Textes
-    document.title = `NeoQuest TV — ${matiereData.nom}`;
-    document.getElementById('bc-matiere').textContent = matiereData.nom;
-    document.getElementById('bc-matiere').style.color = couleur;
-    document.getElementById('mat-nom').textContent = matiereData.nom;
+    const bannerEl = document.getElementById('kingdom-banner-img');
+    const bannerImg = {'histoire-geo':'img/HistoryaBannerShort.png'}[matiereId];
+    bannerEl.style.backgroundImage = bannerImg ? `url('${bannerImg}')` : 'none';
+    if (!bannerImg) bannerEl.style.background = `linear-gradient(135deg,${couleur}33 0%,#08061a 100%)`;
 
-    const niveauxCount = matiereData.niveaux?.length || 0;
-    const chapCount = matiereData.niveaux?.flatMap(n => n.themes?.flatMap(t => t.chapitres) || []).length || 0;
-    document.getElementById('mat-subtitle').textContent =
-      niveauxCount > 0 ? `${niveauxCount} niveau${niveauxCount > 1 ? 'x' : ''} · ${chapCount} chapitre${chapCount > 1 ? 's' : ''}` : '';
+    document.getElementById('bc-royaume').textContent = matiereData.nom_royaume || matiereData.nom;
+    document.getElementById('kingdom-name').textContent = matiereData.nom_royaume || matiereData.nom;
+    document.getElementById('kingdom-tagline').textContent = matiereData.tagline || '';
+    document.getElementById('sticky-kingdom-name').textContent = matiereData.nom_royaume || matiereData.nom;
+  }
+  init();
 
-    // Logo
-    if (matiereData.logo) {
-      const logoEl = document.getElementById('mat-logo');
-      logoEl.src = matiereData.logo;
-      logoEl.alt = matiereData.nom;
-      logoEl.style.display = 'block';
-      logoEl.style.filter = `drop-shadow(0 0 40px ${couleur}cc)`;
-    }
+  // ── Fonctions map ──
+  const PROVINCE_MAPS = {
+    '5eme': 'img/Hist5Map.png',
+    // autres provinces à venir
+  };
 
-    // Niveaux tabs
+  const NEO_PROVINCE_IMGS = {
+    // '6eme':'img/NeoExplorateur.png',
+    // '5eme':'img/NeoChevalier.png',
+  };
+  const BANNER_IMGS  = { 'histoire-geo':'img/HistoryaBannerShort.png' };
+  const NEO_MAT_IMGS = { 'histoire-geo':'img/NeoGeo-Transp.png' };
+
+  (function(){
+    const data = window.__neoData;
+    if (!data || !data.matieres) { console.warn('data.js non chargé'); return; }
+    matiereData = data.matieres.find(m => m.id === matiereId);
+    if (!matiereData) { window.location.href = 'index_hidden.html'; return; }
+
+    couleur = matiereData.couleur || '#a855f7';
+    document.documentElement.style.setProperty('--accent', couleur);
+    document.querySelector('.blob-1').style.background = couleur + '22';
+    document.title = `NeoQuest — ${matiereData.nom_royaume || matiereData.nom}`;
+
+    const bannerImg = BANNER_IMGS[matiereId];
+    const bannerEl = document.getElementById('kingdom-banner-img');
+    bannerEl.style.backgroundImage = bannerImg ? `url('${bannerImg}')` : 'none';
+    if (!bannerImg) bannerEl.style.background = `linear-gradient(135deg,${couleur}33 0%,#08061a 100%)`;
+
+    document.getElementById('bc-royaume').textContent = matiereData.nom_royaume || matiereData.nom;
+    document.getElementById('kingdom-name').textContent = matiereData.nom_royaume || matiereData.nom;
+    document.getElementById('kingdom-tagline').textContent = matiereData.tagline || '';
+    document.getElementById('sticky-kingdom-name').textContent = matiereData.nom_royaume || matiereData.nom;
+
+    const neoSrc = NEO_MAT_IMGS[matiereId];
+    if (neoSrc) document.getElementById('kingdom-neo').src = neoSrc;
+
     if (!matiereData.niveaux || matiereData.niveaux.length === 0) {
-      document.getElementById('empty-state').classList.remove('hidden');
-    } else {
-      const tabs = document.getElementById('niveaux-tabs');
-      matiereData.niveaux.forEach((niv, i) => {
-        const btn = document.createElement('button');
-        btn.className = `niveau-btn ${i === 0 ? 'active' : ''}`;
-        btn.textContent = niv.nom;
-        if (i === 0) {
-          btn.style.background = couleur + '30';
-          btn.style.borderColor = couleur + 'aa';
-          btn.style.color = '#fff';
-        }
-        btn.addEventListener('click', () => {
-          document.querySelectorAll('.niveau-btn').forEach(b => {
-            b.classList.remove('active');
-            b.style.background = 'transparent';
-            b.style.borderColor = 'rgba(168,85,247,0.3)';
-            b.style.color = '#c4b5fd';
-          });
-          btn.classList.add('active');
-          btn.style.background = couleur + '30';
-          btn.style.borderColor = couleur + 'aa';
-          btn.style.color = '#fff';
-          renderThemes(niv);
-        });
-        tabs.appendChild(btn);
-      });
-      renderThemes(matiereData.niveaux[0]);
+      document.getElementById('empty-state').style.display = 'block';
+      return;
     }
+
+    // Province par défaut
+    if (matiereData.niveaux.length > 0) {
+      const first = matiereData.niveaux[0];
+      document.getElementById('current-province-label') && (document.getElementById('current-province-label').textContent = (first.nom_province || first.nom) + ' · ' + first.nom);
+      renderProvince(first, first.couleur_province || couleur);
+    }
+
+    // Fresnel
+    const globeImg = document.getElementById('globe-img');
+    if (globeImg) {
+      globeImg.addEventListener('load', placeFresnel);
+      if (globeImg.complete) placeFresnel();
+      window.addEventListener('resize', placeFresnel);
+      setTimeout(placeFresnel, 300);
+    }
+
+    renderProvince(matiereData.niveaux[0], matiereData.niveaux[0].couleur_province || couleur);
   })();
 
-  // ── Statut d'un chapitre depuis localStorage ──
-  function getChapStatut(chapId) {
+  function getStatut(id) {
     try {
-      const key = `neoquest_chap_${chapId}`;
-      const raw = localStorage.getItem(key);
-      if (!raw) return 'not-started';
-      const d = JSON.parse(raw);
+      const d = JSON.parse(localStorage.getItem(`neoquest_chap_${id}`) || 'null');
+      if (!d) return 'not-started';
       if (d.pts >= 200) return 'mastered';
       if (d.pts > 0 || d.quizDone > 0) return 'in-progress';
       return 'not-started';
     } catch { return 'not-started'; }
   }
-
-  function getChapPts(chapId) {
-    try {
-      const raw = localStorage.getItem(`neoquest_chap_${chapId}`);
-      if (!raw) return 0;
-      return JSON.parse(raw).pts || 0;
-    } catch { return 0; }
+  function getPts(id) {
+    try { return JSON.parse(localStorage.getItem(`neoquest_chap_${id}`) || '{}').pts || 0; } catch { return 0; }
   }
 
-  function renderThemes(niveau) {
-    const container = document.getElementById('themes-container');
+  function renderProvince(niveau, c) {
+    currentNiveau = niveau;
+    document.documentElement.style.setProperty('--accent', c);
+
+    const allChaps = niveau.themes?.flatMap(t => t.chapitres) || [];
+    const total   = allChaps.filter(ch => (ch.quiz?.length||0) > 0).length;
+    const visited = allChaps.filter(ch => localStorage.getItem(`neoquest_chap_${ch.id}`)).length;
+    const pct     = total > 0 ? Math.round((visited/total)*100) : 0;
+    document.getElementById('sticky-visited').textContent = visited;
+    document.getElementById('sticky-total').textContent   = total;
+    document.getElementById('sticky-fill').style.width    = pct + '%';
+
+    const container = document.getElementById('quest-route-container');
     container.innerHTML = '';
 
-    if (!niveau.themes || niveau.themes.length === 0) {
-      container.innerHTML = '<p style="color:#475569;text-align:center;padding:3rem 0;">Aucun thème disponible pour ce niveau.</p>';
+    if (allChaps.length === 0) {
+      document.getElementById('empty-state').style.display = 'block';
       return;
     }
+    document.getElementById('empty-state').style.display = 'none';
 
-    const STATUS = {
-      'not-started': { icon:'📖', label:'Pas commencé', color:'rgba(255,255,255,0.15)' },
-      'in-progress':  { icon:'⚡', label:'En cours',     color:'#fbbf24' },
-      'mastered':     { icon:'✅', label:'Maîtrisé',     color:'#22d3ee' },
-    };
+    // Position Neo = dernier chapitre actif
+    let lastActiveIdx = 0;
+    allChaps.forEach((ch, i) => {
+      const s = getStatut(ch.id);
+      if (s === 'in-progress' || s === 'mastered') lastActiveIdx = i;
+    });
 
-    niveau.themes.forEach(theme => {
-      const block = document.createElement('div');
-      block.className = 'theme-block';
+    const neoEl = document.getElementById('kingdom-neo');
+    const neoSrc = neoEl ? neoEl.src : 'img/Neo_assis.png';
+    const mapImg = PROVINCE_MAPS[niveau.id];
 
-      const chapitresHTML = theme.chapitres.map(chap => {
-        const statut   = getChapStatut(chap.id);
-        const pts      = getChapPts(chap.id);
-        const maxPts   = 200;
-        const pct      = Math.min(100, Math.round((pts / maxPts) * 100));
-        const s        = STATUS[statut];
-        const nbQuiz   = chap.quiz?.length || 0;
-        const nbCards  = chap.flashcards?.length || 0;
-        const isEmpty  = nbQuiz === 0 && nbCards === 0;
+    // ── Si une carte map existe → mode parcours sur image ──
+    if (mapImg) {
+      renderMapRoute(niveau, c, mapImg, lastActiveIdx, neoSrc, container);
+    } else {
+      renderZigzag(niveau, c, lastActiveIdx, neoSrc, container);
+    }
+  }
 
-        return `
-        <a href="chapitre.html?matiere=${matiereId}&niveau=${niveau.id}&chapitre=${chap.id}" class="chapitre-card">
-          <div class="chap-status ${statut}" title="${s.label}">
-            ${isEmpty ? '🚧' : s.icon}
-          </div>
-          <div class="chap-body">
-            <div class="chap-name">${chap.nom}</div>
-            <div class="chap-meta">
-              ${isEmpty ? `<span class="chap-count" style="color:#374151;">🚧 Bientôt disponible</span>` : ''}
-              <span class="chap-badge-status ${statut}">${s.label}</span>
-            </div>
-            ${statut !== 'not-started' && !isEmpty ? `
-            <div class="chap-progress-track">
-              <div class="chap-progress-fill" style="width:${pct}%;background:${s.color};"></div>
-            </div>` : ''}
-          </div>
-          ${chap.youtube && !isEmpty ? `
-          <div style="flex-shrink:0;width:80px;height:50px;border-radius:0.5rem;overflow:hidden;border:1px solid rgba(255,255,255,0.08);">
-            <img src="https://img.youtube.com/vi/${chap.youtube}/mqdefault.jpg" alt=""
-              class="chap-thumb" style="width:100%;height:100%;object-fit:cover;opacity:0.85;" />
-          </div>` : (!isEmpty ? `<span style="color:#374151;font-size:1rem;flex-shrink:0;">›</span>` : '')}
-        </a>`;
-      }).join('');
+  // ── Positions des nodes sur la map (en % largeur/hauteur de l'image) ──
+  // Chemin continu qui traverse les 3 régions de bas en haut
+  // Ordre : Choc des Empires (gauche) → Âge des Seigneurs (centre) → Nouveau Monde (droite)
+  // Pions individuels par quête
+  const QUEST_PIONS = {
+    'heritage-aigles':  'img/dome.png',
+    'souffle-desert':   'img/croissant.png',
+    'savoirs-bagdad':   'img/livre.png',
+    'ordre-seigneurial':'img/moulin.png',
+    'emergence-villes': 'img/befroi.png',
+    'etat-monarchique': 'img/bouclierroi.png',
+    'duel-titans':      'img/galeres.png',
+    'esprit-lumieres':  'img/presse.png',
+    'sacre-neo':        'img/portailroi.png',
+  };
 
-      block.innerHTML = `
-        <div class="theme-header">
-          <div class="theme-dot" style="background:${couleur};box-shadow:0 0 8px ${couleur}88;"></div>
-          <h2 style="font-weight:900;font-size:1.05rem;color:#fff;">${theme.nom}</h2>
-          <span class="theme-count">${theme.chapitres.length} chapitre${theme.chapitres.length > 1 ? 's' : ''}</span>
-        </div>
-        <div>${chapitresHTML}</div>
+  const MAP_NODE_POSITIONS = {
+    '5eme': [
+      [ 7.0, 50.2],  // dome byzantin
+      [18.9, 62.0],  // croissant lune
+      [10.6, 88.7],  // livre manuscrit
+      [53.2, 81.4],  // moulin
+      [44.6, 58.2],  // beffroi
+      [60.9, 43.8],  // bouclier roi
+      [71.1, 36.5],  // galeres
+      [73.3, 66.5],  // presse plume
+      [85.5, 55.6],  // portail Versailles
+    ],
+    default: [
+      [20, 75], [35, 60], [20, 45],
+      [50, 75], [50, 55], [50, 35],
+      [80, 45], [80, 62], [80, 78],
+    ]
+  };
+
+  // Frontières x% des régions pour bannière de transition
+  const REGION_BOUNDARIES = {
+    '5eme': [
+      { xMin: 0,  xMax: 33, nom: 'Le Choc des Empires',  couleur: '#f97316' },
+      { xMin: 33, xMax: 66, nom: "L'Âge des Seigneurs",  couleur: '#a855f7' },
+      { xMin: 66, xMax: 100,nom: 'Le Nouveau Monde',     couleur: '#22c55e' },
+    ]
+  };
+
+  function renderMapRoute(niveau, c, mapImg, lastActiveIdx, neoSrc, container) {
+    const allChaps = niveau.themes?.flatMap(t => t.chapitres) || [];
+    const positions = MAP_NODE_POSITIONS[niveau.id] || MAP_NODE_POSITIONS.default;
+
+    // Wrapper identique au test_map.html qui fonctionne
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'position:relative;display:inline-block;width:100%;margin-bottom:1rem;border-radius:1rem;overflow:hidden;';
+
+    const img = document.createElement('img');
+    img.src = mapImg;
+    img.style.cssText = 'width:100%;display:block;border-radius:1rem;';
+    wrap.appendChild(img);
+
+    // SVG chemins
+    const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;pointer-events:none;';
+    svg.setAttribute('viewBox','0 0 100 100');
+    svg.setAttribute('preserveAspectRatio','none');
+    wrap.appendChild(svg);
+
+    // Filtres CSS précalculés pour coloriser paw.png (image noire)
+    function colorFilter(color, lit) {
+      if (!lit) return 'brightness(0) invert(1)';
+      const map = {
+        '#ffffff': 'brightness(0) invert(1)',
+        '#a855f7': 'brightness(0) saturate(100%) invert(42%) sepia(93%) saturate(1000%) hue-rotate(252deg) brightness(103%) contrast(96%)',
+        '#22c55e': 'brightness(0) saturate(100%) invert(59%) sepia(75%) saturate(450%) hue-rotate(95deg) brightness(98%) contrast(93%)',
+        '#f97316': 'brightness(0) saturate(100%) invert(55%) sepia(94%) saturate(800%) hue-rotate(6deg) brightness(103%) contrast(97%)',
+        '#22d3ee': 'brightness(0) saturate(100%) invert(78%) sepia(60%) saturate(500%) hue-rotate(155deg) brightness(100%) contrast(97%)',
+        '#f472b6': 'brightness(0) saturate(100%) invert(62%) sepia(80%) saturate(600%) hue-rotate(295deg) brightness(103%) contrast(95%)',
+        '#facc15': 'brightness(0) saturate(100%) invert(85%) sepia(60%) saturate(800%) hue-rotate(5deg) brightness(105%) contrast(97%)',
+      };
+      return map[color] || 'brightness(0) invert(1)';
+    }
+
+    function drawPaw(wrap, iw, ih, cx, cy, angle, lit, color) {
+      const el = document.createElement('img');
+      el.src = 'img/paw.png';
+      el.className = 'paw-print';
+      const sizePx = Math.round(iw * 0.022);
+      const pxX = cx / 100 * iw;
+      const pxY = cy / 100 * ih;
+      el.style.cssText = `
+        position:absolute;
+        left:${pxX}px; top:${pxY}px;
+        width:${sizePx}px; height:${sizePx}px;
+        transform:translate(-50%,-50%) rotate(${(angle * 180/Math.PI).toFixed(1)}deg);
+        filter:${colorFilter(color, lit)};
+        opacity:${lit ? 1 : 0.3};
+        pointer-events:none;
+        z-index:5;
       `;
-      container.appendChild(block);
+      wrap.appendChild(el);
+    }
+
+    const pawsToDraw = [];
+    allChaps.forEach((chap, i) => {
+      if (i === 0) return;
+      const prev = positions[i-1] || [50,50];
+      const curr = positions[i]   || [50,50];
+      const prevStatut = getStatut(allChaps[i-1].id);
+      const lit = prevStatut === 'mastered';
+      const pawColor = lit ? c : '#ffffff';
+
+      // Interpoler 4 pattes entre les deux nodes
+      // Distance réelle en pixels (image 2744x1568)
+      const IW = 2744, IH = 1568;
+      const dpx = (curr[0]-prev[0])/100 * IW;
+      const dpy = (curr[1]-prev[1])/100 * IH;
+      const distPx = Math.sqrt(dpx*dpx + dpy*dpy);
+      // 1 patte tous les 120px réels
+      const steps = Math.max(3, Math.round(distPx / 60));
+      for (let s = 0; s < steps; s++) {
+        const t  = (s + 0.5) / steps;
+        const mx = (prev[0]+curr[0])/2;
+        const my = (prev[1]+curr[1])/2 - 3;
+        const bx = (1-t)*(1-t)*prev[0] + 2*(1-t)*t*mx + t*t*curr[0];
+        const by = (1-t)*(1-t)*prev[1] + 2*(1-t)*t*my + t*t*curr[1];
+        const dtx = 2*(1-t)*(mx-prev[0]) + 2*t*(curr[0]-mx);
+        const dty = 2*(1-t)*(my-prev[1]) + 2*t*(curr[1]-my);
+        const angle = Math.atan2(dty * IH, dtx * IW) + Math.PI/2;
+        // Offset gauche/droite en % équivalent à ~30px réels
+        const offsetPctX = (30 / IW) * 100;
+        const offsetPctY = (30 / IH) * 100;
+        const offsetDir = (s % 2 === 0 ? 1.0 : -1.0);
+        const px = bx + offsetDir * offsetPctX * Math.cos(angle - Math.PI/2);
+        const py = by + offsetDir * offsetPctY * Math.sin(angle - Math.PI/2);
+        pawsToDraw.push({px, py, angle, lit, color: pawColor});
+      }
+    });
+
+    // Créer les nodes AVANT de les positionner
+    const nodes = [];
+    allChaps.forEach((chap, i) => {
+      const statut  = getStatut(chap.id);
+      const isEmpty = (chap.quiz?.length||0)===0 && (chap.flashcards?.length||0)===0;
+      const isNeo   = (i === lastActiveIdx);
+      const loot    = chap.loot_quete || null;
+      const pionSrc = QUEST_PIONS[chap.id];
+
+      let pionFilter = (isEmpty || statut==='not-started') ? 'grayscale(0.85) brightness(0.6) opacity(0.7)' : '';
+      let fogHTML = '';
+      let pionAnim   = statut==='in-progress' ? 'nodePulse 2s ease-in-out infinite' : 'none';
+      let pionGlow   = statut==='mastered'
+        ? 'drop-shadow(0 0 8px #fbbf24) drop-shadow(0 0 20px #f59e0b) drop-shadow(0 0 40px rgba(251,191,36,0.6))'
+        : statut==='in-progress' ? `drop-shadow(0 0 8px ${c}) drop-shadow(0 0 18px ${c})` : '';
+      let checkmark = '';
+
+      const lootTip  = loot ? `<div style="font-size:0.62rem;color:#fbbf24;font-weight:800;margin-top:3px;">${loot.emoji} ${loot.nom}</div>` : '';
+      const ctaBtn   = isEmpty ? '' : `<div style="margin-top:5px;font-size:0.65rem;font-weight:800;color:${c};">Commencer →</div>`;
+
+      const node = document.createElement('div');
+      node.dataset.idx = i;
+      node.style.cssText = 'position:absolute;transform:translate(-50%,-50%);z-index:10;cursor:' + (isEmpty?'default':'pointer') + ';';
+      node.innerHTML = `
+        ${isNeo ? `<img src="${neoSrc}" style="position:absolute;top:-30px;left:50%;transform:translateX(-50%);width:48px;height:48px;object-fit:contain;filter:drop-shadow(0 0 8px ${c});animation:neoFloat 2.5s ease-in-out infinite;pointer-events:none;"/>` : ''}
+        <div style="position:relative;">
+          ${pionSrc
+            ? `<img src="${pionSrc}" style="width:64px;height:64px;object-fit:contain;filter:${pionGlow};animation:${pionAnim};transition:transform 0.2s;display:block;"/>`
+            : `<div style="width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:1.8rem;">${chap.icone_quete||'📍'}</div>`
+          }
+          ${fogHTML}
+          ${checkmark}
+        </div>
+        <div class="map-tooltip" style="
+          position:absolute;
+          bottom:calc(100% + 10px);
+          left:50%;
+          transform:translateX(-50%);
+          min-width:140px;
+          max-width:180px;
+          background:rgba(8,6,26,0.88);
+          backdrop-filter:blur(20px);
+          -webkit-backdrop-filter:blur(20px);
+          border:1px solid rgba(168,85,247,0.4);
+          border-radius:0.85rem;
+          padding:10px 14px;
+          opacity:0;
+          transition:opacity 0.2s, transform 0.2s;
+          pointer-events:none;
+          z-index:200;
+          text-align:center;
+          white-space:nowrap;
+          box-shadow:0 8px 32px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.08);
+        ">
+          <div style="font-size:0.75rem;font-weight:900;color:#fff;line-height:1.3;">${chap.nom_quete||chap.nom}</div>
+          ${lootTip}${ctaBtn}
+          <div style="position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:rgba(168,85,247,0.4);"></div>
+        </div>
+      `;
+
+      node.addEventListener('mouseenter', () => {
+        node.style.zIndex = '500';
+        const tip = node.querySelector('.map-tooltip');
+        // Détecter si le tooltip sort du haut de la carte
+        const nodeTop = parseFloat(node.style.top);
+        const ih = img.offsetHeight;
+        if (nodeTop < ih * 0.3) {
+          // Node en haut → tooltip en dessous
+          tip.style.bottom = 'auto';
+          tip.style.top = 'calc(100% + 10px)';
+          tip.querySelector('div[style*="border-top-color"]').style.borderTopColor = 'transparent';
+          tip.querySelector('div[style*="border-top-color"]').style.borderBottomColor = 'rgba(168,85,247,0.4)';
+          tip.querySelector('div[style*="border-top-color"]').style.top = 'auto';
+          tip.querySelector('div[style*="border-top-color"]').style.bottom = '100%';
+        }
+        tip.style.opacity = '1';
+        const img2 = node.querySelector('img[style*="64px"]');
+        if(img2) img2.style.transform = 'scale(1.15)';
+      });
+      node.addEventListener('mouseleave', () => {
+        node.style.zIndex = '10';
+        const tip = node.querySelector('.map-tooltip');
+        tip.style.opacity = '0';
+        const img2 = node.querySelector('img[style*="64px"]');
+        if(img2) img2.style.transform = 'scale(1)';
+      });
+      if (!isEmpty) {
+        node.addEventListener('click', () => {
+          window.location.href = `chapitre.html?matiere=${matiereId}&niveau=${niveau.id}&chapitre=${chap.id}`;
+        });
+      }
+
+      wrap.appendChild(node);
+      nodes.push(node);
+    });
+
+    // Positionner en px exactement comme test_map.html
+    function placeNodes() {
+      const iw = img.offsetWidth;
+      const ih = img.offsetHeight;
+      if (!iw || !ih) { setTimeout(placeNodes, 100); return; }
+      // Placer les nodes
+      nodes.forEach((node, i) => {
+        const pos = positions[i] || [50,50];
+        node.style.left = (pos[0]/100 * iw) + 'px';
+        node.style.top  = (pos[1]/100 * ih) + 'px';
+      });
+      // Dessiner les pattes
+      wrap.querySelectorAll('.paw-print').forEach(p => p.remove());
+      pawsToDraw.forEach(({px, py, angle, lit, color}) => {
+        drawPaw(wrap, iw, ih, px, py, angle, lit, color || c);
+        wrap.lastChild.classList.add('paw-print');
+      });
+    }
+
+    img.addEventListener('load', placeNodes);
+    window.addEventListener('resize', placeNodes);
+    if (img.complete && img.naturalWidth) placeNodes();
+    else setTimeout(placeNodes, 300);
+
+    container.appendChild(wrap);
+
+    // Loots de régions
+    niveau.themes?.forEach(theme => {
+      if (!theme.loot_region) return;
+      const themeChaps  = theme.chapitres || [];
+      const allMastered = themeChaps.length > 0 && themeChaps.every(ch => getStatut(ch.id) === 'mastered');
+      const loot = theme.loot_region;
+      const lootEl = document.createElement('div');
+      lootEl.style.cssText = 'text-align:center;margin-bottom:0.75rem;';
+      lootEl.innerHTML = `
+        <div style="display:inline-flex;align-items:center;gap:0.5rem;
+          background:${allMastered?'rgba(250,204,21,0.12)':'rgba(255,255,255,0.03)'};
+          border:1px solid ${allMastered?'rgba(250,204,21,0.45)':'rgba(255,255,255,0.08)'};
+          border-radius:9999px;padding:5px 16px;font-size:0.7rem;font-weight:800;
+          color:${allMastered?'#fbbf24':'#334155'};">
+          ${loot.emoji} ${theme.icone_region} ${theme.nom_region} — ${allMastered ? loot.nom : '??? Récompense bloquée'}
+        </div>`;
+      container.appendChild(lootEl);
     });
   }
+
+  function renderZigzag(niveau, c, lastActiveIdx, neoSrc, container) {
+    const route = document.createElement('div');
+    route.className = 'quest-route';
+
+    const STATUS_ICON  = {'not-started':'📖','in-progress':'⚡','mastered':'✅'};
+    const STATUS_LABEL = {'not-started':'Pas commencé','in-progress':'En cours','mastered':'Maîtrisé'};
+    const STATUS_COL   = {'not-started':'rgba(255,255,255,0.1)','in-progress':'#fbbf24','mastered':'#22d3ee'};
+
+    let globalIdx = 0;
+    niveau.themes?.forEach(theme => {
+      const regionNom  = theme.nom_region  || theme.nom;
+      const regionIcon = theme.icone_region || '📍';
+      const loot       = theme.loot_region  || null;
+      const themeChaps = theme.chapitres || [];
+      const allMastered = themeChaps.length > 0 && themeChaps.every(ch => getStatut(ch.id) === 'mastered');
+      const lootHTML = loot ? `
+        <div style="display:inline-flex;align-items:center;gap:0.4rem;margin-top:0.5rem;
+          background:${allMastered?'rgba(250,204,21,0.12)':'rgba(255,255,255,0.04)'};
+          border:1px solid ${allMastered?'rgba(250,204,21,0.5)':'rgba(255,255,255,0.08)'};
+          border-radius:9999px;padding:3px 12px;font-size:0.62rem;font-weight:800;
+          color:${allMastered?'#fbbf24':'#334155'};">
+          ${loot.emoji} ${allMastered ? loot.nom : '??? Objet légendaire'}
+        </div>` : '';
+
+      const lbl = document.createElement('div');
+      lbl.className = 'theme-label';
+      lbl.innerHTML = `
+        <div style="display:inline-flex;flex-direction:column;align-items:center;gap:0.4rem;">
+          <span style="font-size:0.68rem;font-weight:800;color:${c};text-transform:uppercase;letter-spacing:0.1em;background:${c}18;border:1px solid ${c}33;border-radius:9999px;padding:4px 16px;">
+            ${regionIcon} ${regionNom}
+          </span>
+          ${lootHTML}
+        </div>`;
+      route.appendChild(lbl);
+
+      theme.chapitres.forEach(chap => {
+        const statut  = getStatut(chap.id);
+        const pts     = getPts(chap.id);
+        const pct2    = Math.min(100, Math.round((pts/200)*100));
+        const isEmpty = (chap.quiz?.length||0)===0 && (chap.flashcards?.length||0)===0;
+        const isNeo   = (globalIdx === lastActiveIdx);
+        const isEven  = globalIdx % 2 === 0;
+        const thumbBg = chap.youtube ? `background-image:url('https://img.youtube.com/vi/${chap.youtube}/mqdefault.jpg');` : '';
+        const href    = isEmpty ? '#' : `chapitre.html?matiere=${matiereId}&niveau=${niveau.id}&chapitre=${chap.id}`;
+
+        const cardHTML = `
+          <a href="${href}" class="quest-card ${isEmpty?'empty':statut}">
+            <div class="quest-card-thumb" style="${thumbBg}"></div>
+            <div class="quest-card-inner">
+              <div class="quest-card-num">${chap.icone_quete||'📍'} Quête ${globalIdx+1}</div>
+              <div class="quest-card-name">${chap.nom_quete || chap.nom}</div>
+              <span class="quest-status-pill ${isEmpty?'not-started':statut}">
+                ${isEmpty ? '🚧 Bientôt' : STATUS_LABEL[statut]}
+              </span>
+              ${statut!=='not-started'&&!isEmpty?`<div class="quest-progress-bar"><div class="quest-progress-fill" style="width:${pct2}%;background:${STATUS_COL[statut]};"></div></div>`:''}
+            </div>
+          </a>`;
+
+        const dotHTML = `
+          <div class="quest-node-center">
+            ${isNeo ? `<img class="neo-on-map" src="${neoSrc}" alt="Neo" />` : ''}
+            <div class="quest-node-dot ${isEmpty?'empty':statut}">
+              ${isEmpty ? '🔒' : STATUS_ICON[statut]}
+            </div>
+          </div>`;
+        const spacer = `<div class="quest-spacer"></div>`;
+        const node = document.createElement('div');
+        node.className = 'quest-node';
+        node.innerHTML = isEven ? cardHTML + dotHTML + spacer : spacer + dotHTML + cardHTML;
+        route.appendChild(node);
+        globalIdx++;
+      });
+    });
+    container.appendChild(route);
+  }
+
+  function launchSOSQuiz() {
+    if (!currentNiveau) return;
+    const active = currentNiveau.themes?.flatMap(t=>t.chapitres).filter(ch =>
+      localStorage.getItem(`neoquest_chap_${ch.id}`) && (ch.quiz?.length||0) > 0
+    ) || [];
+    if (active.length === 0) { alert('Complète au moins une quête pour débloquer le SOS Contrôle !'); return; }
+    window.location.href = `chapitre.html?matiere=${matiereId}&niveau=${currentNiveau.id}&chapitre=${active[0].id}`;
+  }
+
 </script>
 <script>
-  if("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/sw.js")
-      .then(() => console.log("[NeoQuest] Service Worker enregistré"))
-      .catch(e => console.warn("[NeoQuest] SW erreur:", e));
-  }
+  if("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js").catch(()=>{});
 </script>
 </body>
 </html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; }
+body { background:#08061a; padding:20px; }
+#wrap { position:relative; display:inline-block; width:100%; }
+#wrap img { width:100%; display:block; }
+.node {
+  position:absolute;
+  width:40px; height:40px;
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+  background:red;
+  border:3px solid white;
+  display:flex; align-items:center; justify-content:center;
+  color:white; font-weight:900; font-size:12px;
+  z-index:10;
+}
+#info { color:white; margin-top:10px; font-size:13px; font-family:monospace; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <img id="img" src="img/Hist5Map.png" />
+</div>
+<div id="info">Clique pour calibrer</div>
+
+<script>
+const POSITIONS = [
+  [ 7.0, 50.2], [18.9, 62.0], [10.6, 88.7],
+  [53.2, 81.4], [44.6, 58.2], [60.9, 43.8],
+  [71.1, 36.5], [73.3, 66.5], [85.5, 55.6]
+];
+
+const wrap = document.getElementById('wrap');
+const img  = document.getElementById('img');
+
+function place() {
+  wrap.querySelectorAll('.node').forEach(n => n.remove());
+  const iw = img.offsetWidth;
+  const ih = img.offsetHeight;
+  document.getElementById('info').textContent =
+    `img.offsetWidth=${iw} img.offsetHeight=${ih} wrap=${wrap.offsetWidth}x${wrap.offsetHeight}`;
+
+  POSITIONS.forEach((p, i) => {
+    const node = document.createElement('div');
+    node.className = 'node';
+    node.textContent = i + 1;
+    node.style.left = (p[0]/100 * iw) + 'px';
+    node.style.top  = (p[1]/100 * ih) + 'px';
+    wrap.appendChild(node);
+  });
+}
+
+img.onload = place;
+if (img.complete) place();
+setTimeout(place, 1000);
+
+wrap.addEventListener('click', e => {
+  const r = img.getBoundingClientRect();
+  const x = ((e.clientX - r.left) / img.offsetWidth * 100).toFixed(1);
+  const y = ((e.clientY - r.top)  / img.offsetHeight * 100).toFixed(1);
+  document.getElementById('info').textContent = `Clic: ${x}%, ${y}%`;
+});
+</script>
+</body>
+</html>

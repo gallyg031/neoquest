@@ -40,9 +40,130 @@
     .reveal { opacity:0; transform:translateY(24px); transition:opacity 0.6s ease,transform 0.6s ease; }
     .reveal.visible { opacity:1; transform:translateY(0); }
     .divider { height:1px; background:linear-gradient(90deg,transparent,rgba(168,85,247,0.4),rgba(34,211,238,0.4),transparent); max-width:700px; margin:0 auto; }
-    .mat-card { background: transparent !important; }
-    .mat-glow { position:absolute; inset:0; opacity:0.45; transition:opacity 0.3s; border-radius:1.25rem; pointer-events:none; }
-    .glass-hover:hover .mat-glow { opacity:1; }
+    /* ── Portails ── */
+    @property --rot { syntax:'<angle>'; initial-value:0deg; inherits:false; }
+    @keyframes portalSpin  { to { --rot: 360deg; } }
+    @keyframes portalFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+    @keyframes portalPulse { 0%,100%{opacity:0.7} 50%{opacity:1} }
+
+    /* Nid d'abeille — positionnement absolu */
+    #matieres-grid {
+      position:relative !important;
+      display:block !important;
+      width:800px;
+      height:560px;
+      margin:0 auto;
+      padding:1rem 0 3rem;
+    }
+
+    .portal-wrap {
+      width:260px; height:300px;
+      position:absolute;
+      flex-shrink:0;
+    }
+
+    /* Responsive : scale down sur petits écrans */
+    @media (max-width:900px) {
+      #matieres-grid { transform:scale(0.75); transform-origin:top center; height:440px; }
+    }
+    @media (max-width:600px) {
+      #matieres-grid { transform:scale(0.5); transform-origin:top center; height:300px; }
+    }
+
+    /* Bordure animée — hexagone extérieur */
+    .portal-border {
+      position:absolute; inset:0;
+      clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+      background:conic-gradient(from var(--rot), var(--p1) 0%, var(--p2) 30%, var(--p3) 50%, var(--p2) 70%, var(--p1) 100%);
+      animation:portalSpin 6s linear infinite;
+    }
+    .portal-wrap.locked .portal-border { animation:none; background:#1e1e2e; }
+
+    /* Hexagone intérieur (décalé de 3px pour la bordure) */
+    .portal-hex {
+      position:absolute;
+      inset:3px;
+      clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+      overflow:hidden;
+      cursor:pointer;
+      transition:filter 0.3s;
+    }
+    .portal-wrap:not(.locked):hover .portal-hex { filter:brightness(1.2); }
+    .portal-wrap:not(.locked):hover .portal-border { animation-duration:2s; }
+    .portal-wrap.locked .portal-hex { filter:grayscale(1) brightness(0.4); cursor:default; }
+
+    /* Image de fond */
+    .portal-img {
+      position:absolute; inset:0;
+      background-size:115%; background-position:center 35%;
+      transition:transform 0.4s ease;
+    }
+    .portal-wrap:not(.locked):hover .portal-img { transform:scale(1.08); }
+
+    /* Overlay sombre en bas pour le texte */
+    .portal-overlay {
+      position:absolute; inset:0;
+      background:linear-gradient(to top, rgba(8,6,26,0.95) 0%, rgba(8,6,26,0.2) 45%, transparent 100%);
+    }
+
+    /* Glow au survol */
+    .portal-glow {
+      position:absolute; inset:0;
+      opacity:0; transition:opacity 0.3s;
+      background:radial-gradient(circle at center, var(--p1-raw) 0%, transparent 70%);
+    }
+    .portal-wrap:not(.locked):hover .portal-glow { opacity:0.25; }
+
+    /* Contenu texte */
+    .portal-content {
+      position:absolute; inset:0;
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:flex-end;
+      padding:0 1rem 1.25rem;
+      text-align:center; z-index:2;
+    }
+    .portal-icon {
+      margin-bottom:0.4rem;
+      animation:portalFloat 4s ease-in-out infinite;
+    }
+    .portal-name {
+      font-weight:900; font-size:1.1rem;
+      color:#fff; letter-spacing:0.1em;
+      text-transform:uppercase;
+      text-shadow:0 0 24px var(--p1-raw), 0 2px 8px rgba(0,0,0,0.9);
+      line-height:1.2;
+    }
+    .portal-sub {
+      font-size:0.62rem; font-weight:700;
+      margin-top:3px; opacity:0.7; color:#cbd5e1;
+    }
+    .portal-bar-wrap {
+      width:70%; margin-top:6px;
+      height:2px; background:rgba(255,255,255,0.12);
+      border-radius:9999px; overflow:hidden;
+    }
+    .portal-bar { height:100%; border-radius:9999px; transition:width 0.8s ease; }
+
+    /* ── Animation porte ── */
+    @keyframes doorFadeIn  { from{opacity:0} to{opacity:1} }
+    @keyframes doorFadeOut { from{opacity:1} to{opacity:0} }
+    @keyframes doorOpenL   { from{transform:perspective(800px) rotateY(0)} to{transform:perspective(800px) rotateY(-85deg)} }
+    @keyframes doorOpenR   { from{transform:perspective(800px) rotateY(0)} to{transform:perspective(800px) rotateY(85deg)} }
+    @keyframes flashBeam   { 0%{opacity:0} 40%{opacity:1} 100%{opacity:0} }
+
+    .door-overlay { position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center; }
+    .door-backdrop { position:absolute;inset:0;background:rgba(8,6,26,0.88);backdrop-filter:blur(10px);animation:doorFadeIn 0.25s ease forwards; }
+    .door-hex-wrap { position:relative;width:300px;height:346px;clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);overflow:hidden; }
+    .door-scene { position:absolute;inset:0;display:flex; }
+    .door-half {
+      width:50%; height:100%;
+      background-size:200% 100%;
+      transform-style:preserve-3d;
+    }
+    .door-half-l { transform-origin:right center; background-position:left; animation:doorOpenL 0.65s cubic-bezier(.4,0,.2,1) 0.2s both; }
+    .door-half-r { transform-origin:left center;  background-position:right; animation:doorOpenR 0.65s cubic-bezier(.4,0,.2,1) 0.2s both; }
+    .door-beam { position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(255,255,255,0.95) 0%,transparent 65%);animation:flashBeam 0.55s ease 0.7s both; }
+    .mat-card { background:transparent!important; }
     ::-webkit-scrollbar { width:6px; }
     ::-webkit-scrollbar-track { background:#08061a; }
     ::-webkit-scrollbar-thumb { background:linear-gradient(var(--violet),var(--cyan)); border-radius:3px; }
@@ -54,35 +175,49 @@
 <div class="blob blob-2"></div>
 
 <!-- NAVBAR -->
-<nav class="relative z-50 w-full px-6 py-4 flex items-center justify-between">
+<nav class="relative z-50 w-full px-6 py-3 flex items-center justify-between">
   <a href="index.html" class="flex items-center gap-2 no-underline">
     <svg width="30" height="30" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="15" stroke="url(#lg)" stroke-width="1.5"/><circle cx="16" cy="16" r="3" fill="url(#lg)"/><path d="M9 12L16 8L23 12L23 20L16 24L9 20Z" stroke="url(#lg)" stroke-width="1.5" fill="none"/><defs><linearGradient id="lg" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse"><stop stop-color="#a855f7"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs></svg>
     <span class="logo-text text-xl">NeoQuest TV</span>
   </a>
   <div class="hidden md:flex items-center gap-8">
-    <a href="#matieres" class="nav-link">Matières</a>
+    <a href="#matieres" class="nav-link">Royaumes</a>
     <a href="#comment" class="nav-link">Comment ça marche</a>
   </div>
   <button id="menuBtn" class="md:hidden text-purple-300"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
-<a href="profil.html" id="nav-profile" title="Mon profil" style="display:flex;align-items:center;gap:0.5rem;text-decoration:none;">
-    <div style="position:relative;">
-      <img id="nav-avatar" src="img/Neo_assis.png" alt="Profil" style="width:34px;height:34px;object-fit:contain;border-radius:50%;border:2px solid rgba(168,85,247,0.5);background:rgba(168,85,247,0.1);padding:2px;transition:border-color 0.2s;" onmouseover="this.style.borderColor='rgba(34,211,238,0.8)'" onmouseout="this.style.borderColor='rgba(168,85,247,0.5)'" />
+  <a href="profil.html" id="nav-profile" style="display:flex;align-items:center;gap:10px;text-decoration:none;background:rgba(0,0,0,0.35);border:1px solid rgba(168,85,247,0.25);border-radius:9999px;padding:5px 14px 5px 5px;transition:border-color 0.2s;" onmouseover="this.style.borderColor='rgba(168,85,247,0.55)'" onmouseout="this.style.borderColor='rgba(168,85,247,0.25)'">
+    <div style="position:relative;flex-shrink:0;">
+      <img id="nav-avatar" src="img/Neo_assis.png" alt="Profil" style="width:36px;height:36px;object-fit:contain;border-radius:50%;border:2px solid #22d3ee;background:rgba(168,85,247,0.15);padding:2px;" />
+      <div id="nav-level-badge" style="position:absolute;bottom:-2px;right:-4px;background:#22d3ee;color:#08061a;font-size:9px;font-weight:900;padding:1px 5px;border-radius:9999px;border:1.5px solid #08061a;line-height:1.4;">1</div>
     </div>
-    <span id="nav-pseudo" style="font-size:0.8rem;font-weight:700;color:#c4b5fd;display:none;"></span>
+    <div style="display:none;" id="nav-hero-info">
+      <div id="nav-level-title" style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.05em;line-height:1;"></div>
+      <div id="nav-pseudo" style="font-size:13px;font-weight:900;color:#fff;line-height:1.3;">Héros</div>
+      <div style="width:72px;height:3px;background:rgba(255,255,255,0.08);border-radius:9999px;margin-top:3px;overflow:hidden;">
+        <div id="nav-xp-bar" style="height:100%;border-radius:9999px;background:#22d3ee;box-shadow:0 0 8px #22d3ee;width:0%;transition:width 0.8s ease;"></div>
+      </div>
+    </div>
   </a>
 </nav>
 <script>
   (function(){
     try {
       const p = JSON.parse(localStorage.getItem('neoquest_profile') || '{}');
-      if(p.avatar) {
-        const img = document.getElementById('nav-avatar');
-        if(img) { img.src = p.avatar; if(p.avatarStyle) img.style.filter = p.avatarStyle; }
-      }
-      if(p.pseudo) {
-        const el = document.getElementById('nav-pseudo');
-        if(el) { el.textContent = p.pseudo; el.style.display = 'inline'; }
-      }
+      if(p.avatar) { const img = document.getElementById('nav-avatar'); if(img) { img.src = p.avatar; if(p.avatarStyle) img.style.filter = p.avatarStyle; } }
+      if(p.pseudo) { const el = document.getElementById('nav-pseudo'); if(el) el.textContent = p.pseudo; }
+    } catch(e) {}
+    try {
+      const xp  = (typeof nqGetXP === 'function') ? nqGetXP() : 0;
+      const lvl = (typeof nqGetLevel === 'function') ? nqGetLevel(xp) : {level:1,title:'Curieux Éveillé',color:'#22d3ee'};
+      const pct = (typeof nqGetLevelProgress === 'function') ? nqGetLevelProgress(xp) : 0;
+      document.getElementById('nav-level-badge').textContent = lvl.level;
+      document.getElementById('nav-level-badge').style.background = lvl.color;
+      document.getElementById('nav-level-title').textContent = lvl.title;
+      document.getElementById('nav-level-title').style.color = lvl.color;
+      document.getElementById('nav-xp-bar').style.width = pct + '%';
+      document.getElementById('nav-xp-bar').style.background = lvl.color;
+      document.getElementById('nav-xp-bar').style.boxShadow = '0 0 8px ' + lvl.color;
+      document.getElementById('nav-hero-info').style.display = 'block';
     } catch(e) {}
   })();
 </script>
@@ -101,15 +236,40 @@
 <section class="relative z-10 px-6 py-16 md:py-24">
   <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
     <div class="reveal">
-      <div class="badge mb-6">✦ L'Aventure de l'Apprentissage</div>
-      <h1 class="font-black text-4xl md:text-5xl lg:text-6xl leading-tight mb-6" style="background:linear-gradient(135deg,#fff 30%,#c4b5fd);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
-        Le savoir est ton super-pouvoir
+      <!-- Badge quête du moment -->
+      <div style="display:inline-flex;align-items:center;gap:0.5rem;background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.3);border-radius:9999px;padding:0.3rem 1rem;margin-bottom:1.5rem;">
+        <span style="width:7px;height:7px;border-radius:50%;background:#a855f7;display:inline-block;animation:ping 1.2s ease-in-out infinite;"></span>
+        <span style="font-size:0.75rem;font-weight:800;color:#c4b5fd;text-transform:uppercase;letter-spacing:0.08em;">Nouvelle quête disponible</span>
+      </div>
+
+      <h1 class="font-black text-4xl md:text-6xl leading-tight mb-6" style="background:linear-gradient(135deg,#fff 20%,#c4b5fd 60%,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-style:italic;">
+        L'ODYSSÉE<br/>DE NEO
       </h1>
-      <p class="text-slate-400 text-lg mb-8 max-w-md leading-relaxed">
-        Vidéos, fiches, flashcards et quiz pour explorer toutes les matières — du primaire au collège.
+
+      <p class="text-slate-400 text-lg mb-4 max-w-md leading-relaxed">
+        Le brouillard de l'oubli gagne du terrain. Explore les Royaumes, récolte les éclats de savoir et fais évoluer ton Héros.
       </p>
-      <a href="#matieres" class="btn-neon">⚡ Choisir une matière</a>
+
+      <!-- Dernière quête active -->
+      <div id="hero-last-quest" style="display:none;align-items:center;gap:0.75rem;background:rgba(255,255,255,0.04);border:1px solid rgba(168,85,247,0.2);border-radius:0.75rem;padding:0.75rem 1rem;margin-bottom:1.75rem;max-width:400px;">
+        <div style="font-size:1.5rem;flex-shrink:0;">🗺️</div>
+        <div>
+          <div style="font-size:0.7rem;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">Dernière quête</div>
+          <div id="hero-quest-name" style="font-size:0.9rem;font-weight:800;color:#fff;"></div>
+        </div>
+        <a id="hero-quest-link" href="#" style="margin-left:auto;flex-shrink:0;font-size:0.75rem;font-weight:800;color:#22d3ee;text-decoration:none;white-space:nowrap;">Continuer →</a>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
+        <a href="#matieres" class="btn-neon">⚔️ Commencer l'Aventure</a>
+        <!-- Indicateur nouveautés -->
+        <div id="hero-new-badge" style="display:none;align-items:center;gap:0.4rem;font-size:0.72rem;font-weight:800;color:#a855f7;text-transform:uppercase;letter-spacing:0.05em;">
+          <span style="width:6px;height:6px;border-radius:50%;background:#a855f7;animation:ping 1.2s ease-in-out infinite;"></span>
+          <span id="hero-new-text"></span>
+        </div>
+      </div>
     </div>
+
     <div class="flex justify-center reveal" style="transition-delay:0.2s;">
       <div class="float relative">
         <div style="position:absolute;inset:-20px;border-radius:50%;background:radial-gradient(circle,rgba(168,85,247,0.25) 0%,transparent 70%);filter:blur(30px);"></div>
@@ -125,9 +285,9 @@
 <section id="matieres" class="relative z-10 px-6 py-20">
   <div class="max-w-5xl mx-auto">
     <div class="text-center mb-14 reveal">
-      <div class="badge mb-4">📚 Toutes les matières</div>
-      <h2 class="font-black text-3xl md:text-4xl text-white mb-3">Quelle aventure aujourd'hui ?</h2>
-      <p class="text-slate-400">Clique sur une matière pour explorer les cours</p>
+      <div class="badge mb-4">🗺️ Les Royaumes du Savoir</div>
+      <h2 class="font-black text-3xl md:text-4xl text-white mb-3">Quelle quête aujourd'hui ?</h2>
+      <p class="text-slate-400">Choisis un Royaume pour explorer ses chapitres</p>
     </div>
     <div id="matieres-grid" class="grid grid-cols-2 md:grid-cols-3 gap-5"></div>
   </div>
@@ -137,29 +297,124 @@
 
 <!-- COMMENT ÇA MARCHE -->
 <section id="comment" class="relative z-10 px-6 py-20">
-  <div class="max-w-4xl mx-auto text-center">
-    <div class="badge mb-6 reveal">🗺️ Comment ça marche</div>
-    <h2 class="font-black text-3xl md:text-4xl text-white mb-12 reveal">4 étapes vers la maîtrise</h2>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
-      <div class="glass p-6 text-center reveal" style="transition-delay:0.05s;">
-        <div class="text-4xl mb-3">🎬</div>
-        <p class="font-bold text-white text-sm">Regarde la vidéo</p>
-        <p class="text-slate-400 text-xs mt-1">Comprends le cours en quelques minutes</p>
+  <style>
+    .quest-path { display:flex; align-items:flex-start; justify-content:center; gap:0; }
+    .quest-step { display:flex; flex-direction:column; align-items:center; width:190px; position:relative; }
+
+    /* Connecteur avec particule */
+    .quest-connector { flex:1; height:3px; margin-top:66px; position:relative;
+      background:linear-gradient(90deg,var(--c1),var(--c2));
+      box-shadow:0 0 8px var(--c1); }
+    @keyframes particleRun { 0%{left:0;opacity:0} 10%{opacity:1} 90%{opacity:1} 100%{left:100%;opacity:0} }
+    .quest-connector::after { content:'';position:absolute;top:-4px;
+      width:11px;height:11px;border-radius:50%;
+      background:var(--c2);box-shadow:0 0 10px var(--c2);
+      animation:particleRun 2.5s ease-in-out infinite; }
+
+    /* Cristal losange */
+    .step-crystal {
+      width:90px; height:130px;
+      clip-path:polygon(50% 0%, 100% 38%, 50% 100%, 0% 38%);
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.9rem; position:relative;
+      transition:transform 0.3s, filter 0.3s;
+      cursor:default;
+    }
+    .quest-step:hover .step-crystal { transform:translateY(-8px) scale(1.1); filter:brightness(1.35); }
+
+    /* Reflet interne du cristal */
+    .step-crystal::before {
+      content:''; position:absolute;
+      top:8%; left:20%; width:25%; height:35%;
+      background:rgba(255,255,255,0.18);
+      clip-path:polygon(0 0,100% 30%,60% 100%,0 70%);
+    }
+
+    /* Neo qui saute */ 45%{transform:translateY(-20px) scale(1.1)} }
+
+    .step-num   { font-size:0.6rem;font-weight:800;color:#334155;letter-spacing:0.12em;margin-bottom:0.35rem; }
+    .step-label { font-weight:900;font-size:0.82rem;color:#fff;margin-top:0.65rem;text-transform:uppercase;letter-spacing:0.06em;text-align:center; }
+
+    .loot-badge { display:inline-flex;align-items:center;gap:0.35rem;
+      background:rgba(250,204,21,0.1);border:1px solid rgba(250,204,21,0.4);
+      border-radius:9999px;padding:3px 10px;font-size:0.65rem;font-weight:800;color:#fbbf24;
+      margin-top:0.5rem;animation:lootGlow 2s ease-in-out infinite; }
+    @keyframes lootGlow { 0%,100%{box-shadow:0 0 6px rgba(250,204,21,0.3)} 50%{box-shadow:0 0 18px rgba(250,204,21,0.7)} }
+    .step-gain { font-size:0.65rem;font-weight:800;margin-top:0.3rem;text-align:center; }
+    .step-desc  { font-size:0.68rem;color:#64748b;margin-top:0.25rem;line-height:1.45;text-align:center;max-width:140px;min-height:2.8rem; }
+  </style>
+
+  <div class="max-w-5xl mx-auto text-center">
+    <div class="badge mb-4 reveal">🎮 Le Cycle de Victoire</div>
+    <h2 class="font-black text-3xl md:text-4xl text-white mb-4 reveal">Ton Protocole de Conquête</h2>
+    <p class="text-slate-400 text-base mb-14 max-w-2xl mx-auto reveal" style="line-height:1.7;">
+      Le savoir n'est pas une corvée, c'est ton arsenal. Suis le protocole NeoQuest pour transformer chaque contrôle en une formalité et chaque chapitre en une victoire légendaire.
+    </p>
+
+    <!-- Chemin des 4 cristaux -->
+    <div class="quest-path reveal" style="transition-delay:0.1s;">
+
+      <!-- Cristal 1 : Explorer — violet -->
+      <div class="quest-step">
+        <div class="step-num">MISSION 01</div>
+        <div class="step-crystal" style="background:linear-gradient(170deg,#4c1d95,#7c3aed,#a855f7);box-shadow:0 0 24px rgba(168,85,247,0.5);">
+          🔭
+        </div>
+        <div class="step-label">Explorer</div>
+        <div class="step-desc">Scrute le terrain en 3 minutes.</div>
+        <div class="step-gain" style="color:#a855f7;">👁️ Points de Vision débloqués</div>
       </div>
-      <div class="glass p-6 text-center reveal" style="transition-delay:0.1s;">
-        <div class="text-4xl mb-3">📄</div>
-        <p class="font-bold text-white text-sm">Télécharge la fiche</p>
-        <p class="text-slate-400 text-xs mt-1">Garde l'essentiel sous la main</p>
+
+      <div class="quest-connector" style="--c1:#a855f7;--c2:#22d3ee;"></div>
+
+      <!-- Cristal 2 : S'entraîner — cyan -->
+      <div class="quest-step">
+        <div class="step-num">MISSION 02</div>
+        <div class="step-crystal" style="background:linear-gradient(170deg,#0c4a6e,#0891b2,#22d3ee);box-shadow:0 0 24px rgba(34,211,238,0.45);">
+          🏹
+        </div>
+        <div class="step-label">S'entraîner</div>
+        <div class="step-desc">Active ta mémoire avec Neo-Flash.</div>
+        <div class="step-gain" style="color:#22d3ee;">🎒 Munitions collectées</div>
       </div>
-      <div class="glass p-6 text-center reveal" style="transition-delay:0.15s;">
-        <div class="text-4xl mb-3">🃏</div>
-        <p class="font-bold text-white text-sm">Flashcards</p>
-        <p class="text-slate-400 text-xs mt-1">Mémorise sans t'en rendre compte</p>
+
+      <div class="quest-connector" style="--c1:#22d3ee;--c2:#f472b6;"></div>
+
+      <!-- Cristal 3 : Combattre — rose -->
+      <div class="quest-step">
+        <div class="step-num">MISSION 03</div>
+        <div class="step-crystal" style="background:linear-gradient(170deg,#831843,#be185d,#f472b6);box-shadow:0 0 24px rgba(244,114,182,0.45);">
+          ⚔️
+        </div>
+        <div class="step-label">Combattre</div>
+        <div class="step-desc">Terrasse le Boss du chapitre.</div>
+        <div class="step-gain" style="color:#f472b6;">🏆 XP + Loot légendaire</div>
       </div>
-      <div class="glass p-6 text-center reveal" style="transition-delay:0.2s;">
-        <div class="text-4xl mb-3">❓</div>
-        <p class="font-bold text-white text-sm">Quiz</p>
-        <p class="text-slate-400 text-xs mt-1">Teste tes connaissances !</p>
+
+      <div class="quest-connector" style="--c1:#f472b6;--c2:#fbbf24;"></div>
+
+      <!-- Cristal 4 : Défier — or -->
+      <div class="quest-step">
+        <div class="step-num">MISSION 04</div>
+        <div class="step-crystal" style="background:linear-gradient(170deg,#78350f,#d97706,#fbbf24);box-shadow:0 0 30px rgba(251,191,36,0.55);">
+          ⏱️
+        </div>
+        <div class="step-label">Défier</div>
+        <div class="step-desc">Bat le chrono en mode expert.</div>
+        <div class="step-gain" style="color:#fbbf24;">⭐ Points de Prestige</div>
+        <div class="loot-badge">🔥 Speedrun actif</div>
+      </div>
+
+    </div>
+
+    <!-- Bandeau objectif -->
+    <div class="reveal" style="margin-top:3rem;transition-delay:0.3s;">
+      <div style="display:inline-flex;align-items:center;gap:0.75rem;background:rgba(255,255,255,0.03);border:1px solid rgba(168,85,247,0.2);border-radius:1rem;padding:1rem 2rem;">
+        <span style="font-size:1.5rem;">🎯</span>
+        <p style="font-size:0.85rem;color:#94a3b8;line-height:1.6;text-align:left;">
+          <span style="font-weight:900;color:#fff;display:block;margin-bottom:2px;">Objectif final</span>
+          Prépare ton contrôle en <span style="color:#22d3ee;font-weight:800;">15 minutes chrono</span> et collectionne les <span style="color:#fbbf24;font-weight:800;">150 objets légendaires</span> de Neo.
+        </p>
       </div>
     </div>
   </div>
@@ -181,37 +436,179 @@
 <script>
   document.getElementById('menuBtn').addEventListener('click', () => document.getElementById('mobileMenu').classList.toggle('hidden'));
 
+  function openPortal(mat, pal, img) {
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+      position:fixed;inset:0;z-index:9999;
+      background:#08061a;
+      opacity:0;
+      transition:opacity 0.5s ease;
+      pointer-events:none;
+    `;
+    document.body.appendChild(overlay);
+
+    requestAnimationFrame(() => {
+      overlay.style.opacity = '1';
+      setTimeout(() => {
+        window.location.href = `cours.html?matiere=${mat.id}`;
+      }, 400);
+    });
+  }
+
+  // Animation ping
+  const pingStyle = document.createElement('style');
+  pingStyle.textContent = '@keyframes ping { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(1.4)} }';
+  document.head.appendChild(pingStyle);
+
+  // Hero : dernière quête visitée + badge nouveautés
+  (function() {
+    try {
+      // Dernière quête depuis localStorage
+      const lastKey = Object.keys(localStorage).filter(k => k.startsWith('neoquest_chap_')).pop();
+      if (lastKey) {
+        const chapId = lastKey.replace('neoquest_chap_', '');
+        // Chercher le nom du chapitre dans data
+        let chapNom = null, chapUrl = null;
+        window.__neoData.matieres.forEach(mat => {
+          mat.niveaux?.forEach(niv => {
+            niv.themes?.forEach(t => {
+              t.chapitres?.forEach(ch => {
+                if (ch.id === chapId) {
+                  chapNom = ch.nom;
+                  chapUrl = `chapitre.html?matiere=${mat.id}&niveau=${niv.id}&chapitre=${chapId}`;
+                }
+              });
+            });
+          });
+        });
+        if (chapNom) {
+          document.getElementById('hero-quest-name').textContent = chapNom;
+          document.getElementById('hero-quest-link').href = chapUrl;
+          document.getElementById('hero-last-quest').style.display = 'flex';
+        }
+      }
+      // Nouveaux chapitres (ceux avec contenu non visités)
+      let newCount = 0, newMatiere = '';
+      window.__neoData.matieres.forEach(mat => {
+        mat.niveaux?.forEach(niv => {
+          niv.themes?.forEach(t => {
+            t.chapitres?.forEach(ch => {
+              if ((ch.quiz?.length || 0) > 0 && !localStorage.getItem(`neoquest_chap_${ch.id}`)) {
+                newCount++;
+                if (!newMatiere) newMatiere = mat.nom;
+              }
+            });
+          });
+        });
+      });
+      if (newCount > 0) {
+        document.getElementById('hero-new-text').textContent = `${newCount} quête${newCount > 1 ? 's' : ''} disponible${newCount > 1 ? 's' : ''} en ${newMatiere}`;
+        document.getElementById('hero-new-badge').style.display = 'flex';
+      }
+    } catch(e) {}
+  })();
+
   const observer = new IntersectionObserver(entries => {
     entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); observer.unobserve(e.target); } });
   }, { threshold: 0.1 });
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
+
   {
     const data = window.__neoData;
-      const grid = document.getElementById('matieres-grid');
-      data.matieres.forEach((mat, i) => {
-        const hasContent = mat.niveaux && mat.niveaux.length > 0;
-        const card = document.createElement(hasContent ? 'a' : 'div');
-        if (hasContent) card.href = `cours.html?matiere=${mat.id}`;
-        card.className = `glass ${hasContent ? 'glass-hover' : ''} mat-card p-6 flex flex-col items-center gap-3 text-center reveal relative overflow-hidden`;
-        card.style.transitionDelay = `${i * 0.07}s`;
-        card.style.background = `linear-gradient(135deg, ${mat.couleur}22 0%, ${mat.couleur}08 100%)`;
-        card.style.borderColor = `${mat.couleur}55`;
-        if (!hasContent) card.style.opacity = '0.4';
+    const grid = document.getElementById('matieres-grid');
 
-        const logoHTML = mat.logo
-          ? `<img src="${mat.logo}" alt="${mat.nom}" style="width:220px;height:220px;object-fit:contain;filter:drop-shadow(0 0 14px ${mat.couleur}88);" />`
-          : `<div style="width:220px;height:220px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:${mat.couleur}18;border:2px dashed ${mat.couleur}44;font-size:2rem;color:${mat.couleur}99;">?</div>`;
+    // Images par royaume (Option A si dispo, sinon emoji)
+    const ROYAUME_IMAGES = {
+      'histoire-geo': 'img/Historya.png',
+      'svt':          'img/Bioverde.png',
+      'maths':        'img/Algebron.png',
+      'francais':     'img/Lexoria.png',
+      'physique-chimie': 'img/Quantix.png',
+    };
 
-        card.innerHTML = `
-          <div class="mat-glow" style="background:radial-gradient(circle at center,${mat.couleur}25 0%,transparent 70%);"></div>
-          ${logoHTML}
-          <span class="font-black text-lg text-white">${mat.nom}</span>
-          ${!hasContent ? `<span style="font-size:0.75rem;color:#64748b;font-weight:700;">Bientôt...</span>` : ''}
-        `;
-        grid.appendChild(card);
-        observer.observe(card);
-      });
+    const PALETTES = {
+      'histoire-geo':    { p1:'#a855f7', p2:'#7c3aed', p3:'#c084fc', bg:'#0e0820', emoji:'🏛️' },
+      'svt':             { p1:'#22c55e', p2:'#15803d', p3:'#4ade80', bg:'#051a0d', emoji:'🌿' },
+      'physique-chimie': { p1:'#22d3ee', p2:'#0891b2', p3:'#67e8f9', bg:'#00131a', emoji:'⚗️' },
+      'maths':           { p1:'#facc15', p2:'#ca8a04', p3:'#fde047', bg:'#1a1400', emoji:'📐' },
+      'francais':        { p1:'#f472b6', p2:'#be185d', p3:'#f9a8d4', bg:'#1a0510', emoji:'📖' },
+    };
+
+    data.matieres.forEach((mat, i) => {
+      const hasContent = mat.niveaux && mat.niveaux.length > 0;
+      const pal = PALETTES[mat.id] || { p1:mat.couleur, p2:mat.couleur, p3:'#fff', bg:'#0a0a1a', emoji:'✦' };
+      const img = ROYAUME_IMAGES[mat.id];
+
+      // Progression
+      const allChaps = mat.niveaux?.flatMap(n => n.themes?.flatMap(t => t.chapitres) || []) || [];
+      const total = allChaps.length;
+      const visited = allChaps.filter(ch => localStorage.getItem(`neoquest_chap_${ch.id}`)).length;
+      const pct = total > 0 ? Math.round((visited / total) * 100) : 0;
+
+      const wrap = document.createElement('div');
+      wrap.className = `portal-wrap reveal ${!hasContent ? 'locked' : ''}`;
+      const HEX_POSITIONS = [
+        { x: 0,   y: 0   },  // Historya
+        { x: 270, y: 0   },  // Bioverde
+        { x: 540, y: 0   },  // Quantix
+        { x: 135, y: 235 },  // Algebron
+        { x: 405, y: 235 },  // Lexoria
+      ];
+      const pos = HEX_POSITIONS[i] || { x: i * 226, y: 0 };
+      wrap.style.left = pos.x + 'px';
+      wrap.style.top  = pos.y + 'px';
+      wrap.style.transitionDelay = `${i * 0.08}s`;
+      wrap.style.setProperty('--p1', pal.p1);
+      wrap.style.setProperty('--p2', pal.p2);
+      wrap.style.setProperty('--p3', pal.p3);
+
+      // Contenu intérieur selon image disponible ou non
+      // Neo colorisé pour les portails sans image
+      const neoFilter = {
+        'svt':             'hue-rotate(80deg) saturate(1.4) brightness(1.1)',
+        'physique-chimie': 'hue-rotate(160deg) saturate(1.4) brightness(1.1)',
+        'maths':           'hue-rotate(140deg) saturate(1.3) brightness(1.2)',
+        'francais':        'hue-rotate(280deg) saturate(1.4) brightness(1.1)',
+      }[mat.id] || '';
+
+      const iconHTML = img
+        ? '' // image = pas de Neo
+        : `<img src="img/Neo_assis.png" alt="Neo" class="portal-icon" style="width:90px;height:90px;object-fit:contain;filter:${neoFilter} drop-shadow(0 0 14px ${pal.p1}aa);" />`;
+
+      const imgStyle = img
+        ? `background-image:url('${img}');`
+        : `background:radial-gradient(ellipse at 50% 30%, ${pal.p1}44 0%, ${pal.bg} 70%);`;
+
+      const barHTML = hasContent && total > 0 ? `
+        <div class="portal-bar-wrap">
+          <div class="portal-bar" style="width:${pct}%;background:${pal.p3};box-shadow:0 0 6px ${pal.p1};"></div>
+        </div>
+        <div class="portal-sub">${pct > 0 ? pct + '% exploré' : 'Inexploré'}</div>
+      ` : (!hasContent ? `<div class="portal-sub">Bientôt...</div>` : '');
+
+      wrap.innerHTML = `
+        <div class="portal-border" style="--p1:${pal.p1};--p2:${pal.p2};--p3:${pal.p3};"></div>
+        <div class="portal-hex">
+          <div class="portal-img" style="${imgStyle}"></div>
+          <div class="portal-overlay"></div>
+          <div class="portal-glow" style="--p1-raw:${pal.p1};"></div>
+          <div class="portal-content" style="--p1-raw:${pal.p1};">
+            ${iconHTML}
+            <div class="portal-name" style="--p1-raw:${pal.p1};">${mat.nom_royaume || mat.nom}</div>
+            ${barHTML}
+          </div>
+        </div>
+      `;
+
+      if (hasContent) {
+        wrap.style.cursor = 'pointer';
+        wrap.addEventListener('click', () => openPortal(mat, pal, img));
+      }
+
+      grid.appendChild(wrap);
+      observer.observe(wrap);
+    });
   }
 </script>
 <script>

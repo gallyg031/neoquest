@@ -72,13 +72,49 @@
 <div class="blob blob-2"></div>
 
 <!-- NAVBAR -->
-<nav class="relative z-50 w-full px-6 py-4 flex items-center justify-between">
+<nav class="relative z-50 w-full px-6 py-3 flex items-center justify-between">
   <a href="index.html" class="flex items-center gap-2 no-underline">
     <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="15" stroke="url(#lg)" stroke-width="1.5"/><circle cx="16" cy="16" r="3" fill="url(#lg)"/><path d="M9 12L16 8L23 12L23 20L16 24L9 20Z" stroke="url(#lg)" stroke-width="1.5" fill="none"/><defs><linearGradient id="lg" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse"><stop stop-color="#a855f7"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs></svg>
     <span class="logo-text text-xl">NeoQuest TV</span>
   </a>
   <a href="index.html" class="nav-link">← Accueil</a>
+  <!-- Profil héros -->
+  <div id="nav-profile" style="display:flex;align-items:center;gap:10px;background:rgba(0,0,0,0.35);border:1px solid rgba(168,85,247,0.25);border-radius:9999px;padding:5px 14px 5px 5px;">
+    <div style="position:relative;flex-shrink:0;">
+      <img id="nav-avatar" src="img/Neo_assis.png" alt="Profil" style="width:36px;height:36px;object-fit:contain;border-radius:50%;border:2px solid #22d3ee;background:rgba(168,85,247,0.15);padding:2px;" />
+      <div id="nav-level-badge" style="position:absolute;bottom:-2px;right:-4px;background:#22d3ee;color:#08061a;font-size:9px;font-weight:900;padding:1px 5px;border-radius:9999px;border:1.5px solid #08061a;line-height:1.4;">1</div>
+    </div>
+    <div style="display:none;" id="nav-hero-info">
+      <div id="nav-level-title" style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.05em;line-height:1;"></div>
+      <div id="nav-pseudo" style="font-size:13px;font-weight:900;color:#fff;line-height:1.3;">Héros</div>
+      <div style="width:72px;height:3px;background:rgba(255,255,255,0.08);border-radius:9999px;margin-top:3px;overflow:hidden;">
+        <div id="nav-xp-bar" style="height:100%;border-radius:9999px;background:#22d3ee;box-shadow:0 0 8px #22d3ee;width:0%;transition:width 0.8s ease;"></div>
+      </div>
+    </div>
+  </div>
 </nav>
+<script>
+  (function(){
+    try {
+      const p = JSON.parse(localStorage.getItem('neoquest_profile') || '{}');
+      if(p.avatar) { const img = document.getElementById('nav-avatar'); if(img) { img.src = p.avatar; if(p.avatarStyle) img.style.filter = p.avatarStyle; } }
+      if(p.pseudo) { const el = document.getElementById('nav-pseudo'); if(el) el.textContent = p.pseudo; }
+    } catch(e) {}
+    try {
+      const xp  = (typeof nqGetXP === 'function') ? nqGetXP() : 0;
+      const lvl = (typeof nqGetLevel === 'function') ? nqGetLevel(xp) : {level:1,title:'Curieux Éveillé',color:'#22d3ee'};
+      const pct = (typeof nqGetLevelProgress === 'function') ? nqGetLevelProgress(xp) : 0;
+      document.getElementById('nav-level-badge').textContent = lvl.level;
+      document.getElementById('nav-level-badge').style.background = lvl.color;
+      document.getElementById('nav-level-title').textContent = lvl.title;
+      document.getElementById('nav-level-title').style.color = lvl.color;
+      document.getElementById('nav-xp-bar').style.width = pct + '%';
+      document.getElementById('nav-xp-bar').style.background = lvl.color;
+      document.getElementById('nav-xp-bar').style.boxShadow = '0 0 8px ' + lvl.color;
+      document.getElementById('nav-hero-info').style.display = 'block';
+    } catch(e) {}
+  })();
+</script>
 
 <!-- MAIN -->
 <main class="relative z-10 max-w-2xl mx-auto px-6 py-10">

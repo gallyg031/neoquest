@@ -7,57 +7,170 @@ window.__neoData = {
       "couleur": "#a855f7",
       "niveaux": [
         {
+          "id": "6eme",
+          "nom": "6ème",
+          "themes": [
+            {
+              "id": "aube-humanite",
+              "nom": "L'Aube de l'Humanité",
+              "nom_region": "L'Aube de l'Humanité",
+              "icone_region": "🌅",
+              "loot_region": {
+                "nom": "L'Éclat du Premier Feu",
+                "emoji": "🔥"
+              },
+              "chapitres": []
+            },
+            {
+              "id": "eveil-mediterranee",
+              "nom": "L'Éveil de la Méditerranée",
+              "nom_region": "L'Éveil de la Méditerranée",
+              "icone_region": "🌊",
+              "loot_region": {
+                "nom": "Le Parchemin des Dieux",
+                "emoji": "📜"
+              },
+              "chapitres": []
+            },
+            {
+              "id": "aigle-rome",
+              "nom": "L'Aigle de Rome",
+              "nom_region": "L'Aigle de Rome",
+              "icone_region": "🦅",
+              "loot_region": {
+                "nom": "Le Casque du Centurion",
+                "emoji": "⚔️"
+              },
+              "chapitres": []
+            }
+          ],
+          "nom_province": "L'Origine",
+          "ambiance": "Préhistoire, déserts, marbre blanc et temples antiques",
+          "emoji_province": "🏛️",
+          "couleur_province": "#22d3ee",
+          "soustitre": "L'Antiquité & les premières civilisations"
+        },
+        {
           "id": "5eme",
           "nom": "5ème",
           "themes": [
             {
-              "id": "societe-eglise-pouvoir",
-              "nom": "Société, Église et pouvoir politique dans l'Occident féodal (XIᵉ-XVᵉ siècles)",
+              "id": "choc-empires",
+              "nom": "Le Choc des Empires",
+              "nom_region": "Le Choc des Empires",
+              "icone_region": "🕌",
+              "loot_region": {
+                "nom": "Tunique de l'Érudit Nomade",
+                "emoji": "🧥"
+              },
               "chapitres": [
                 {
-                  "id": "ordre-seigneurial",
-                  "nom": "L'ordre seigneurial : la formation et la domination des campagnes",
+                  "id": "heritage-aigles",
+                  "nom": "Byzance & Carolingiens",
+                  "nom_quete": "L'Héritage des Aigles",
+                  "icone_quete": "🏛️",
+                  "loot_quete": {
+                    "nom": "Le Sceau de Charlemagne",
+                    "emoji": "📿"
+                  },
                   "youtube": "",
-                  "pdf": "fiches/histoire-5eme-ordre-seigneurial.pdf",
-                  "badges_custom": {
-                    "novice": {
-                      "label": "Serf des Champs",
-                      "desc": "Tu découvres le monde féodal !"
-                    },
-                    "initie": {
-                      "label": "Vassal du Seigneur",
-                      "desc": "Tu maîtrises les bases."
-                    },
-                    "maitre": {
-                      "label": "Seigneur des Terres",
-                      "desc": "Tu gouvernes le domaine !"
-                    }
-                  },
-                  "diff_custom": {
-                    "facile": "Paysan du Village",
-                    "medium": "Chevalier du Fief",
-                    "hard": "Seigneur du Château"
-                  },
+                  "pdf": "",
                   "flashcards": [],
                   "quiz": []
                 },
                 {
+                  "id": "souffle-desert",
+                  "nom": "Naissance de l'Islam",
+                  "nom_quete": "Le Souffle du Désert",
+                  "icone_quete": "🌙",
+                  "loot_quete": {
+                    "nom": "L'Amphore d'Orient",
+                    "emoji": "🏺"
+                  },
+                  "youtube": "",
+                  "pdf": "",
+                  "flashcards": [],
+                  "quiz": []
+                },
+                {
+                  "id": "savoirs-bagdad",
+                  "nom": "Pouvoirs & Cultures",
+                  "nom_quete": "Les Savoirs de Bagdad",
+                  "icone_quete": "📜",
+                  "loot_quete": {
+                    "nom": "Le Parchemin des Savants",
+                    "emoji": "📜"
+                  },
+                  "youtube": "",
+                  "pdf": "",
+                  "flashcards": [],
+                  "quiz": []
+                }
+              ]
+            },
+            {
+              "id": "age-seigneurs",
+              "nom": "L'Âge des Seigneurs",
+              "nom_region": "L'Âge des Seigneurs",
+              "icone_region": "🏰",
+              "loot_region": {
+                "nom": "Le Tabard de Chevalier",
+                "emoji": "🛡️"
+              },
+              "chapitres": [
+                {
+                  "id": "ordre-seigneurial",
+                  "nom": "L'ordre seigneurial : la formation et la domination des campagnes",
+                  "nom_quete": "Le Maître des Terres",
+                  "icone_quete": "🌾",
+                  "loot_quete": {
+                    "nom": "La Sacoche du Paysan",
+                    "emoji": "🌾"
+                  },
+                  "youtube": "",
+                  "pdf": "fiches/histoire-5eme-ordre-seigneurial.pdf",
+                  "flashcards": [],
+                  "quiz": [],
+                  "badges_custom": {
+                    "novice": {
+                      "label": "Novice"
+                    },
+                    "initie": {
+                      "label": "Initié"
+                    },
+                    "maitre": {
+                      "label": "Maître"
+                    }
+                  },
+                  "diff_custom": {
+                    "facile": "Facile",
+                    "medium": "Medium",
+                    "hard": "Hard"
+                  }
+                },
+                {
                   "id": "emergence-villes",
                   "nom": "L'émergence d'une nouvelle société urbaine",
+                  "nom_quete": "Neo et les Bâtisseurs",
+                  "icone_quete": "🏘️",
+                  "loot_quete": {
+                    "nom": "Le Panier de la Foire",
+                    "emoji": "🥖"
+                  },
                   "youtube": "ETcHYFba9NY",
                   "pdf": "fiches/histoire-5eme-emergence-villes.pdf",
                   "badges_custom": {
                     "novice": {
-                      "label": "Apprenti Citadin",
-                      "desc": "Continue tes recherches !"
+                      "label": "Novice de la Cité",
+                      "desc": ""
                     },
                     "initie": {
-                      "label": "Bourgeois Influent",
-                      "desc": "Tu maîtrises les bases."
+                      "label": "Marchand de la Guilde",
+                      "desc": ""
                     },
                     "maitre": {
-                      "label": "Prévôt du Roi",
-                      "desc": "Tu es le maître de la cité !"
+                      "label": "Maître de la Commune",
+                      "desc": ""
                     }
                   },
                   "diff_custom": {
@@ -873,25 +986,29 @@ window.__neoData = {
                 {
                   "id": "etat-monarchique",
                   "nom": "L'affirmation de l'État monarchique dans le Royaume des Capétiens et des Valois",
+                  "nom_quete": "La Couronne des Rois",
+                  "icone_quete": "👑",
+                  "loot_quete": {
+                    "nom": "L'Épée de Bois d'Écuyer",
+                    "emoji": "🗡️"
+                  },
+                  "youtube": "",
                   "pdf": "fiches/histoire-5eme-etat-monarchique.pdf",
                   "badges_custom": {
                     "novice": {
-                      "label": "Sujet du Roi",
-                      "desc": "Tu découvres le royaume !"
+                      "label": "Novice"
                     },
                     "initie": {
-                      "label": "Conseiller Royal",
-                      "desc": "Tu maîtrises les bases."
+                      "label": "Initié"
                     },
                     "maitre": {
-                      "label": "Grand du Royaume",
-                      "desc": "Tu es au cœur du pouvoir !"
+                      "label": "Maître"
                     }
                   },
                   "diff_custom": {
-                    "facile": "Sujet du Royaume",
-                    "medium": "Bailli du Roi",
-                    "hard": "Prévôt de France"
+                    "facile": "Facile",
+                    "medium": "Medium",
+                    "hard": "Hard"
                   },
                   "flashcards": [
                     {
@@ -1699,11 +1816,160 @@ window.__neoData = {
                   ]
                 }
               ]
+            },
+            {
+              "id": "nouveau-monde",
+              "nom": "Le Nouveau Monde",
+              "nom_region": "Le Nouveau Monde",
+              "icone_region": "🌍",
+              "loot_region": {
+                "nom": "La Couronne de Soleil",
+                "emoji": "👑"
+              },
+              "chapitres": [
+                {
+                  "id": "duel-titans",
+                  "nom": "Charles Quint & Soliman",
+                  "nom_quete": "L'Duel des Titans",
+                  "icone_quete": "⚓",
+                  "loot_quete": {
+                    "nom": "La Boussole d'Explorateur",
+                    "emoji": "🧭"
+                  },
+                  "youtube": "",
+                  "pdf": "",
+                  "flashcards": [],
+                  "quiz": []
+                },
+                {
+                  "id": "esprit-lumieres",
+                  "nom": "Humanisme & Réformes",
+                  "nom_quete": "L'Esprit des Lumières",
+                  "icone_quete": "🪶",
+                  "loot_quete": {
+                    "nom": "La Plume de l'Auteur",
+                    "emoji": "🪶"
+                  },
+                  "youtube": "",
+                  "pdf": "",
+                  "flashcards": [],
+                  "quiz": []
+                },
+                {
+                  "id": "sacre-neo",
+                  "nom": "Rois Absolus",
+                  "nom_quete": "Le Sacre de Neo",
+                  "icone_quete": "🏰",
+                  "loot_quete": {
+                    "nom": "La Clé des Châteaux",
+                    "emoji": "🏰"
+                  },
+                  "youtube": "",
+                  "pdf": "",
+                  "flashcards": [],
+                  "quiz": []
+                }
+              ]
             }
-          ]
+          ],
+          "soustitre": "Le Moyen Âge & les pouvoirs",
+          "emoji_province": "⚔️",
+          "couleur_province": "#a855f7",
+          "nom_province": "L'Héritage",
+          "ambiance": "Cathédrales, déserts d'Orient, châteaux forts et palais de la Renaissance"
+        },
+        {
+          "id": "4eme",
+          "nom": "4ème",
+          "themes": [
+            {
+              "id": "siecle-lumieres",
+              "nom": "Le Siècle des Lumières",
+              "nom_region": "Le Siècle des Lumières",
+              "icone_region": "💡",
+              "loot_region": {
+                "nom": "La Déclaration des Droits",
+                "emoji": "📋"
+              },
+              "chapitres": []
+            },
+            {
+              "id": "age-fer",
+              "nom": "L'Âge de Fer",
+              "nom_region": "L'Âge de Fer",
+              "icone_region": "⚙️",
+              "loot_region": {
+                "nom": "La Clé de la Locomotive",
+                "emoji": "🚂"
+              },
+              "chapitres": []
+            },
+            {
+              "id": "marche-peuple",
+              "nom": "La Marche du Peuple",
+              "nom_region": "La Marche du Peuple",
+              "icone_region": "✊",
+              "loot_region": {
+                "nom": "Le Drapeau de la République",
+                "emoji": "🇫🇷"
+              },
+              "chapitres": []
+            }
+          ],
+          "nom_province": "Les Révolutions",
+          "ambiance": "Navires de commerce, barricades, usines à vapeur et grandes cités coloniales",
+          "emoji_province": "🏭",
+          "couleur_province": "#f472b6",
+          "soustitre": "Révolutions & monde moderne"
+        },
+        {
+          "id": "3eme",
+          "nom": "3ème",
+          "themes": [
+            {
+              "id": "temps-tempetes",
+              "nom": "Le Temps des Tempêtes",
+              "nom_region": "Le Temps des Tempêtes",
+              "icone_region": "⚡",
+              "loot_region": {
+                "nom": "La Médaille du Poilu",
+                "emoji": "🎖️"
+              },
+              "chapitres": []
+            },
+            {
+              "id": "equilibre-fragile",
+              "nom": "L'Équilibre Fragile",
+              "nom_region": "L'Équilibre Fragile",
+              "icone_region": "☢️",
+              "loot_region": {
+                "nom": "Le Mur de Berlin (fragment)",
+                "emoji": "🧱"
+              },
+              "chapitres": []
+            },
+            {
+              "id": "souffle-francais",
+              "nom": "Le Nouveau Souffle Français",
+              "nom_region": "Le Nouveau Souffle Français",
+              "icone_region": "🗼",
+              "loot_region": {
+                "nom": "La Clé de l'Élysée",
+                "emoji": "🔑"
+              },
+              "chapitres": []
+            }
+          ],
+          "nom_province": "Le Monde Moderne",
+          "ambiance": "Tranchées, drapeaux, guerre froide et technologie",
+          "emoji_province": "🌍",
+          "couleur_province": "#fbbf24",
+          "soustitre": "Le XXe siècle & le monde actuel"
         }
       ],
-      "emoji": "🏛️"
+      "emoji": "🏛️",
+      "nom_royaume": "Historya",
+      "tagline": "Le Royaume du Temps & des Civilisations"
     },
     {
       "id": "svt",
@@ -1711,7 +1977,9 @@ window.__neoData = {
       "logo": "",
       "couleur": "#4ade80",
       "niveaux": [],
-      "emoji": "🌿"
+      "emoji": "🌿",
+      "nom_royaume": "Bioverde",
+      "tagline": "Le Royaume du Vivant & de la Nature"
     },
     {
       "id": "physique-chimie",
@@ -1719,7 +1987,9 @@ window.__neoData = {
       "logo": "",
       "couleur": "#f97316",
       "niveaux": [],
-      "emoji": "⚗️"
+      "emoji": "⚗️",
+      "nom_royaume": "Quantix",
+      "tagline": "Le Royaume de la Matière & de l'Énergie"
     },
     {
       "id": "maths",
@@ -1727,7 +1997,9 @@ window.__neoData = {
       "logo": "",
       "couleur": "#facc15",
       "niveaux": [],
-      "emoji": "📐"
+      "emoji": "📐",
+      "nom_royaume": "Algebron",
+      "tagline": "Le Royaume des Nombres & des Formes"
     },
     {
       "id": "francais",
@@ -1735,7 +2007,9 @@ window.__neoData = {
       "logo": "",
       "couleur": "#f472b6",
       "niveaux": [],
-      "emoji": "📖"
+      "emoji": "📖",
+      "nom_royaume": "Lexoria",
+      "tagline": "Le Royaume des Mots & des Récits"
     }
   ]
 };

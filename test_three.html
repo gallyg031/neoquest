@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"/></head>
+<body style="background:#08061a;margin:0;">
+<canvas id="c"></canvas>
+<div id="log" style="color:white;font-family:monospace;padding:10px;position:absolute;top:0;"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const log = s => document.getElementById('log').innerHTML += s + '<br>';
+if(typeof THREE === 'undefined') { log('❌ Three.js NON chargé'); }
+else {
+  log('✅ Three.js ' + THREE.REVISION + ' chargé');
+  
+  const canvas = document.getElementById('c');
+  canvas.width = 400; canvas.height = 400;
+  
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:true});
+  renderer.setSize(400, 400);
+  renderer.setClearColor(0x08061a);
+  
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+  camera.position.z = 3;
+  
+  // Test texture
+  const loader = new THREE.TextureLoader();
+  loader.load('img/historya_globe_texture.jpg',
+    tex => { log('✅ Texture chargée'); globe.material.map = tex; globe.material.needsUpdate = true; },
+    null,
+    err => { log('❌ Texture erreur: ' + err); }
+  );
+  
+  const globe = new THREE.Mesh(
+    new THREE.SphereGeometry(1, 32, 32),
+    new THREE.MeshPhongMaterial({color:0xff0000})
+  );
+  scene.add(globe);
+  scene.add(new THREE.AmbientLight(0xffffff, 2));
+  
+  function animate(){ requestAnimationFrame(animate); globe.rotation.y += 0.01; renderer.render(scene, camera); }
+  animate();
+  log('✅ Rendu démarré - globe rouge si texture absente');
+}
+</script>
+</body>
+</html>
