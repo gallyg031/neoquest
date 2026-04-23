@@ -33,37 +33,153 @@
     .kingdom-name { font-weight:900; font-size:clamp(2rem,5vw,3.2rem); line-height:1; color:#fff; letter-spacing:0.04em; text-shadow:0 0 40px var(--accent); text-transform:uppercase; }
     .kingdom-tagline { font-size:0.88rem; color:#94a3b8; margin-top:0.4rem; }
 
-    /* ── LAYOUT DEUX PHASES ── */
-    .kingdom-layout { position:relative; z-index:10; }
+    /* ── LAYOUT AVEC GLOBE EN GRAND + POPUP MODAL ── */
+    .kingdom-layout { position:relative; z-index:10; display:flex; flex-direction:column; align-items:center; padding:2rem 1rem; }
 
-    /* Phase globe : centré */
-    .globe-phase { display:flex; flex-direction:column; align-items:center; padding:2rem 1rem; }
-    .globe-phase .kingdom-body { display:none; }
-    .globe-phase .globe-sidebar { width:100%; display:flex; flex-direction:column; align-items:center; }
-
-    /* Phase map : deux colonnes */
-    .map-phase { display:flex; flex-direction:row; align-items:flex-start; }
-    .map-phase .kingdom-body { display:block; flex:1; min-width:0; }
-    .map-phase .globe-sidebar {
-      width:240px; flex-shrink:0;
-      position:sticky; top:64px;
-      height:calc(100vh - 64px);
-      display:flex; flex-direction:column; align-items:center; justify-content:center;
-      border-right:1px solid rgba(168,85,247,0.1);
-      background:rgba(8,6,26,0.7); backdrop-filter:blur(10px);
-      padding:1rem 0.5rem;
+    /* Bouton toggle - en bas à gauche */
+    .globe-toggle-btn {
+      position:fixed;
+      bottom:100px;
+      left:20px;
+      padding:0.75rem 1.5rem;
+      background:transparent;
+      border:none;
+      border-bottom:2px solid rgba(168,85,247,0.3);
+      cursor:pointer;
+      font-size:0.9rem;
+      font-weight:700;
+      color:#c4b5fd;
+      transition:all 0.6s cubic-bezier(0.34,1.56,0.64,1);
+      z-index:20;
+      display:inline-flex;
+      align-items:center;
+      gap:0.5rem;
+      opacity:0;
+      pointer-events:none;
+      transform:translateY(20px);
+    }
+    .globe-toggle-btn.active {
+      opacity:1;
+      pointer-events:auto;
+      transform:translateY(0);
+    }
+    .globe-toggle-btn:hover {
+      border-bottom-color:rgba(168,85,247,0.7);
+      color:#fff;
     }
 
-    /* Globe image */
+    /* Contenu du bouton */
+    .globe-content { display:none; }
+
+    /* Popup modal - glassmorphisme grand central */
+    .globe-modal {
+      position:fixed;
+      top:50%;
+      left:50%;
+      transform:translate(-50%, -50%) scale(0.9);
+      width:min(600px, 90vw);
+      background:rgba(15,10,26,0.75);
+      backdrop-filter:blur(20px);
+      -webkit-backdrop-filter:blur(20px);
+      border:1px solid rgba(168,85,247,0.3);
+      border-radius:1.5rem;
+      padding:1rem;
+      box-shadow:0 20px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.08);
+      opacity:0;
+      pointer-events:none;
+      transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+      z-index:300;
+    }
+    .globe-modal.active {
+      opacity:1;
+      pointer-events:auto;
+      transform:translate(-50%, -50%) scale(1);
+    }
+    
+    /* Overlay derrière modal */
+    .globe-overlay {
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,0.4);
+      backdrop-filter:blur(4px);
+      opacity:0;
+      pointer-events:none;
+      transition:opacity 0.3s ease;
+      z-index:250;
+    }
+    .globe-overlay.active {
+      opacity:1;
+      pointer-events:auto;
+    }
+
+    /* Close button */
+    .modal-close {
+      position:absolute;
+      top:1.5rem;
+      right:1.5rem;
+      width:40px;
+      height:40px;
+      background:rgba(255,255,255,0.1);
+      border:1px solid rgba(255,255,255,0.2);
+      border-radius:50%;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:1.5rem;
+      transition:all 0.3s ease;
+      color:#94a3b8;
+    }
+    .modal-close:hover {
+      background:rgba(255,255,255,0.15);
+      color:#fff;
+    }
+
+    /* Titre du modal */
+    .modal-title {
+      font-size:1.3rem;
+      font-weight:900;
+      color:#fff;
+      margin-bottom:0.75rem;
+      text-align:left;
+      letter-spacing:0.05em;
+    }
+
+    /* Image globe */
     @keyframes floatG { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
     #globe-wrap {
       position:relative;
-      transition:width 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.5s ease, filter 0.5s ease, opacity 0.5s ease;
+      transition:width 0.4s cubic-bezier(0.34,1.56,0.64,1), height 0.4s cubic-bezier(0.34,1.56,0.64,1);
+      width:min(600px, 80vw);
+      animation:floatG 6s ease-in-out infinite;
+      margin:0 auto;
     }
-    .globe-phase #globe-wrap { width:min(600px,80vw); animation:floatG 6s ease-in-out infinite; }
-    .map-phase   #globe-wrap { width:240px; overflow:hidden; }
-    .map-phase #fresnel-modal { display:none; }
-    #globe-wrap.teleporting { transform:scale(2); filter:blur(10px) brightness(1.5); opacity:0; pointer-events:none; transition:transform 0.5s ease, filter 0.5s ease, opacity 0.5s ease; }
+    
+    /* État compact (après sélection province) */
+    #globe-wrap.compact {
+      position:fixed !important;
+      bottom:20px;
+      left:20px;
+      width:100px;
+      height:100px;
+      animation:none !important;
+      margin:0 !important;
+      z-index:100;
+      transition:width 0.6s cubic-bezier(0.34,1.56,0.64,1), 
+                  height 0.6s cubic-bezier(0.34,1.56,0.64,1), 
+                  bottom 0.6s cubic-bezier(0.34,1.56,0.64,1), 
+                  left 0.6s cubic-bezier(0.34,1.56,0.64,1),
+                  transform 0.6s cubic-bezier(0.34,1.56,0.64,1);
+      transform:none;
+    }
+
+    .globe-modal #globe-wrap {
+      width:100%;
+      max-width:500px;
+      animation:none;
+      margin:0 auto;
+    }
+    #globe-wrap.teleporting { transform:scale(1.3); filter:blur(12px) brightness(1.6); opacity:0; pointer-events:none; transition:transform 0.6s ease-in, filter 0.6s ease, opacity 0.6s ease; }
 
     .globe-img-modal { width:100%; display:block; filter:drop-shadow(0 0 30px rgba(34,211,238,0.2)); }
     .fresnel-modal { position:absolute; border-radius:50%; background:transparent; pointer-events:none; z-index:0;
@@ -74,8 +190,7 @@
     }
 
     /* Zones cliquables */
-    .g-zone { position:absolute; width:140px; height:140px; border-radius:50%; transform:translate(-50%,-50%); cursor:pointer; transition:width 0.6s, height 0.6s; }
-    .map-phase .g-zone { width:100px; height:100px; }
+    .g-zone { position:absolute; width:140px; height:140px; border-radius:50%; transform:translate(-50%,-50%); cursor:pointer; transition:width 0.3s, height 0.3s; }
     .g-ring { position:absolute; inset:-5px; border-radius:50%; border:2px solid var(--col); box-shadow:0 0 14px var(--col); opacity:0; transition:opacity 0.3s, box-shadow 0.3s; }
     .g-dot  { position:absolute; inset:0; border-radius:50%; background:var(--col); opacity:0; transition:opacity 0.3s; }
     .g-zone:hover .g-dot  { opacity:0.25; }
@@ -89,13 +204,12 @@
 
     /* Fog canvas */
     #globe-fog-canvas { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:15; opacity:0; transition:opacity 0.35s; }
+    #globe-fog-canvas-modal { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:15; opacity:0; transition:opacity 0.35s; }
     #globe-wrap.has-active #globe-fog-canvas { opacity:1; }
+    #globe-wrap-modal.has-active #globe-fog-canvas-modal { opacity:1; }
 
     .globe-sidebar-label { font-size:10px; font-weight:800; color:rgba(196,181,253,0.4); letter-spacing:0.15em; text-transform:uppercase; margin-bottom:0.4rem; text-align:center; }
-    .globe-sidebar-province { font-size:11px; font-weight:800; color:#c4b5fd; margin-top:0.5rem; text-align:center; }
-
-    /* ── BODY ── */
-    .kingdom-body { padding:2rem 1.5rem 3rem; position:relative; z-index:10; }
+    .globe-sidebar-province { font-size:11px; font-weight:800; color:#c4b5fd; margin-top:0.5rem; text-align:center; word-break:break-word; }
 
     /* ── MAP ── */
     .province-map-wrap { position:relative; width:100%; border-radius:1.25rem; margin-bottom:1rem; }
@@ -118,9 +232,16 @@
     ::-webkit-scrollbar-thumb { background:linear-gradient(var(--violet),var(--cyan)); border-radius:3px; }
 
     @media (max-width:700px) {
-      .map-phase { flex-direction:column; }
-      .map-phase .globe-sidebar { width:100%; position:relative; top:0; height:auto; border-right:none; border-bottom:1px solid rgba(168,85,247,0.1); padding:0.75rem; }
-      .map-phase #globe-wrap { width:240px; }
+      .globe-modal {
+        width:min(600px, 95vw);
+        padding:1.5rem;
+      }
+      #globe-wrap {
+        width:min(500px, 75vw);
+      }
+      .globe-modal #globe-wrap {
+        max-width:400px;
+      }
     }
   </style>
 </head>
@@ -185,34 +306,35 @@
   </div>
 </div>
 
-<!-- Layout principal -->
-<div class="kingdom-layout globe-phase" id="kingdom-layout">
+<!-- Overlay pour modal -->
+<div class="globe-overlay" id="globe-overlay"></div>
 
-  <!-- Sidebar avec globe -->
-  <div class="globe-sidebar">
-    <div class="globe-sidebar-label">Choisis ta Province</div>
-    <div id="globe-wrap">
-      <div class="fresnel-modal" id="fresnel-modal"></div>
-      <img class="globe-img-modal" id="globe-img" src="img/historyaglobe.png" alt="Planète Historya"/>
-      <canvas id="globe-fog-canvas"></canvas>
-      <div class="g-zone" style="--col:#22d3ee;left:34%;top:20%;" onclick="selectProvince('6eme')">
-        <div class="g-ring"></div><div class="g-dot"></div>
-        <div class="g-tip"><div class="g-tip-name" style="--col:#22d3ee;">L'Origine</div><div class="g-tip-sub">6ème · Antiquité</div></div>
-      </div>
-      <div class="g-zone" style="--col:#a855f7;left:65%;top:20%;" onclick="selectProvince('5eme')">
-        <div class="g-ring"></div><div class="g-dot"></div>
-        <div class="g-tip"><div class="g-tip-name" style="--col:#a855f7;">L'Héritage</div><div class="g-tip-sub">5ème · Moyen Âge</div></div>
-      </div>
-      <div class="g-zone" style="--col:#f472b6;left:34%;top:70%;" onclick="selectProvince('4eme')">
-        <div class="g-ring"></div><div class="g-dot"></div>
-        <div class="g-tip"><div class="g-tip-name" style="--col:#f472b6;">Les Révolutions</div><div class="g-tip-sub">4ème · XVIIIe-XIXe</div></div>
-      </div>
-      <div class="g-zone" style="--col:#fbbf24;left:65%;top:70%;" onclick="selectProvince('3eme')">
-        <div class="g-ring"></div><div class="g-dot"></div>
-        <div class="g-tip"><div class="g-tip-name" style="--col:#fbbf24;">Le Monde Moderne</div><div class="g-tip-sub">3ème · XXe siècle</div></div>
-      </div>
-    </div>
-    <div class="globe-sidebar-province" id="sidebar-province-label"></div>
+<!-- Modal glassmorphisme -->
+<div class="globe-modal" id="globe-modal">
+  <button class="modal-close" onclick="closeGlobeModal()">✕</button>
+  <div class="modal-title">Changer de Province</div>
+  
+  <div id="globe-wrap-modal" style="position:relative;">
+    <div class="fresnel-modal" id="fresnel-modal-modal"></div>
+    <img class="globe-img-modal" id="globe-img-modal" src="img/historyaglobe.png" alt="Planète Historya"/>
+    <canvas id="globe-fog-canvas-modal"></canvas>
+  </div>
+  <div class="globe-sidebar-province" id="sidebar-province-label-modal" style="margin-top:0.75rem;font-size:0.9rem;"></div>
+</div>
+
+<!-- Layout principal -->
+<div class="kingdom-layout" id="kingdom-layout">
+
+  <!-- Bouton toggle simple -->
+  <button class="globe-toggle-btn" id="globe-toggle-btn" onclick="openGlobeModal(event)">
+    🌍 Changer de Province
+  </button>
+
+  <!-- Globe en grand -->
+  <div id="globe-wrap" style="position:relative;">
+    <div class="fresnel-modal" id="fresnel-modal"></div>
+    <img class="globe-img-modal" id="globe-img" src="img/historyaglobe.png" alt="Planète Historya"/>
+    <canvas id="globe-fog-canvas"></canvas>
   </div>
 
   <!-- Corps : map + quêtes -->
@@ -237,25 +359,103 @@
 </div>
 
 <script>
-  // ── Fresnel ──
+  // ── Modal globe ──
+  function openGlobeModal(event) {
+    event.stopPropagation();
+    const modal = document.getElementById('globe-modal');
+    const overlay = document.getElementById('globe-overlay');
+    modal.classList.add('active');
+    overlay.classList.add('active');
+    // Refresh du fresnel modal et placement des zones
+    setTimeout(() => {
+      placeFresnelModal();
+      placeZonesModal();
+    }, 100);
+  }
+
+  function closeGlobeModal() {
+    const modal = document.getElementById('globe-modal');
+    const overlay = document.getElementById('globe-overlay');
+    modal.classList.remove('active');
+    overlay.classList.remove('active');
+  }
+
+  // Fermer si clic sur overlay
+  document.addEventListener('click', (e) => {
+    const modal = document.getElementById('globe-modal');
+    const overlay = document.getElementById('globe-overlay');
+    if (overlay.classList.contains('active') && e.target === overlay) {
+      closeGlobeModal();
+    }
+  });
+
+  // Fermer au clic Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeGlobeModal();
+    }
+  });
+
+  // ── Fresnel pour globe principal ──
   function placeFresnel() {
     const img = document.getElementById('globe-img');
     const fr  = document.getElementById('fresnel-modal');
-    if (!img || !fr || !img.offsetWidth) return;
+    if (!img || !fr || !img.offsetWidth || !img.naturalWidth) return;
+    
     const iw = img.offsetWidth;
     const ih = img.offsetHeight;
-    // Image ratio 1.83 — la sphère occupe ~95% de la hauteur, centrée
-    const r  = ih * 0.415;
+    const r  = ih * 0.40;
     const cx = iw * 0.5;
     const cy = ih * 0.5;
+    
     fr.style.width  = (r*2) + 'px';
     fr.style.height = (r*2) + 'px';
     fr.style.left   = (cx - r) + 'px';
     fr.style.top    = (cy - r) + 'px';
   }
 
-  // ── Fog canvas ──
+  // ── Fresnel pour globe modal ──
+  function placeFresnelModal() {
+    const img = document.getElementById('globe-img-modal');
+    const fr  = document.getElementById('fresnel-modal-modal');
+    if (!img || !fr || !img.offsetWidth || !img.naturalWidth) return;
+    
+    const iw = img.offsetWidth;
+    const ih = img.offsetHeight;
+    const r  = ih * 0.40;
+    const cx = iw * 0.5;
+    const cy = ih * 0.5;
+    
+    fr.style.width  = (r*2) + 'px';
+    fr.style.height = (r*2) + 'px';
+    fr.style.left   = (cx - r) + 'px';
+    fr.style.top    = (cy - r) + 'px';
+  }
+
+  // ── Fog pour globe principal ──
   let _persistentZone = null;
+  let _persistentZoneModal = null;
+
+  // ── Placer zones du modal en fonction de la taille réelle de l'image ──
+  function placeZonesModal() {
+    const img = document.getElementById('globe-img-modal');
+    const wrap = document.getElementById('globe-wrap-modal');
+    if (!img || !img.offsetWidth || !img.offsetHeight) {
+      setTimeout(placeZonesModal, 100);
+      return;
+    }
+    
+    const zones = wrap.querySelectorAll('.g-zone');
+    zones.forEach(zone => {
+      // Récupérer les % originaux depuis les data-* attributes
+      const leftPct = parseFloat(zone.getAttribute('data-left-pct') || '50');
+      const topPct = parseFloat(zone.getAttribute('data-top-pct') || '50');
+      
+      // Convertir en pixels basé sur la taille réelle
+      zone.style.left = (leftPct / 100 * img.offsetWidth) + 'px';
+      zone.style.top = (topPct / 100 * img.offsetHeight) + 'px';
+    });
+  }
 
   function drawFog(activeZone, persist) {
     const fogCanvas = document.getElementById('globe-fog-canvas');
@@ -276,9 +476,43 @@
 
     const cx = parseFloat(zone.style.left) / 100 * iw;
     const cy = parseFloat(zone.style.top)  / 100 * ih;
-    const layout = document.getElementById('kingdom-layout');
-    const isSidebar = layout && layout.classList.contains('map-phase');
-    const r = isSidebar ? iw * 0.18 : iw * 0.15;
+    const r = iw * 0.15;
+
+    ctx.fillStyle = 'rgba(8,6,26,0.7)';
+    ctx.fillRect(0, 0, iw, ih);
+    ctx.save();
+    ctx.globalCompositeOperation = 'destination-out';
+    const grad = ctx.createRadialGradient(cx, cy, r*0.3, cx, cy, r*1.5);
+    grad.addColorStop(0, 'rgba(0,0,0,1)');
+    grad.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r*1.5, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function drawFogModal(activeZone, persist) {
+    const fogCanvas = document.getElementById('globe-fog-canvas-modal');
+    const globeImg  = document.getElementById('globe-img-modal');
+    const wrap      = document.getElementById('globe-wrap-modal');
+    if (!fogCanvas || !globeImg) return;
+
+    if (persist) { _persistentZoneModal = activeZone; }
+    const zone = activeZone || _persistentZoneModal;
+
+    const iw = globeImg.offsetWidth, ih = globeImg.offsetHeight;
+    fogCanvas.width = iw; fogCanvas.height = ih;
+    const ctx = fogCanvas.getContext('2d');
+    ctx.clearRect(0, 0, iw, ih);
+
+    if (!zone) { wrap.classList.remove('has-active'); return; }
+    wrap.classList.add('has-active');
+
+    // Les zones du modal sont déjà positionnées en px, les utiliser directement
+    const cx = parseFloat(zone.style.left);
+    const cy = parseFloat(zone.style.top);
+    const r = iw * 0.15;
 
     ctx.fillStyle = 'rgba(8,6,26,0.7)';
     ctx.fillRect(0, 0, iw, ih);
@@ -296,20 +530,66 @@
 
   // ── Hover fog ──
   document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.g-zone').forEach(zone => {
+    // Zones de provinces
+    const zones = [
+      { col: '#22d3ee', left: '34%', top: '20%', id: '6eme', label: 'L\'Origine', sub: '6ème · Antiquité' },
+      { col: '#a855f7', left: '65%', top: '20%', id: '5eme', label: 'L\'Héritage', sub: '5ème · Moyen Âge' },
+      { col: '#f472b6', left: '34%', top: '70%', id: '4eme', label: 'Les Révolutions', sub: '4ème · XVIIIe-XIXe' },
+      { col: '#fbbf24', left: '65%', top: '70%', id: '3eme', label: 'Le Monde Moderne', sub: '3ème · XXe siècle' }
+    ];
+
+    // Créer zones pour globe principal
+    const globeWrap = document.getElementById('globe-wrap');
+    zones.forEach(z => {
+      const zone = document.createElement('div');
+      zone.className = 'g-zone';
+      zone.style.cssText = `--col:${z.col};left:${z.left};top:${z.top};`;
+      zone.innerHTML = `
+        <div class="g-ring"></div><div class="g-dot"></div>
+        <div class="g-tip"><div class="g-tip-name" style="--col:${z.col};">${z.label}</div><div class="g-tip-sub">${z.sub}</div></div>
+      `;
+      zone.onclick = () => selectProvince(z.id);
       zone.addEventListener('mouseenter', () => drawFog(zone));
       zone.addEventListener('mouseleave', () => drawFog(_persistentZone));
+      globeWrap.appendChild(zone);
     });
 
-    // Fresnel init
+    // Créer zones pour modal
+    const globeWrapModal = document.getElementById('globe-wrap-modal');
+    zones.forEach(z => {
+      const zone = document.createElement('div');
+      zone.className = 'g-zone';
+      zone.setAttribute('data-left-pct', z.left.replace('%', ''));
+      zone.setAttribute('data-top-pct', z.top.replace('%', ''));
+      zone.style.cssText = `--col:${z.col};`;
+      zone.innerHTML = `
+        <div class="g-ring"></div><div class="g-dot"></div>
+        <div class="g-tip"><div class="g-tip-name" style="--col:${z.col};">${z.label}</div><div class="g-tip-sub">${z.sub}</div></div>
+      `;
+      zone.onclick = () => selectProvince(z.id);
+      zone.addEventListener('mouseenter', () => drawFogModal(zone));
+      zone.addEventListener('mouseleave', () => drawFogModal(_persistentZoneModal));
+      globeWrapModal.appendChild(zone);
+    });
+
+    // Placer les zones du modal après création
+    setTimeout(placeZonesModal, 100);
+
+    // Fresnel init pour globe principal
     const globeImg = document.getElementById('globe-img');
     globeImg.addEventListener('load', placeFresnel);
     if (globeImg.complete) placeFresnel();
-    window.addEventListener("resize", () => { placeFresnel(); drawFog(null); });
+    window.addEventListener("resize", () => { 
+      placeFresnel(); 
+      drawFog(_persistentZone);
+    });
     setTimeout(placeFresnel, 300);
-  });
 
-  document.addEventListener('keydown', e => { if(e.key==='Escape') { } });
+    // Fresnel init pour modal
+    const globeImgModal = document.getElementById('globe-img-modal');
+    globeImgModal.addEventListener('load', placeFresnelModal);
+    if (globeImgModal.complete) placeFresnelModal();
+  });
 
   // ── Variables globales ──
   const params    = new URLSearchParams(window.location.search);
@@ -319,18 +599,24 @@
   // ── Sélection province ──
   function selectProvince(id) {
     const wrap   = document.getElementById('globe-wrap');
-    const layout = document.getElementById('kingdom-layout');
+    const fresnel = document.getElementById('fresnel-modal');
+    const btn = document.getElementById('globe-toggle-btn');
+    const modal = document.getElementById('globe-modal');
+
+    // Enlever le glow avant transition
+    if (fresnel) fresnel.style.display = 'none';
 
     drawFog(null);
+    closeGlobeModal();
+
+    // Ajouter classes pour transition
+    wrap.classList.add('compact');
+    btn.classList.add('active');
 
     // Zoom téléportation
     wrap.classList.add('teleporting');
 
     setTimeout(() => {
-      // Switch vers map-phase
-      layout.classList.remove('globe-phase');
-      layout.classList.add('map-phase');
-      wrap.classList.remove('teleporting');
 
       // Trouver la province dans data
       const data = window.__neoData;
@@ -627,8 +913,8 @@
       const dpx = (curr[0]-prev[0])/100 * IW;
       const dpy = (curr[1]-prev[1])/100 * IH;
       const distPx = Math.sqrt(dpx*dpx + dpy*dpy);
-      // 1 patte tous les 120px réels
-      const steps = Math.max(3, Math.round(distPx / 60));
+      // 1 patte tous les 50px réels = trail plus dense et fluide
+      const steps = Math.max(4, Math.round(distPx / 50));
       for (let s = 0; s < steps; s++) {
         const t  = (s + 0.5) / steps;
         const mx = (prev[0]+curr[0])/2;
@@ -711,17 +997,33 @@
       node.addEventListener('mouseenter', () => {
         node.style.zIndex = '500';
         const tip = node.querySelector('.map-tooltip');
-        // Détecter si le tooltip sort du haut de la carte
+        // Détection viewport-aware du tooltip position
         const nodeTop = parseFloat(node.style.top);
+        const nodeLeft = parseFloat(node.style.left);
         const ih = img.offsetHeight;
-        if (nodeTop < ih * 0.3) {
-          // Node en haut → tooltip en dessous
+        const iw = img.offsetWidth;
+        const tipHeight = 100; // ~hauteur estimée du tooltip
+        const tipWidth = 180;
+        
+        // Si node en haut (< 20% du viewport) → tooltip dessous
+        if (nodeTop < ih * 0.20) {
           tip.style.bottom = 'auto';
           tip.style.top = 'calc(100% + 10px)';
-          tip.querySelector('div[style*="border-top-color"]').style.borderTopColor = 'transparent';
-          tip.querySelector('div[style*="border-top-color"]').style.borderBottomColor = 'rgba(168,85,247,0.4)';
-          tip.querySelector('div[style*="border-top-color"]').style.top = 'auto';
-          tip.querySelector('div[style*="border-top-color"]').style.bottom = '100%';
+          const arrow = tip.querySelector('div[style*="border-top-color"]');
+          if (arrow) {
+            arrow.style.borderTopColor = 'transparent';
+            arrow.style.borderBottomColor = 'rgba(168,85,247,0.4)';
+            arrow.style.top = 'auto';
+            arrow.style.bottom = '100%';
+          }
+        }
+        // Si node trop à droite → décaler tooltip à gauche
+        if (nodeLeft + tipWidth/2 > iw * 0.95) {
+          tip.style.transform = 'translateX(-80%)';
+        } else if (nodeLeft - tipWidth/2 < iw * 0.05) {
+          tip.style.transform = 'translateX(-20%)';
+        } else {
+          tip.style.transform = 'translateX(-50%)';
         }
         tip.style.opacity = '1';
         const img2 = node.querySelector('img[style*="64px"]');
@@ -748,7 +1050,11 @@
     function placeNodes() {
       const iw = img.offsetWidth;
       const ih = img.offsetHeight;
-      if (!iw || !ih) { setTimeout(placeNodes, 100); return; }
+      // Vérifier que l'image est chargée ET a ses dimensions naturelles
+      if (!iw || !ih || !img.naturalWidth || !img.naturalHeight) { 
+        setTimeout(placeNodes, 100); 
+        return; 
+      }
       // Placer les nodes
       nodes.forEach((node, i) => {
         const pos = positions[i] || [50,50];
@@ -765,8 +1071,8 @@
 
     img.addEventListener('load', placeNodes);
     window.addEventListener('resize', placeNodes);
-    if (img.complete && img.naturalWidth) placeNodes();
-    else setTimeout(placeNodes, 300);
+    if (img.complete && img.naturalWidth && img.naturalHeight) placeNodes();
+    else setTimeout(placeNodes, 400);
 
     container.appendChild(wrap);
 
