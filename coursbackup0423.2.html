@@ -36,145 +36,6 @@
     /* ── LAYOUT AVEC GLOBE EN GRAND + POPUP MODAL ── */
     .kingdom-layout { position:relative; z-index:10; display:flex; flex-direction:column; align-items:center; padding:2rem 1rem; }
 
-    /* ── SPLIT VIEW MAP + PANEL ── */
-    .province-split { display:flex; width:100%; max-width:1600px; margin:0 auto; gap:1rem; align-items:stretch; }
-    .province-split-map { flex:0 0 70%; min-width:0; display:flex; flex-direction:column; }
-    .province-split-panel { flex:0 0 calc(30% - 1rem); min-width:0; display:flex; flex-direction:column; align-self:stretch; }
-    .quest-panel {
-      background:rgba(15,10,26,0.6);
-      backdrop-filter:blur(16px);
-      -webkit-backdrop-filter:blur(16px);
-      border:1px solid rgba(168,85,247,0.2);
-      border-radius:1rem;
-      padding:1.25rem 1rem;
-      display:flex;
-      flex-direction:column;
-      box-shadow:0 8px 32px rgba(0,0,0,0.3);
-      overflow:hidden;
-      height:100%;
-      min-height:0;
-    }
-    .quest-panel.unroll {
-      animation:slideInPanel 0.5s cubic-bezier(0.34,1.56,0.64,1);
-    }
-    @keyframes slideInPanel {
-      0%   { opacity:0; transform:translateX(-100%); }
-      100% { opacity:1; transform:translateX(0); }
-    }
-    /* ── QUEST PANEL - NOUVEAU DESIGN ── */
-    .quest-panel { position:relative; }
-    .quest-panel::before {
-      content:'';
-      position:absolute;
-      inset:0;
-      border-radius:inherit;
-      background:var(--region-color, rgba(168,85,247,0.06));
-      opacity:0;
-      transition:opacity 0.5s ease, background 0.5s ease;
-      pointer-events:none;
-      z-index:0;
-    }
-    .quest-panel.colored::before { opacity:0.12; }
-    .quest-panel > * { position:relative; z-index:1; }
-
-    /* État d'attente */
-    .qp-waiting { display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; text-align:center; padding:2rem 1rem; gap:0.8rem; }
-    .qp-waiting-icon { font-size:4rem; animation:waitingFloat 3s ease-in-out infinite; filter:drop-shadow(0 0 20px rgba(168,85,247,0.3)); }
-    @keyframes waitingFloat { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
-    .qp-waiting-title { font-size:1.1rem; font-weight:900; color:#e2e8f0; margin:0; letter-spacing:0.02em; }
-    .qp-waiting-subtitle { font-size:0.8rem; color:#94a3b8; line-height:1.5; max-width:240px; margin:0; }
-    .qp-waiting-dots { display:flex; gap:0.4rem; margin-top:0.5rem; }
-    .qp-waiting-dots span { width:6px; height:6px; border-radius:50%; background:rgba(168,85,247,0.5); animation:waitingDot 1.4s ease-in-out infinite; }
-    .qp-waiting-dots span:nth-child(2) { animation-delay:0.2s; }
-    .qp-waiting-dots span:nth-child(3) { animation-delay:0.4s; }
-    @keyframes waitingDot { 0%,100%{opacity:0.3; transform:scale(0.8);} 50%{opacity:1; transform:scale(1);} }
-
-    /* État sélectionné */
-    .qp-selected { display:flex; flex-direction:column; height:100%; min-height:0; gap:0.8rem; }
-
-    .qp-header {
-      display:flex; gap:0.8rem; align-items:flex-start; padding-bottom:0.7rem;
-      border-bottom:1px solid rgba(168,85,247,0.15); flex-shrink:0;
-    }
-    .qp-header-img { width:56px; height:56px; object-fit:contain; filter:drop-shadow(0 0 10px var(--region-color, rgba(168,85,247,0.5))); flex-shrink:0; transition:filter 0.5s ease; }
-    .qp-header-text { flex:1; min-width:0; }
-    .qp-region-badge {
-      display:inline-block;
-      font-size:0.6rem;
-      font-weight:800;
-      text-transform:uppercase;
-      letter-spacing:0.06em;
-      padding:0.15rem 0.55rem;
-      border-radius:9999px;
-      background:var(--region-color, rgba(168,85,247,0.5));
-      color:#fff;
-      margin-bottom:0.3rem;
-    }
-    .qp-title { font-size:1rem; font-weight:900; color:#fff; margin:0; line-height:1.2; }
-    .qp-subtitle { font-size:0.65rem; color:#94a3b8; margin:0.25rem 0 0 0; font-style:italic; line-height:1.3; }
-
-    .qp-body { display:flex; flex-direction:column; gap:0.5rem; flex:1; min-height:0; overflow-y:auto; padding-right:2px; }
-    .qp-body::-webkit-scrollbar { width:4px; }
-    .qp-body::-webkit-scrollbar-track { background:transparent; }
-    .qp-body::-webkit-scrollbar-thumb { background:rgba(168,85,247,0.3); border-radius:2px; }
-    .qp-step { display:flex; gap:0.7rem; align-items:center; padding:0.6rem 0.7rem; background:rgba(168,85,247,0.08); border:1px solid rgba(168,85,247,0.15); border-radius:0.55rem; transition:all 0.2s; flex-shrink:0; }
-    .qp-step:hover { background:rgba(168,85,247,0.12); border-color:rgba(168,85,247,0.3); }
-    .qp-step-icon { font-size:1.5rem; flex-shrink:0; }
-    .qp-step-content { flex:1; display:flex; flex-direction:column; gap:0.1rem; min-width:0; }
-    .qp-step-title { font-size:0.75rem; font-weight:900; color:#fff; letter-spacing:0.04em; }
-    .qp-step-subtitle { font-size:0.6rem; color:#94a3b8; line-height:1.3; }
-    .qp-step-progress { height:3px; background:rgba(255,255,255,0.1); border-radius:9999px; overflow:hidden; }
-    .qp-step-progress-fill { height:100%; background:linear-gradient(90deg,var(--accent),#22d3ee); }
-    .qp-step-btn { padding:0.5rem 0.8rem; background:rgba(168,85,247,0.2); border:1px solid rgba(168,85,247,0.4); border-radius:0.5rem; color:#c4b5fd; font-weight:700; font-size:0.7rem; cursor:pointer; transition:all 0.2s; white-space:nowrap; }
-    .qp-step-btn:hover:not(:disabled) { background:rgba(168,85,247,0.4); border-color:rgba(168,85,247,0.7); }
-    .qp-step-btn:disabled { opacity:0.4; cursor:not-allowed; text-decoration:line-through; }
-
-    .qp-footer { padding-top:0.6rem; border-top:1px solid rgba(168,85,247,0.15); flex-shrink:0; }
-    .qp-loot-box { position:relative; border:2px solid #fbbf24; border-radius:0.7rem; padding:0.7rem; background:linear-gradient(135deg,rgba(251,191,36,0.08),rgba(250,204,21,0.04)); text-align:center; animation:lootGlow 2s ease-in-out infinite; }
-    @keyframes lootGlow { 0%,100%{border-color:#fbbf24; box-shadow:0 0 10px rgba(251,191,36,0.35);} 50%{border-color:#f59e0b; box-shadow:0 0 20px rgba(245,158,11,0.55);} }
-    .qp-loot-img { font-size:2rem; margin-bottom:0.2rem; display:block; line-height:1; }
-    .qp-loot-label { font-size:0.6rem; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:0.04em; }
-    .qp-loot-name { font-size:0.82rem; font-weight:900; color:#fbbf24; margin:0.15rem 0; line-height:1.25; }
-    .qp-loot-condition { font-size:0.58rem; color:#cbd5e1; font-style:italic; }
-
-    .quest-panel-content { flex:1; min-height:0; display:flex; flex-direction:column; gap:1.1rem; }
-
-    .quest-panel-empty { display:flex; flex-direction:column; align-items:center; justify-content:center; flex:1; color:#64748b; text-align:center; padding:2rem 1rem; }
-    .quest-panel-empty-icon { font-size:2.5rem; margin-bottom:1rem; opacity:0.6; }
-    .quest-panel-empty p { font-size:0.85rem; margin:0; line-height:1.5; }
-
-    .quest-info { display:none; flex-direction:column; gap:1.1rem; }
-    .quest-info.active { display:flex; }
-
-    .quest-panel-title { font-size:1.2rem; font-weight:900; color:#fff; margin:0; line-height:1.3; }
-    .quest-panel-meta { display:flex; gap:0.4rem; flex-wrap:wrap; }
-    .quest-panel-badge { display:inline-flex; align-items:center; gap:0.3rem; background:rgba(168,85,247,0.12); border:1px solid rgba(168,85,247,0.3); border-radius:9999px; padding:0.25rem 0.7rem; font-size:0.7rem; font-weight:700; color:#c4b5fd; }
-
-    .quest-panel-progress { display:flex; flex-direction:column; gap:0.4rem; }
-    .quest-panel-progress-label { font-size:0.72rem; font-weight:700; color:#94a3b8; display:flex; justify-content:space-between; }
-    .quest-panel-progress-bar { height:6px; background:rgba(255,255,255,0.08); border-radius:9999px; overflow:hidden; }
-    .quest-panel-progress-fill { height:100%; background:linear-gradient(90deg,var(--accent),#22d3ee); transition:width 0.4s ease; border-radius:9999px; }
-
-    .quest-panel-loot { background:rgba(250,204,21,0.08); border:1px solid rgba(250,204,21,0.25); border-radius:0.7rem; padding:0.7rem; text-align:center; }
-    .quest-panel-loot-emoji { font-size:1.5rem; margin-bottom:0.2rem; }
-    .quest-panel-loot-name { font-size:0.85rem; font-weight:800; color:#fbbf24; margin:0; }
-    .quest-panel-loot-desc { font-size:0.65rem; color:#94a3b8; margin-top:0.15rem; }
-
-    .quest-panel-actions { display:flex; flex-direction:column; gap:0.6rem; margin-top:auto; padding-top:1rem; }
-    .quest-panel-btn { width:100%; padding:0.8rem; border:none; border-radius:0.7rem; font-weight:800; font-size:0.85rem; cursor:pointer; transition:all 0.25s ease; text-decoration:none; display:flex; align-items:center; justify-content:center; gap:0.4rem; font-family:'Nunito',sans-serif; }
-    .quest-panel-btn-launch { background:linear-gradient(135deg,var(--accent),#06b6d4); color:#fff; }
-    .quest-panel-btn-launch:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 6px 20px rgba(168,85,247,0.4); }
-    .quest-panel-btn-launch:disabled { opacity:0.5; cursor:not-allowed; }
-
-    /* Quest node selected state */
-    .quest-node-selected img.quest-pion { transform:scale(1.15) !important; filter:drop-shadow(0 0 16px #22d3ee) drop-shadow(0 0 32px #22d3ee) drop-shadow(0 0 48px #22d3ee) !important; }
-
-    @media (max-width:900px) {
-      .province-split { flex-direction:column; }
-      .province-split-map, .province-split-panel { flex:0 0 auto; width:100%; }
-      .quest-panel { position:static; min-height:auto; }
-    }
-
     /* Bouton toggle - en bas à gauche */
     .globe-toggle-btn {
       position:fixed;
@@ -294,9 +155,22 @@
       margin:0 auto;
     }
     
-    /* État compact - caché complètement après téléportation */
+    /* État compact (après sélection province) */
     #globe-wrap.compact {
-      display:none !important;
+      position:fixed !important;
+      bottom:20px;
+      left:20px;
+      width:100px;
+      height:100px;
+      animation:none !important;
+      margin:0 !important;
+      z-index:100;
+      transition:width 0.6s cubic-bezier(0.34,1.56,0.64,1), 
+                  height 0.6s cubic-bezier(0.34,1.56,0.64,1), 
+                  bottom 0.6s cubic-bezier(0.34,1.56,0.64,1), 
+                  left 0.6s cubic-bezier(0.34,1.56,0.64,1),
+                  transform 0.6s cubic-bezier(0.34,1.56,0.64,1);
+      transform:none;
     }
 
     .globe-modal #globe-wrap {
@@ -305,32 +179,7 @@
       animation:none;
       margin:0 auto;
     }
-    #globe-wrap.teleporting {
-      animation:teleportOut 0.8s cubic-bezier(0.55,0.085,0.68,0.53) forwards;
-      pointer-events:none;
-    }
-    @keyframes teleportOut {
-      0% {
-        transform:scale(1) rotate(0deg);
-        filter:brightness(1) blur(0);
-        opacity:1;
-      }
-      35% {
-        transform:scale(1.4) rotate(180deg);
-        filter:brightness(2.2) blur(3px) drop-shadow(0 0 40px #22d3ee) drop-shadow(0 0 80px #a855f7);
-        opacity:1;
-      }
-      60% {
-        transform:scale(0.4) rotate(540deg) translateY(50px);
-        filter:brightness(3) blur(8px);
-        opacity:0.6;
-      }
-      100% {
-        transform:scale(0.05) rotate(720deg) translate(30vw, 40vh);
-        filter:brightness(5) blur(20px);
-        opacity:0;
-      }
-    }
+    #globe-wrap.teleporting { transform:scale(1.3); filter:blur(12px) brightness(1.6); opacity:0; pointer-events:none; transition:transform 0.6s ease-in, filter 0.6s ease, opacity 0.6s ease; }
 
     .globe-img-modal { width:100%; display:block; filter:drop-shadow(0 0 30px rgba(34,211,238,0.2)); }
     .fresnel-modal { position:absolute; border-radius:50%; background:transparent; pointer-events:none; z-index:0;
@@ -367,25 +216,15 @@
     .province-map-img { width:100%; display:block; border-radius:1.25rem; }
     .map-svg { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
     .map-node-icon { transition:transform 0.2s ease; }
-    @keyframes nodePulse { 
-      0%,100%{transform:scale(1);opacity:0.9;} 
-      50%{transform:scale(1.08);opacity:1;} 
-    }
-    @keyframes neoFloat { 
-      0%,100%{transform:translateX(-50%) translateY(0)} 
-      50%{transform:translateX(-50%) translateY(-10px)} 
-    }
-    @keyframes nodeGlow {
-      0%,100%{filter:drop-shadow(0 0 6px #fbbf24) drop-shadow(0 0 16px #f59e0b) drop-shadow(0 0 32px #fbbf24);}
-      50%{filter:drop-shadow(0 0 10px #fbbf24) drop-shadow(0 0 24px #f59e0b) drop-shadow(0 0 48px #fbbf24) drop-shadow(0 0 60px rgba(251,191,36,0.9));}
-    }
+    @keyframes nodePulse { 0%,100%{opacity:0.7} 50%{opacity:1} }
+    @keyframes neoFloat { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(-8px)} }
 
     /* ── STICKY BAR ── */
     .sticky-bar { position:fixed; bottom:0; left:0; right:0; z-index:200; background:rgba(8,6,26,0.96); backdrop-filter:blur(20px); border-top:1px solid rgba(168,85,247,0.2); padding:0.75rem 1.5rem; display:flex; align-items:center; justify-content:space-between; gap:1rem; }
     .sticky-bar-track { width:100px; height:4px; background:rgba(255,255,255,0.08); border-radius:9999px; overflow:hidden; margin-top:4px; }
     .sticky-bar-fill { height:100%; border-radius:9999px; background:linear-gradient(90deg,var(--accent),var(--cyan)); transition:width 0.8s; }
-    .btn-sos { display:inline-flex; align-items:center; gap:0.5rem; background:linear-gradient(135deg,#7c3aed,#06b6d4); border:none; border-radius:9999px; padding:0.6rem 1.4rem; font-weight:800; font-size:0.85rem; color:#fff; cursor:pointer; font-family:'Nunito',sans-serif; transition:all 0.25s ease; }
-    .btn-sos:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(124,58,237,0.5); }
+    .btn-sos { display:inline-flex; align-items:center; gap:0.5rem; background:linear-gradient(135deg,#dc2626,#991b1b); border:none; border-radius:9999px; padding:0.6rem 1.4rem; font-weight:800; font-size:0.85rem; color:#fff; cursor:pointer; font-family:'Nunito',sans-serif; animation:sosPulse 2.5s ease-in-out infinite; }
+    @keyframes sosPulse { 0%,100%{box-shadow:0 0 10px rgba(220,38,38,0.35)} 50%{box-shadow:0 0 24px rgba(220,38,38,0.7)} }
     @keyframes masterPulse { 0%,100%{box-shadow:0 0 12px rgba(34,211,238,0.4)} 50%{box-shadow:0 0 28px rgba(34,211,238,0.8)} }
 
     ::-webkit-scrollbar { width:6px; }
@@ -486,6 +325,11 @@
 <!-- Layout principal -->
 <div class="kingdom-layout" id="kingdom-layout">
 
+  <!-- Bouton toggle simple -->
+  <button class="globe-toggle-btn" id="globe-toggle-btn" onclick="openGlobeModal(event)">
+    🌍 Changer de Province
+  </button>
+
   <!-- Globe en grand -->
   <div id="globe-wrap" style="position:relative;">
     <div class="fresnel-modal" id="fresnel-modal"></div>
@@ -511,7 +355,7 @@
     <div style="font-size:0.8rem;color:#94a3b8;font-weight:700;"><strong id="sticky-visited" style="color:#fff;">0</strong>/<span id="sticky-total">0</span> Quêtes · <span id="sticky-kingdom-name" style="color:var(--accent);"></span></div>
     <div class="sticky-bar-track"><div class="sticky-bar-fill" id="sticky-fill" style="width:0%"></div></div>
   </div>
-  <button class="btn-sos" onclick="openGlobeModal(event)">🌍 Changer de Province</button>
+  <button class="btn-sos" onclick="launchSOSQuiz()">🆘 SOS Contrôle</button>
 </div>
 
 <script>
@@ -752,45 +596,6 @@
   const matiereId = params.get('matiere');
   let matiereData = null, couleur = '#a855f7', currentNiveau = null;
 
-  // ── Son de parchemin ──
-  function playParchmentSound() {
-    // Créer un contexte audio avec Web Audio API
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    
-    // Son 1 : Froissement bas (180-240 Hz)
-    const osc1 = audioContext.createOscillator();
-    const gain1 = audioContext.createGain();
-    osc1.connect(gain1);
-    gain1.connect(audioContext.destination);
-    osc1.frequency.setValueAtTime(180, audioContext.currentTime);
-    osc1.frequency.exponentialRampToValueAtTime(240, audioContext.currentTime + 0.15);
-    gain1.gain.setValueAtTime(0.15, audioContext.currentTime);
-    gain1.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
-    osc1.start(audioContext.currentTime);
-    osc1.stop(audioContext.currentTime + 0.15);
-    
-    // Son 2 : Froissement haut (320-380 Hz, décalé)
-    const osc2 = audioContext.createOscillator();
-    const gain2 = audioContext.createGain();
-    osc2.connect(gain2);
-    gain2.connect(audioContext.destination);
-    osc2.frequency.setValueAtTime(320, audioContext.currentTime + 0.05);
-    osc2.frequency.exponentialRampToValueAtTime(380, audioContext.currentTime + 0.18);
-    gain2.gain.setValueAtTime(0.12, audioContext.currentTime + 0.05);
-    gain2.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.18);
-    osc2.start(audioContext.currentTime + 0.05);
-    osc2.stop(audioContext.currentTime + 0.18);
-  }
-
-  // ── Son papier (pour ouverture map) ──
-  function playPaperSound() {
-    const audio = new Audio('wav/mapsound.wav');
-    audio.volume = 0.6;
-    audio.play().catch(() => {
-      // Fallback silencieux si le fichier ne charge pas
-    });
-  }
-
   // ── Sélection province ──
   function selectProvince(id) {
     const wrap   = document.getElementById('globe-wrap');
@@ -806,7 +611,7 @@
 
     // Ajouter classes pour transition
     wrap.classList.add('compact');
-    if (btn) btn.classList.add('active');
+    btn.classList.add('active');
 
     // Zoom téléportation
     wrap.classList.add('teleporting');
@@ -827,9 +632,6 @@
       const lbl = document.getElementById('sidebar-province-label');
       if (lbl) lbl.textContent = (niv.emoji_province||'') + ' ' + (niv.nom_province || niv.nom);
 
-      // Jouer le son papier
-      playPaperSound();
-
       renderProvince(niv, c);
 
       // Garder la zone active en surbrillance
@@ -848,12 +650,12 @@
 
 
 
-      // Animer le container - déroulement de parchemin
+      // Animer le container
       const container = document.getElementById('quest-route-container');
       if (container) {
-        container.style.cssText = 'clip-path:inset(0 100% 0 0);transition:none;';
+        container.style.cssText = 'opacity:0;transform:scale(0.95);filter:blur(6px);transition:none;';
         setTimeout(() => {
-          container.style.cssText = 'clip-path:inset(0 0 0 0);transition:clip-path 0.9s cubic-bezier(0.22,1,0.36,1);';
+          container.style.cssText = 'opacity:1;transform:scale(1);filter:blur(0);transition:opacity 0.6s ease,transform 0.6s ease,filter 0.6s ease;';
         }, 30);
       }
     }, 500);
@@ -918,15 +720,19 @@
     document.getElementById('sticky-kingdom-name').textContent = matiereData.nom_royaume || matiereData.nom;
 
     const neoSrc = NEO_MAT_IMGS[matiereId];
-    const neoImg = document.getElementById('kingdom-neo');
-    if (neoSrc && neoImg) neoImg.src = neoSrc;
+    if (neoSrc) document.getElementById('kingdom-neo').src = neoSrc;
 
     if (!matiereData.niveaux || matiereData.niveaux.length === 0) {
       document.getElementById('empty-state').style.display = 'block';
       return;
     }
 
-    // NOTE: Plus de province par défaut — la map apparaît seulement après click sur le globe
+    // Province par défaut
+    if (matiereData.niveaux.length > 0) {
+      const first = matiereData.niveaux[0];
+      document.getElementById('current-province-label') && (document.getElementById('current-province-label').textContent = (first.nom_province || first.nom) + ' · ' + first.nom);
+      renderProvince(first, first.couleur_province || couleur);
+    }
 
     // Fresnel
     const globeImg = document.getElementById('globe-img');
@@ -936,6 +742,8 @@
       window.addEventListener('resize', placeFresnel);
       setTimeout(placeFresnel, 300);
     }
+
+    renderProvince(matiereData.niveaux[0], matiereData.niveaux[0].couleur_province || couleur);
   })();
 
   function getStatut(id) {
@@ -950,46 +758,6 @@
   function getPts(id) {
     try { return JSON.parse(localStorage.getItem(`neoquest_chap_${id}`) || '{}').pts || 0; } catch { return 0; }
   }
-
-  // ── Positions des nodes sur la map (en % largeur/hauteur de l'image) ──
-  const QUEST_PIONS = {
-    'heritage-aigles':  'img/dome.png',
-    'souffle-desert':   'img/croissant.png',
-    'savoirs-bagdad':   'img/livre.png',
-    'ordre-seigneurial':'img/moulin.png',
-    'emergence-villes': 'img/befroi.png',
-    'etat-monarchique': 'img/bouclierroi.png',
-    'duel-titans':      'img/galeres.png',
-    'esprit-lumieres':  'img/presse.png',
-    'sacre-neo':        'img/portailroi.png',
-  };
-
-  const MAP_NODE_POSITIONS = {
-    '5eme': [
-      [ 7.0, 50.2],  // dome byzantin
-      [18.9, 62.0],  // croissant lune
-      [10.6, 88.7],  // livre manuscrit
-      [53.2, 81.4],  // moulin
-      [44.6, 58.2],  // beffroi
-      [60.9, 43.8],  // bouclier roi
-      [71.1, 36.5],  // galeres
-      [73.3, 66.5],  // presse plume
-      [85.5, 55.6],  // portail Versailles
-    ],
-    default: [
-      [20, 75], [35, 60], [20, 45],
-      [50, 75], [50, 55], [50, 35],
-      [80, 45], [80, 62], [80, 78],
-    ]
-  };
-
-  const REGION_BOUNDARIES = {
-    '5eme': [
-      { xMin: 0,  xMax: 33, nom: 'Le Choc des Empires',  couleur: '#f97316' },
-      { xMin: 33, xMax: 66, nom: "L'Âge des Seigneurs",  couleur: '#a855f7' },
-      { xMin: 66, xMax: 100,nom: 'Le Nouveau Monde',     couleur: '#22c55e' },
-    ]
-  };
 
   function renderProvince(niveau, c) {
     currentNiveau = niveau;
@@ -1031,90 +799,57 @@
     }
   }
 
+  // ── Positions des nodes sur la map (en % largeur/hauteur de l'image) ──
+  // Chemin continu qui traverse les 3 régions de bas en haut
+  // Ordre : Choc des Empires (gauche) → Âge des Seigneurs (centre) → Nouveau Monde (droite)
+  // Pions individuels par quête
+  const QUEST_PIONS = {
+    'heritage-aigles':  'img/dome.png',
+    'souffle-desert':   'img/croissant.png',
+    'savoirs-bagdad':   'img/livre.png',
+    'ordre-seigneurial':'img/moulin.png',
+    'emergence-villes': 'img/befroi.png',
+    'etat-monarchique': 'img/bouclierroi.png',
+    'duel-titans':      'img/galeres.png',
+    'esprit-lumieres':  'img/presse.png',
+    'sacre-neo':        'img/portailroi.png',
+  };
+
+  const MAP_NODE_POSITIONS = {
+    '5eme': [
+      [ 7.0, 50.2],  // dome byzantin
+      [18.9, 62.0],  // croissant lune
+      [10.6, 88.7],  // livre manuscrit
+      [53.2, 81.4],  // moulin
+      [44.6, 58.2],  // beffroi
+      [60.9, 43.8],  // bouclier roi
+      [71.1, 36.5],  // galeres
+      [73.3, 66.5],  // presse plume
+      [85.5, 55.6],  // portail Versailles
+    ],
+    default: [
+      [20, 75], [35, 60], [20, 45],
+      [50, 75], [50, 55], [50, 35],
+      [80, 45], [80, 62], [80, 78],
+    ]
+  };
+
+  // Frontières x% des régions pour bannière de transition
+  const REGION_BOUNDARIES = {
+    '5eme': [
+      { xMin: 0,  xMax: 33, nom: 'Le Choc des Empires',  couleur: '#f97316' },
+      { xMin: 33, xMax: 66, nom: "L'Âge des Seigneurs",  couleur: '#a855f7' },
+      { xMin: 66, xMax: 100,nom: 'Le Nouveau Monde',     couleur: '#22c55e' },
+    ]
+  };
+
   function renderMapRoute(niveau, c, mapImg, lastActiveIdx, neoSrc, container) {
     const allChaps = niveau.themes?.flatMap(t => t.chapitres) || [];
     const positions = MAP_NODE_POSITIONS[niveau.id] || MAP_NODE_POSITIONS.default;
 
-    // ── Split view : map à gauche + panel à droite ──
-    const split = document.createElement('div');
-    split.className = 'province-split';
-
-    const splitMap = document.createElement('div');
-    splitMap.className = 'province-split-map';
-    split.appendChild(splitMap);
-
-    const splitPanel = document.createElement('div');
-    splitPanel.className = 'province-split-panel';
-    splitPanel.innerHTML = `
-      <div class="quest-panel" id="quest-panel-main">
-        <!-- État d'attente -->
-        <div class="qp-waiting" id="qp-waiting">
-          <div class="qp-waiting-icon">🗺️</div>
-          <h3 class="qp-waiting-title">Choisis ta quête</h3>
-          <p class="qp-waiting-subtitle">Clique sur un monument de la carte pour découvrir les détails de l'aventure et commencer ton exploration.</p>
-          <div class="qp-waiting-dots">
-            <span></span><span></span><span></span>
-          </div>
-        </div>
-
-        <!-- État quête sélectionnée -->
-        <div class="qp-selected" id="qp-selected" style="display:none;">
-          <div class="qp-header">
-            <img class="qp-header-img" id="qp-header-img" src="" alt="Quête" />
-            <div class="qp-header-text">
-              <div class="qp-region-badge" id="qp-region-badge"></div>
-              <h3 class="qp-title" id="qp-title">—</h3>
-              <p class="qp-subtitle" id="qp-subtitle"></p>
-            </div>
-          </div>
-          <div class="qp-body">
-            <div class="qp-step" id="qp-step-explore">
-              <div class="qp-step-icon">👁️</div>
-              <div class="qp-step-content">
-                <div class="qp-step-title">EXPLORER</div>
-                <div class="qp-step-subtitle">Gagne tes Points de Vision.</div>
-              </div>
-            </div>
-            <div class="qp-step" id="qp-step-prepare">
-              <div class="qp-step-icon">🏹</div>
-              <div class="qp-step-content">
-                <div class="qp-step-title">PRÉPARER</div>
-                <div class="qp-step-subtitle">Collecte tes Munitions.</div>
-              </div>
-            </div>
-            <div class="qp-step" id="qp-step-fight">
-              <div class="qp-step-icon">⚔️</div>
-              <div class="qp-step-content">
-                <div class="qp-step-title" id="qp-fight-title">COMBATTRE</div>
-                <div class="qp-step-subtitle">Affronte le Boss.</div>
-              </div>
-            </div>
-            <div class="qp-step" id="qp-step-challenge">
-              <div class="qp-step-icon">🔥</div>
-              <div class="qp-step-content">
-                <div class="qp-step-title" id="qp-challenge-title">DÉFIER</div>
-                <div class="qp-step-subtitle">Mode Speedrun (Expert).</div>
-              </div>
-            </div>
-          </div>
-          <div class="qp-footer">
-            <div class="qp-loot-box">
-              <div class="qp-loot-img" id="qp-loot-img"></div>
-              <div class="qp-loot-text">
-                <div class="qp-loot-label">Récompense de quête</div>
-                <div class="qp-loot-name" id="qp-loot-name"></div>
-                <div class="qp-loot-condition">Score Quiz ≥ 70%</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
-    split.appendChild(splitPanel);
-
-    // Wrapper map (identique à l'original, mais dans splitMap)
+    // Wrapper identique au test_map.html qui fonctionne
     const wrap = document.createElement('div');
-    wrap.style.cssText = 'position:relative;display:inline-block;width:100%;border-radius:1rem;overflow:hidden;';
+    wrap.style.cssText = 'position:relative;display:inline-block;width:100%;margin-bottom:1rem;border-radius:1rem;overflow:hidden;';
 
     const img = document.createElement('img');
     img.src = mapImg;
@@ -1208,39 +943,28 @@
       const loot    = chap.loot_quete || null;
       const pionSrc = QUEST_PIONS[chap.id];
 
-      // Statuts visuels
-      let pionFilter = '';
-      let pionAnim   = 'none';
-      let pionGlow   = '';
+      let pionFilter = (isEmpty || statut==='not-started') ? 'grayscale(0.85) brightness(0.6) opacity(0.7)' : '';
+      let fogHTML = '';
+      let pionAnim   = statut==='in-progress' ? 'nodePulse 2s ease-in-out infinite' : 'none';
+      let pionGlow   = statut==='mastered'
+        ? 'drop-shadow(0 0 8px #fbbf24) drop-shadow(0 0 20px #f59e0b) drop-shadow(0 0 40px rgba(251,191,36,0.6))'
+        : statut==='in-progress' ? `drop-shadow(0 0 8px ${c}) drop-shadow(0 0 18px ${c})` : '';
       let checkmark = '';
 
-      if (isEmpty || statut === 'not-started') {
-        // ── Non visité : GRISÉ + moins visible ──
-        pionFilter = 'grayscale(1) brightness(0.65) opacity(0.75)';
-      } else if (statut === 'in-progress') {
-        // ── En cours : PULSE animé + glow couleur ──
-        pionAnim = 'nodePulse 2.2s ease-in-out infinite';
-        pionGlow = `drop-shadow(0 0 12px ${c}) drop-shadow(0 0 24px ${c}) drop-shadow(0 0 40px ${c}33)`;
-      } else if (statut === 'mastered') {
-        // ── Maîtrisé : SCINTILLEMENT + icône loot ──
-        pionGlow = 'drop-shadow(0 0 6px #fbbf24) drop-shadow(0 0 16px #f59e0b) drop-shadow(0 0 32px #fbbf24) drop-shadow(0 0 48px rgba(251,191,36,0.8))';
-        pionAnim = 'nodeGlow 2s ease-in-out infinite';
-        checkmark = loot ? `<div style="position:absolute;top:-6px;right:-6px;width:32px;height:32px;border-radius:50%;background:#fbbf24;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.4rem;box-shadow:0 0 12px #f59e0b;line-height:1;">${loot.emoji}</div>` : '';
-      }
-
       const lootTip  = loot ? `<div style="font-size:0.62rem;color:#fbbf24;font-weight:800;margin-top:3px;">${loot.emoji} ${loot.nom}</div>` : '';
-      const ctaBtn   = isEmpty ? `<div style="margin-top:5px;font-size:0.7rem;font-weight:800;color:#94a3b8;">🏗️ En préparation</div>` : `<div style="margin-top:5px;font-size:0.65rem;font-weight:800;color:${c};">Commencer →</div>`;
+      const ctaBtn   = isEmpty ? '' : `<div style="margin-top:5px;font-size:0.65rem;font-weight:800;color:${c};">Commencer →</div>`;
 
       const node = document.createElement('div');
       node.dataset.idx = i;
       node.style.cssText = 'position:absolute;transform:translate(-50%,-50%);z-index:10;cursor:' + (isEmpty?'default':'pointer') + ';';
       node.innerHTML = `
-        ${isNeo ? `<img class="neo-pion" src="${neoSrc}" style="position:absolute;left:50%;object-fit:contain;filter:drop-shadow(0 0 10px ${c});animation:neoFloat 2.5s ease-in-out infinite;pointer-events:none;"/>` : ''}
+        ${isNeo ? `<img src="${neoSrc}" style="position:absolute;top:-30px;left:50%;transform:translateX(-50%);width:48px;height:48px;object-fit:contain;filter:drop-shadow(0 0 8px ${c});animation:neoFloat 2.5s ease-in-out infinite;pointer-events:none;"/>` : ''}
         <div style="position:relative;">
           ${pionSrc
-            ? `<img class="quest-pion" src="${pionSrc}" style="object-fit:contain;filter:${pionFilter}${pionGlow};animation:${pionAnim};transition:filter 0.3s, transform 0.25s;display:block;"/>`
-            : `<div class="quest-pion quest-pion-fallback" style="border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;">${chap.icone_quete||'📍'}</div>`
+            ? `<img src="${pionSrc}" style="width:64px;height:64px;object-fit:contain;filter:${pionGlow};animation:${pionAnim};transition:transform 0.2s;display:block;"/>`
+            : `<div style="width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:1.8rem;">${chap.icone_quete||'📍'}</div>`
           }
+          ${fogHTML}
           ${checkmark}
         </div>
         <div class="map-tooltip" style="
@@ -1302,104 +1026,19 @@
           tip.style.transform = 'translateX(-50%)';
         }
         tip.style.opacity = '1';
-        const img2 = node.querySelector('img.quest-pion');
+        const img2 = node.querySelector('img[style*="64px"]');
         if(img2) img2.style.transform = 'scale(1.15)';
       });
       node.addEventListener('mouseleave', () => {
         node.style.zIndex = '10';
         const tip = node.querySelector('.map-tooltip');
         tip.style.opacity = '0';
-        const img2 = node.querySelector('img.quest-pion');
+        const img2 = node.querySelector('img[style*="64px"]');
         if(img2) img2.style.transform = 'scale(1)';
       });
       if (!isEmpty) {
         node.addEventListener('click', () => {
-          playParchmentSound();
-          nodes.forEach(n => n.classList.remove('quest-node-selected'));
-          node.classList.add('quest-node-selected');
-
-          const panel = document.querySelector('.quest-panel');
-          if (panel) { panel.classList.remove('unroll'); void panel.offsetWidth; panel.classList.add('unroll'); }
-
-          const statut = getStatut(chap.id);
-          const videoVu   = !!localStorage.getItem(`neoquest_video_${chap.id}`);
-          const fcVu      = !!localStorage.getItem(`neoquest_fc_${chap.id}`);
-          const quizVu    = !!localStorage.getItem(`neoquest_quiz_${chap.id}`);
-          const quizUnlock = videoVu || fcVu;
-          const chronoUnlock = quizVu;
-
-          const regionData = niveau.themes?.find(t => (t.chapitres||[]).some(ch => ch.id === chap.id));
-          const regionColor = regionData?.couleur_region || c;
-          const regionNom   = regionData?.nom_region || '';
-
-          // ── Switch waiting → selected ──
-          document.getElementById('qp-waiting').style.display = 'none';
-          document.getElementById('qp-selected').style.display = 'flex';
-
-          // ── Couleur région (fond translucide moderne) ──
-          const panel2 = document.getElementById('quest-panel-main');
-          if (panel2) {
-            panel2.style.setProperty('--region-color', regionColor);
-            panel2.classList.add('colored');
-            panel2.style.borderColor = regionColor + '40';
-            panel2.style.boxShadow = `0 8px 32px rgba(0,0,0,0.3), inset 0 0 40px ${regionColor}10`;
-          }
-
-          // ── Header ──
-          const pionSrc2 = QUEST_PIONS[chap.id] || '';
-          document.getElementById('qp-header-img').src = pionSrc2;
-          document.getElementById('qp-region-badge').textContent = `${regionData?.icone_region || '📍'} ${regionNom}`;
-          document.getElementById('qp-region-badge').style.background = regionColor;
-          document.getElementById('qp-title').textContent = chap.nom_quete || chap.nom;
-          document.getElementById('qp-subtitle').textContent = chap.nom || '';
-
-          // ── Étapes clicables ──
-          const goChapitre = (tab) => {
-            window.location.href = `chapitre.html?matiere=${matiereId}&niveau=${niveau.id}&chapitre=${chap.id}&tab=${tab}`;
-          };
-
-          const stepExplore   = document.getElementById('qp-step-explore');
-          const stepPrepare   = document.getElementById('qp-step-prepare');
-          const stepFight     = document.getElementById('qp-step-fight');
-          const stepChallenge = document.getElementById('qp-step-challenge');
-
-          stepExplore.style.cursor   = 'pointer';
-          stepPrepare.style.cursor   = 'pointer';
-          stepExplore.style.borderColor = regionColor + '55';
-          stepPrepare.style.borderColor = regionColor + '55';
-
-          stepExplore.onclick   = () => goChapitre('video');
-          stepPrepare.onclick   = () => goChapitre('flashcards');
-
-          if (quizUnlock) {
-            stepFight.style.cursor  = 'pointer';
-            stepFight.style.opacity = '1';
-            stepFight.onclick = () => goChapitre('quiz');
-            document.getElementById('qp-fight-title').textContent = '⚔️ COMBATTRE';
-          } else {
-            stepFight.style.cursor  = 'not-allowed';
-            stepFight.style.opacity = '0.45';
-            stepFight.onclick = null;
-            document.getElementById('qp-fight-title').textContent = '🔒 COMBATTRE';
-          }
-
-          if (chronoUnlock) {
-            stepChallenge.style.cursor  = 'pointer';
-            stepChallenge.style.opacity = '1';
-            stepChallenge.onclick = () => goChapitre('chrono');
-            stepChallenge.querySelector('.qp-step-title').textContent = '🔥 DÉFIER';
-          } else {
-            stepChallenge.style.cursor  = 'not-allowed';
-            stepChallenge.style.opacity = '0.45';
-            stepChallenge.onclick = null;
-            stepChallenge.querySelector('.qp-step-title').textContent = '🔒 DÉFIER';
-          }
-
-          // ── Footer loot ──
-          if (chap.loot_quete) {
-            document.getElementById('qp-loot-img').textContent  = chap.loot_quete.emoji;
-            document.getElementById('qp-loot-name').textContent = `+50 XP & ${chap.loot_quete.nom}`;
-          }
+          window.location.href = `chapitre.html?matiere=${matiereId}&niveau=${niveau.id}&chapitre=${chap.id}`;
         });
       }
 
@@ -1416,22 +1055,6 @@
         setTimeout(placeNodes, 100); 
         return; 
       }
-      // Taille pion proportionnelle à la largeur de la map (base 84px pour 900px de large)
-      const pionSize = Math.max(40, Math.min(84, Math.round(iw * 0.093)));
-      const neoSize  = Math.max(32, Math.round(pionSize * 0.72));
-      wrap.querySelectorAll('.quest-pion').forEach(p => {
-        p.style.width  = pionSize + 'px';
-        p.style.height = pionSize + 'px';
-        if (p.classList.contains('quest-pion-fallback')) {
-          p.style.fontSize = (pionSize * 0.5) + 'px';
-        }
-      });
-      wrap.querySelectorAll('.neo-pion').forEach(n => {
-        n.style.width  = neoSize + 'px';
-        n.style.height = neoSize + 'px';
-        n.style.top    = `-${Math.round(neoSize * 0.7)}px`;
-        n.style.transform = 'translateX(-50%)';
-      });
       // Placer les nodes
       nodes.forEach((node, i) => {
         const pos = positions[i] || [50,50];
@@ -1451,20 +1074,26 @@
     if (img.complete && img.naturalWidth && img.naturalHeight) placeNodes();
     else setTimeout(placeNodes, 400);
 
-    splitMap.appendChild(wrap);
-    container.appendChild(split);
+    container.appendChild(wrap);
 
-    // Aligner la hauteur du panel sur celle de la map
-    function syncPanelHeight() {
-      const mapH = wrap.offsetHeight;
-      if (mapH > 0) splitPanel.style.height = mapH + 'px';
-    }
-    if (img.complete && img.naturalWidth) syncPanelHeight();
-    img.addEventListener('load', syncPanelHeight);
-    window.addEventListener('resize', syncPanelHeight);
-    if (window.ResizeObserver) {
-      new ResizeObserver(syncPanelHeight).observe(wrap);
-    }
+    // Loots de régions
+    niveau.themes?.forEach(theme => {
+      if (!theme.loot_region) return;
+      const themeChaps  = theme.chapitres || [];
+      const allMastered = themeChaps.length > 0 && themeChaps.every(ch => getStatut(ch.id) === 'mastered');
+      const loot = theme.loot_region;
+      const lootEl = document.createElement('div');
+      lootEl.style.cssText = 'text-align:center;margin-bottom:0.75rem;';
+      lootEl.innerHTML = `
+        <div style="display:inline-flex;align-items:center;gap:0.5rem;
+          background:${allMastered?'rgba(250,204,21,0.12)':'rgba(255,255,255,0.03)'};
+          border:1px solid ${allMastered?'rgba(250,204,21,0.45)':'rgba(255,255,255,0.08)'};
+          border-radius:9999px;padding:5px 16px;font-size:0.7rem;font-weight:800;
+          color:${allMastered?'#fbbf24':'#334155'};">
+          ${loot.emoji} ${theme.icone_region} ${theme.nom_region} — ${allMastered ? loot.nom : '??? Récompense bloquée'}
+        </div>`;
+      container.appendChild(lootEl);
+    });
   }
 
   function renderZigzag(niveau, c, lastActiveIdx, neoSrc, container) {

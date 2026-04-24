@@ -58,6 +58,7 @@ window.__neoData = {
               "id": "choc-empires",
               "nom": "Le Choc des Empires",
               "nom_region": "Le Choc des Empires",
+              "couleur_region": "#f59e0b",
               "icone_region": "🕌",
               "loot_region": {
                 "nom": "Tunique de l'Érudit Nomade",
@@ -112,6 +113,7 @@ window.__neoData = {
               "id": "age-seigneurs",
               "nom": "L'Âge des Seigneurs",
               "nom_region": "L'Âge des Seigneurs",
+              "couleur_region": "#16a34a",
               "icone_region": "🏰",
               "loot_region": {
                 "nom": "Le Tabard de Chevalier",
@@ -1821,6 +1823,7 @@ window.__neoData = {
               "id": "nouveau-monde",
               "nom": "Le Nouveau Monde",
               "nom_region": "Le Nouveau Monde",
+              "couleur_region": "#0ea5e9",
               "icone_region": "🌍",
               "loot_region": {
                 "nom": "La Couronne de Soleil",
