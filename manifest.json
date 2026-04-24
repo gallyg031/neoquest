@@ -29,7 +29,7 @@
   "shortcuts": [
     {
       "name": "Histoire-Géo",
-      "url": "/cours.html?matiere=histoire-geo",
+      "url": "/royaume.html?matiere=histoire-geo",
       "description": "Accéder aux cours d'Histoire-Géo"
     },
     {

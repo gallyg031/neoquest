@@ -184,7 +184,8 @@ window.__neoData = {
                     {
                       "question": "Comment appelle-t-on un habitant de la ville, souvent riche et puissant par son travail, qui a obtenu des libertés ?",
                       "reponse": "Un bourgeois.",
-                      "indice": "Il ne fait pas partie des seigneurs."
+                      "indice": "Il ne fait pas partie des seigneurs.",
+                      "youtube_timestamp": 45
                     },
                     {
                       "question": "Quel document écrit par le seigneur accorde des droits, des privilèges et une autonomie aux bourgeois ?",
@@ -344,7 +345,8 @@ window.__neoData = {
                       ],
                       "bonne_reponse": 1,
                       "indice": "Ils jouissent d'une autonomie accordée par un seigneur.",
-                      "explication": "Les bourgeois sont les habitants d'une ville qui ont obtenu des libertés urbaines, formant une catégorie de travailleurs riches et puissants qui ne sont pas des seigneurs."
+                      "explication": "Les bourgeois sont les habitants d'une ville qui ont obtenu des libertés urbaines, formant une catégorie de travailleurs riches et puissants qui ne sont pas des seigneurs.",
+                      "youtube_timestamp": 92
                     },
                     {
                       "question": "À quoi sert une charte de franchises ?",

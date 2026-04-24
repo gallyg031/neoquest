@@ -137,6 +137,57 @@
     .qp-loot-name { font-size:0.82rem; font-weight:900; color:#fbbf24; margin:0.15rem 0; line-height:1.25; }
     .qp-loot-condition { font-size:0.58rem; color:#cbd5e1; font-style:italic; }
 
+    /* ── Bandeau VICTOIRE (remplace le loot quand la quête est maîtrisée) ── */
+    .qp-victory { display:none; flex-direction:column; gap:0.6rem; padding:0.7rem; border-radius:0.8rem; background:linear-gradient(135deg, rgba(251,191,36,0.18), rgba(245,158,11,0.08)); border:2px solid #fbbf24; box-shadow:0 0 18px rgba(251,191,36,0.35), inset 0 1px 0 rgba(255,255,255,0.12); position:relative; overflow:hidden; animation:victoryPulse 2.4s ease-in-out infinite; }
+    .qp-victory.active { display:flex; }
+    .qp-victory::after {
+      content:'';
+      position:absolute; inset:0;
+      background:linear-gradient(110deg, transparent 35%, rgba(255,255,255,0.28) 50%, transparent 65%);
+      background-size:220% 100%;
+      animation:victoryShine 3.2s linear infinite;
+      pointer-events:none;
+    }
+    @keyframes victoryPulse { 0%,100%{box-shadow:0 0 18px rgba(251,191,36,0.35), inset 0 1px 0 rgba(255,255,255,0.12);} 50%{box-shadow:0 0 32px rgba(251,191,36,0.65), inset 0 1px 0 rgba(255,255,255,0.2);} }
+    @keyframes victoryShine { 0%{background-position:200% 0;} 100%{background-position:-100% 0;} }
+
+    .qp-victory-ribbon { display:flex; align-items:center; justify-content:center; gap:0.6rem; position:relative; z-index:1; }
+    .qp-victory-crown { font-size:1.3rem; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.25)); animation:crownBob 2s ease-in-out infinite; }
+    .qp-victory-crown:last-child { animation-delay:1s; }
+    @keyframes crownBob { 0%,100%{transform:translateY(0) rotate(-6deg);} 50%{transform:translateY(-3px) rotate(6deg);} }
+    .qp-victory-title { font-size:1.35rem; font-weight:900; letter-spacing:0.22em; color:#fde68a; text-shadow:0 1px 0 rgba(0,0,0,0.35), 0 0 12px rgba(251,191,36,0.6); line-height:1; }
+
+    .qp-victory-body { display:flex; align-items:center; justify-content:space-between; gap:0.5rem; position:relative; z-index:1; padding:0.3rem 0.2rem 0.1rem; }
+    .qp-victory-loot { display:flex; align-items:center; gap:0.35rem; min-width:0; }
+    .qp-victory-loot-img { font-size:1.1rem; line-height:1; }
+    .qp-victory-loot-name { font-size:0.68rem; font-weight:800; color:#fbbf24; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .qp-victory-score { display:flex; flex-direction:column; align-items:flex-end; line-height:1.1; }
+    .qp-victory-score-label { font-size:0.55rem; color:#fde68a; opacity:0.75; text-transform:uppercase; letter-spacing:0.06em; font-weight:700; }
+    .qp-victory-score-value { font-size:0.85rem; font-weight:900; color:#fff; }
+
+    .qp-victory-replay {
+      position:relative; z-index:1;
+      width:100%;
+      padding:0.65rem 0.8rem;
+      background:linear-gradient(135deg, var(--region-color,#a855f7), #22d3ee);
+      border:none;
+      border-radius:0.55rem;
+      color:#fff;
+      font-weight:900;
+      font-size:0.78rem;
+      font-family:'Nunito',sans-serif;
+      cursor:pointer;
+      letter-spacing:0.04em;
+      transition:all 0.25s ease;
+      display:flex; align-items:center; justify-content:center; gap:0.4rem;
+      box-shadow:0 4px 12px rgba(0,0,0,0.25);
+    }
+    .qp-victory-replay:hover { transform:translateY(-2px); box-shadow:0 6px 18px rgba(34,211,238,0.45); }
+
+    /* Teinte dorée du panneau quand la quête est maîtrisée */
+    .quest-panel.mastered::before { background:linear-gradient(135deg, rgba(251,191,36,0.22), rgba(245,158,11,0.1)) !important; opacity:0.25 !important; }
+    .quest-panel.mastered { border-color:rgba(251,191,36,0.45) !important; box-shadow:0 8px 32px rgba(0,0,0,0.3), inset 0 0 50px rgba(251,191,36,0.1) !important; }
+
     .quest-panel-content { flex:1; min-height:0; display:flex; flex-direction:column; gap:1.1rem; }
 
     .quest-panel-empty { display:flex; flex-direction:column; align-items:center; justify-content:center; flex:1; color:#64748b; text-align:center; padding:2rem 1rem; }
@@ -379,6 +430,7 @@
       0%,100%{filter:drop-shadow(0 0 6px #fbbf24) drop-shadow(0 0 16px #f59e0b) drop-shadow(0 0 32px #fbbf24);}
       50%{filter:drop-shadow(0 0 10px #fbbf24) drop-shadow(0 0 24px #f59e0b) drop-shadow(0 0 48px #fbbf24) drop-shadow(0 0 60px rgba(251,191,36,0.9));}
     }
+    @keyframes tipProgress { 0%{width:40%;} 100%{width:75%;} }
 
     /* ── STICKY BAR ── */
     .sticky-bar { position:fixed; bottom:0; left:0; right:0; z-index:200; background:rgba(8,6,26,0.96); backdrop-filter:blur(20px); border-top:1px solid rgba(168,85,247,0.2); padding:0.75rem 1.5rem; display:flex; align-items:center; justify-content:space-between; gap:1rem; }
@@ -854,6 +906,8 @@
         container.style.cssText = 'clip-path:inset(0 100% 0 0);transition:none;';
         setTimeout(() => {
           container.style.cssText = 'clip-path:inset(0 0 0 0);transition:clip-path 0.9s cubic-bezier(0.22,1,0.36,1);';
+          // Centrer la vue sur la map
+          container.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }, 30);
       }
     }, 500);
@@ -894,7 +948,7 @@
     // '5eme':'img/NeoChevalier.png',
   };
   const BANNER_IMGS  = { 'histoire-geo':'img/HistoryaBannerShort.png' };
-  const NEO_MAT_IMGS = { 'histoire-geo':'img/NeoGeo-Transp.png' };
+  const NEO_MAT_IMGS = { 'histoire-geo':'img/Neo_assis.png' };
 
   (function(){
     const data = window.__neoData;
@@ -1049,7 +1103,7 @@
       <div class="quest-panel" id="quest-panel-main">
         <!-- État d'attente -->
         <div class="qp-waiting" id="qp-waiting">
-          <div class="qp-waiting-icon">🗺️</div>
+          <div class="qp-waiting-icon"><img src="img/Neo_assis.png" alt="Neo" style="width:80px;height:80px;object-fit:contain;"/></div>
           <h3 class="qp-waiting-title">Choisis ta quête</h3>
           <p class="qp-waiting-subtitle">Clique sur un monument de la carte pour découvrir les détails de l'aventure et commencer ton exploration.</p>
           <div class="qp-waiting-dots">
@@ -1067,7 +1121,7 @@
               <p class="qp-subtitle" id="qp-subtitle"></p>
             </div>
           </div>
-          <div class="qp-body">
+          <div class="qp-body" id="qp-body">
             <div class="qp-step" id="qp-step-explore">
               <div class="qp-step-icon">👁️</div>
               <div class="qp-step-content">
@@ -1097,14 +1151,36 @@
               </div>
             </div>
           </div>
-          <div class="qp-footer">
-            <div class="qp-loot-box">
+          <div class="qp-footer" id="qp-footer">
+            <!-- Loot normal -->
+            <div class="qp-loot-box" id="qp-loot-box">
               <div class="qp-loot-img" id="qp-loot-img"></div>
               <div class="qp-loot-text">
                 <div class="qp-loot-label">Récompense de quête</div>
                 <div class="qp-loot-name" id="qp-loot-name"></div>
-                <div class="qp-loot-condition">Score Quiz ≥ 70%</div>
+                <div class="qp-loot-condition">Nécessite un score de 70% au Combat</div>
               </div>
+            </div>
+            <!-- Bandeau victoire CONQUIS (remplace le loot si quête maîtrisée) -->
+            <div class="qp-victory" id="qp-victory">
+              <div class="qp-victory-ribbon">
+                <span class="qp-victory-crown">👑</span>
+                <span class="qp-victory-title">CONQUIS</span>
+                <span class="qp-victory-crown">👑</span>
+              </div>
+              <div class="qp-victory-body">
+                <div class="qp-victory-loot">
+                  <span class="qp-victory-loot-img" id="qp-victory-loot-img"></span>
+                  <span class="qp-victory-loot-name" id="qp-victory-loot-name"></span>
+                </div>
+                <div class="qp-victory-score">
+                  <span class="qp-victory-score-label">Score</span>
+                  <span class="qp-victory-score-value" id="qp-victory-score-value">—</span>
+                </div>
+              </div>
+              <button class="qp-victory-replay" id="qp-victory-replay" type="button">
+                🔄 Rejouer pour améliorer
+              </button>
             </div>
           </div>
         </div>
@@ -1228,8 +1304,21 @@
         checkmark = loot ? `<div style="position:absolute;top:-6px;right:-6px;width:32px;height:32px;border-radius:50%;background:#fbbf24;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.4rem;box-shadow:0 0 12px #f59e0b;line-height:1;">${loot.emoji}</div>` : '';
       }
 
-      const lootTip  = loot ? `<div style="font-size:0.62rem;color:#fbbf24;font-weight:800;margin-top:3px;">${loot.emoji} ${loot.nom}</div>` : '';
-      const ctaBtn   = isEmpty ? `<div style="margin-top:5px;font-size:0.7rem;font-weight:800;color:#94a3b8;">🏗️ En préparation</div>` : `<div style="margin-top:5px;font-size:0.65rem;font-weight:800;color:${c};">Commencer →</div>`;
+      const lootTip  = loot ? `<div style="font-size:0.62rem;color:#fbbf24;font-weight:800;margin-top:5px;">${loot.emoji} ${loot.nom}</div>` : '';
+
+      // Status badge
+      let statLabel, statColor, statEmoji;
+      if (isEmpty) { statLabel='En préparation'; statColor='#64748b'; statEmoji='🏗️'; }
+      else if (statut==='mastered') { statLabel='Maîtrisé'; statColor='#fbbf24'; statEmoji='✓'; }
+      else if (statut==='in-progress') { statLabel='En cours'; statColor='#22d3ee'; statEmoji='⚡'; }
+      else { statLabel='Disponible'; statColor=c; statEmoji='▶'; }
+      const statutBadge = `<div style="display:inline-flex;align-items:center;gap:4px;background:${statColor}22;border:1px solid ${statColor}55;border-radius:9999px;padding:2px 9px;font-size:0.58rem;font-weight:800;color:${statColor};margin-top:5px;letter-spacing:0.03em;">${statEmoji} ${statLabel}</div>`;
+
+      // Progress bar (in-progress only)
+      const progressBar = (statut==='in-progress') ? `<div style="height:3px;background:rgba(255,255,255,0.1);border-radius:9999px;overflow:hidden;margin-top:7px;"><div style="height:100%;width:55%;background:linear-gradient(90deg,${c},#22d3ee);border-radius:9999px;animation:tipProgress 2s ease-in-out infinite alternate;"></div></div>` : '';
+
+      // Miniature pion
+      const miniPion = pionSrc ? `<img src="${pionSrc}" style="width:26px;height:26px;object-fit:contain;display:block;margin:0 auto 5px;${isEmpty?'filter:grayscale(1) brightness(0.65) opacity(0.75);':''}"/>` : '';
 
       const node = document.createElement('div');
       node.dataset.idx = i;
@@ -1247,26 +1336,29 @@
           position:absolute;
           bottom:calc(100% + 10px);
           left:50%;
-          transform:translateX(-50%);
-          min-width:140px;
-          max-width:180px;
-          background:rgba(8,6,26,0.88);
-          backdrop-filter:blur(20px);
-          -webkit-backdrop-filter:blur(20px);
-          border:1px solid rgba(168,85,247,0.4);
-          border-radius:0.85rem;
-          padding:10px 14px;
+          transform:translateX(-50%) translateY(6px);
+          min-width:160px;
+          max-width:200px;
+          background:rgba(10,6,30,0.85);
+          backdrop-filter:blur(32px);
+          -webkit-backdrop-filter:blur(32px);
+          border:1px solid rgba(168,85,247,0.35);
+          border-radius:1rem;
+          padding:11px 15px;
           opacity:0;
-          transition:opacity 0.2s, transform 0.2s;
+          transition:opacity 0.22s, transform 0.22s;
           pointer-events:none;
           z-index:200;
           text-align:center;
-          white-space:nowrap;
-          box-shadow:0 8px 32px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.08);
+          white-space:normal;
+          box-shadow:0 8px 40px rgba(0,0,0,0.7), inset 0 0 0 1px rgba(255,255,255,0.06);
         ">
+          ${miniPion}
           <div style="font-size:0.75rem;font-weight:900;color:#fff;line-height:1.3;">${chap.nom_quete||chap.nom}</div>
-          ${lootTip}${ctaBtn}
-          <div style="position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:rgba(168,85,247,0.4);"></div>
+          ${statutBadge}
+          ${progressBar}
+          ${lootTip}
+          <div style="position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:rgba(168,85,247,0.35);"></div>
         </div>
       `;
 
@@ -1295,11 +1387,11 @@
         }
         // Si node trop à droite → décaler tooltip à gauche
         if (nodeLeft + tipWidth/2 > iw * 0.95) {
-          tip.style.transform = 'translateX(-80%)';
+          tip.style.transform = 'translateX(-80%) translateY(0)';
         } else if (nodeLeft - tipWidth/2 < iw * 0.05) {
-          tip.style.transform = 'translateX(-20%)';
+          tip.style.transform = 'translateX(-20%) translateY(0)';
         } else {
-          tip.style.transform = 'translateX(-50%)';
+          tip.style.transform = 'translateX(-50%) translateY(0)';
         }
         tip.style.opacity = '1';
         const img2 = node.querySelector('img.quest-pion');
@@ -1309,6 +1401,7 @@
         node.style.zIndex = '10';
         const tip = node.querySelector('.map-tooltip');
         tip.style.opacity = '0';
+        tip.style.transform = (tip.style.transform||'').replace(/translateY\([^)]*\)/, '') + ' translateY(6px)';
         const img2 = node.querySelector('img.quest-pion');
         if(img2) img2.style.transform = 'scale(1)';
       });
@@ -1354,8 +1447,14 @@
           document.getElementById('qp-subtitle').textContent = chap.nom || '';
 
           // ── Étapes clicables ──
+          _selectedChapId = chap.id;
+          _selectedNiveauId = niveau.id;
           const goChapitre = (tab) => {
-            window.location.href = `chapitre.html?matiere=${matiereId}&niveau=${niveau.id}&chapitre=${chap.id}&tab=${tab}`;
+            if (typeof window.openQuestActivity === 'function') {
+              window.openQuestActivity(chap, niveau, matiereData, tab);
+            } else {
+              window.location.href = `chapitre.html?matiere=${matiereId}&niveau=${niveau.id}&chapitre=${chap.id}&tab=${tab}`;
+            }
           };
 
           const stepExplore   = document.getElementById('qp-step-explore');
@@ -1399,6 +1498,27 @@
           if (chap.loot_quete) {
             document.getElementById('qp-loot-img').textContent  = chap.loot_quete.emoji;
             document.getElementById('qp-loot-name').textContent = `+50 XP & ${chap.loot_quete.nom}`;
+          }
+
+          // ── État CONQUIS : bandeau victoire + teinte dorée ──
+          const lootBox   = document.getElementById('qp-loot-box');
+          const victoryEl = document.getElementById('qp-victory');
+          if (statut === 'mastered') {
+            if (panel2) panel2.classList.add('mastered');
+            lootBox.style.display = 'none';
+            victoryEl.classList.add('active');
+            if (chap.loot_quete) {
+              document.getElementById('qp-victory-loot-img').textContent  = chap.loot_quete.emoji;
+              document.getElementById('qp-victory-loot-name').textContent = chap.loot_quete.nom;
+            }
+            document.getElementById('qp-victory-score-value').textContent = `${getPts(chap.id)} pts`;
+            const replayBtn = document.getElementById('qp-victory-replay');
+            replayBtn.style.background = `linear-gradient(135deg, ${regionColor}, #22d3ee)`;
+            replayBtn.onclick = () => goChapitre('quiz');
+          } else {
+            if (panel2) panel2.classList.remove('mastered');
+            lootBox.style.display = '';
+            victoryEl.classList.remove('active');
           }
         });
       }
@@ -1510,10 +1630,9 @@
         const isNeo   = (globalIdx === lastActiveIdx);
         const isEven  = globalIdx % 2 === 0;
         const thumbBg = chap.youtube ? `background-image:url('https://img.youtube.com/vi/${chap.youtube}/mqdefault.jpg');` : '';
-        const href    = isEmpty ? '#' : `chapitre.html?matiere=${matiereId}&niveau=${niveau.id}&chapitre=${chap.id}`;
 
         const cardHTML = `
-          <a href="${href}" class="quest-card ${isEmpty?'empty':statut}">
+          <a href="#" class="quest-card ${isEmpty?'empty':statut}" data-chap-id="${chap.id}">
             <div class="quest-card-thumb" style="${thumbBg}"></div>
             <div class="quest-card-inner">
               <div class="quest-card-num">${chap.icone_quete||'📍'} Quête ${globalIdx+1}</div>
@@ -1540,6 +1659,18 @@
         globalIdx++;
       });
     });
+    // Délégué : ouvrir la modale de quête au clic sur une card de quête
+    route.addEventListener('click', (e) => {
+      const card = e.target.closest('.quest-card[data-chap-id]');
+      if (!card || card.classList.contains('empty')) return;
+      e.preventDefault();
+      const chapId = card.dataset.chapId;
+      const chap = niveau.themes?.flatMap(t => t.chapitres).find(c => c.id === chapId);
+      if (chap && typeof window.openQuestActivity === 'function') {
+        _selectedChapId = chapId;
+        window.openQuestActivity(chap, niveau, matiereData, 'video');
+      }
+    });
     container.appendChild(route);
   }
 
@@ -1549,10 +1680,33 @@
       localStorage.getItem(`neoquest_chap_${ch.id}`) && (ch.quiz?.length||0) > 0
     ) || [];
     if (active.length === 0) { alert('Complète au moins une quête pour débloquer le SOS Contrôle !'); return; }
-    window.location.href = `chapitre.html?matiere=${matiereId}&niveau=${currentNiveau.id}&chapitre=${active[0].id}`;
+    if (typeof window.openQuestActivity === 'function') {
+      window.openQuestActivity(active[0], currentNiveau, matiereData, 'quiz');
+    }
   }
 
+  // ── État sélection quête (pour refresh après activité) ──
+  let _selectedChapId = null, _selectedNiveauId = null;
+
+  // ── Refresh du panneau après complétion d'une activité ──
+  window.addEventListener('questActivityCompleted', (e) => {
+    if (!currentNiveau) return;
+    const chapId = _selectedChapId;
+    renderProvince(currentNiveau, document.documentElement.style.getPropertyValue('--accent') || couleur);
+    // Re-sélectionner la quête après re-render pour garder le panneau ouvert sur cette quête
+    if (chapId) {
+      setTimeout(() => {
+        const nodes = document.querySelectorAll('[data-idx]');
+        const allChaps = currentNiveau.themes?.flatMap(t => t.chapitres) || [];
+        const idx = allChaps.findIndex(c => c.id === chapId);
+        if (idx >= 0 && nodes[idx]) nodes[idx].click();
+      }, 50);
+    }
+  });
+
 </script>
+<!-- <script src="js/pomodoro.js"></script> -->
+<script src="js/quest-modal.js"></script>
 <script>
   if("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js").catch(()=>{});
 </script>
