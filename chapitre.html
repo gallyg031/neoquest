@@ -129,7 +129,7 @@
     .fc-card.exit-left  { animation:fcSlideBack 0.35s ease forwards; }
 
     /* Quiz */
-    .quiz-opt { width:100%; text-align:left; padding:0.9rem 1.2rem; border-radius:0.75rem; background:rgba(255,255,255,0.04); border:2px solid rgba(168,85,247,0.15); color:#e2e8f0; font-weight:700; font-size:0.95rem; cursor:pointer; transition:all 0.2s; font-family:'Nunito',sans-serif; }
+    .quiz-opt { width:100%; text-align:left; padding:0.65rem 1rem; border-radius:0.75rem; background:rgba(255,255,255,0.04); border:2px solid rgba(168,85,247,0.15); color:#e2e8f0; font-weight:700; font-size:0.95rem; cursor:pointer; transition:all 0.2s; font-family:'Nunito',sans-serif; }
     .quiz-opt:hover:not(:disabled) { background:rgba(168,85,247,0.12); border-color:rgba(168,85,247,0.5); }
     .quiz-opt.correct { background:rgba(34,211,238,0.18); border:2px solid #22d3ee; color:#e2e8f0; font-weight:800; }
     .quiz-opt.correct::before { content:'✓  '; color:#22d3ee; }
@@ -139,7 +139,7 @@
     .quiz-result { display:inline-flex; align-items:center; gap:0.5rem; padding:0.6rem 1.2rem; border-radius:9999px; font-weight:800; font-size:0.9rem; margin-top:1rem; }
     .quiz-result.ok { background:rgba(34,211,238,0.1);   color:#22d3ee; border:1px solid #22d3ee55; }
     .quiz-result.ko { background:rgba(244,114,182,0.1);  color:#f472b6; border:1px solid #f472b655; }
-    .btn-quiz-nav { background:rgba(168,85,247,0.15); border:1px solid rgba(168,85,247,0.35); border-radius:9999px; padding:0.6rem 1.4rem; color:#c4b5fd; font-weight:800; cursor:pointer; transition:all 0.2s; font-family:'Nunito',sans-serif; font-size:0.9rem; }
+    .btn-quiz-nav { background:rgba(168,85,247,0.15); border:1px solid rgba(168,85,247,0.35); border-radius:9999px; padding:0.5rem 1.3rem; color:#c4b5fd; font-weight:800; cursor:pointer; transition:all 0.2s; font-family:'Nunito',sans-serif; font-size:0.9rem; }
     .btn-quiz-nav:hover { background:rgba(168,85,247,0.3); color:#fff; }
 
     /* Progress bar */
@@ -818,6 +818,7 @@
   }
   function showFCIndice(){
     const card=fcPile[0];if(!card||!card.indice)return;
+    console.log('[Radar debug] card.youtube_timestamp =', card.youtube_timestamp, '| card =', card);
     document.getElementById('fc-indice-text').textContent=card.indice;document.getElementById('fc-indice-text').style.display='block';
     const btn=document.getElementById('fc-indice-btn');btn.disabled=true;btn.style.opacity='0.45';btn.textContent='💡 Indice révélé';
     if(card.youtube_timestamp!=null){
