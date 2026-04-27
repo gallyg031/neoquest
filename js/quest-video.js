@@ -5,10 +5,11 @@
     <div class="qa-overlay" id="qa-modal-video">
       <button class="qa-close" onclick="closeQuestActivity()">✕</button>
       <div class="qa-video-box">
-        <div class="qa-video-title">🎬 <span id="qa-video-chap-name"></span></div>
-        <div class="qa-video-layout">
-          <div class="qa-frame-wrap" id="qa-frame-wrap">
-            <div class="qa-frame-inner">
+        <img class="qa-cadre-img" id="qa-cadre-img" src="img/cadre-historya.png" alt=""/>
+        <div class="qa-video-content">
+          <div class="qa-video-title">🎬 <span id="qa-video-chap-name"></span></div>
+          <div class="qa-video-layout">
+            <div class="qa-frame-wrap" id="qa-frame-wrap">
               <div class="video-wrapper">
                 <iframe id="qa-yt-frame" src="" title="Vidéo NeoQuest" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe>
                 <div id="qa-yt-fallback" style="display:none;position:absolute;inset:0;background:rgba(8,6,26,0.95);flex-direction:column;align-items:center;justify-content:center;gap:1rem;padding:1.5rem;text-align:center;">
@@ -18,14 +19,13 @@
                 </div>
               </div>
             </div>
-            <div class="qa-flavor-text" id="qa-flavor-text"></div>
-          </div>
-          <div class="qa-lantern-col">
-            <div class="qa-lantern-wrap" id="qa-lantern-wrap">
-              <img class="qa-lantern-img" id="qa-lantern-img" src="assets/lantern_0.png" alt="Lanterne"/>
+            <div class="qa-lantern-col">
+              <div class="qa-lantern-wrap" id="qa-lantern-wrap">
+                <img class="qa-lantern-img" id="qa-lantern-img" src="img/lantern_0.png" alt="Lanterne"/>
+              </div>
+              <span class="qa-lantern-label">Énergie</span>
+              <span class="qa-lantern-pct" id="qa-lantern-pct">0 éclat</span>
             </div>
-            <span class="qa-lantern-label">Énergie</span>
-            <span class="qa-lantern-pct" id="qa-lantern-pct">0 éclat</span>
           </div>
         </div>
       </div>
@@ -35,19 +35,19 @@
 })();
 
 const VIDEO_THEMES = {
-  'histoire-geo':    { cls: 'vf-medieval', flavor: 'Neo observe la tapisserie… les pierres gardent leurs secrets.' },
-  'svt':             { cls: 'vf-nature',   flavor: 'Neo s\'aventure dans la forêt vivante… les plantes murmurent.' },
-  'physique-chimie': { cls: 'vf-circuit',  flavor: 'Neo analyse les flux d\'énergie… le courant ne ment pas.' },
-  'maths':           { cls: 'vf-rune',     flavor: 'Neo déchiffre les runes… les nombres révèlent leur ordre.' },
-  'francais':        { cls: 'vf-scroll',   flavor: 'Neo déroule le parchemin… les mots prennent vie.' }
+  'histoire-geo':    { cadre: 'historya' },
+  'svt':             { cadre: 'bioverde' },
+  'physique-chimie': { cadre: 'quantix' },
+  'maths':           { cadre: 'algebron' },
+  'francais':        { cadre: 'lexoria' }
 };
 
 const LANTERN_IMGS = [
-  'assets/lantern_0.png',
-  'assets/lantern_25.png',
-  'assets/lantern_50.png',
-  'assets/lantern_75.png',
-  'assets/lantern_100.png'
+  'img/lantern_0.png',
+  'img/lantern_25.png',
+  'img/lantern_50.png',
+  'img/lantern_75.png',
+  'img/lantern_100.png'
 ];
 
 const VIDEO_ECLATS = 5;
@@ -77,7 +77,7 @@ function _spawnEclatAnim(onDone) {
   const wrap = document.getElementById('qa-lantern-wrap');
   if (!wrap) { onDone && onDone(); return; }
   const eclat = document.createElement('img');
-  eclat.src = 'assets/eclat.png';
+  eclat.src = 'img/eclat.png';
   eclat.className = 'qa-eclat-fly';
   eclat.alt = 'éclat';
   eclat.onanimationend = () => { eclat.remove(); onDone && onDone(); };
@@ -170,12 +170,12 @@ function openVideoModal(chap, mat) {
   _lanternChapId = chap.id;
   document.getElementById('qa-video-chap-name').textContent = chap.nom || '';
 
-  const wrap = document.getElementById('qa-frame-wrap');
-  const flavorEl = document.getElementById('qa-flavor-text');
-  wrap.className = 'qa-frame-wrap';
-  const theme = VIDEO_THEMES[mat?.id] || { cls: 'vf-medieval', flavor: '' };
-  wrap.classList.add(theme.cls);
-  if (flavorEl) flavorEl.textContent = theme.flavor;
+  const theme = VIDEO_THEMES[mat?.id] || { flavor: '', cadre: 'historya' };
+
+  const cadreImg = document.getElementById('qa-cadre-img');
+  if (cadreImg && theme.cadre) {
+    cadreImg.src = `img/cadre-${theme.cadre}.png`;
+  }
 
   _currentEclats = _loadEclats(chap.id);
   _updateLanternDisplay(_currentEclats);
