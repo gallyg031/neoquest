@@ -7,7 +7,7 @@
       <div class="qa-video-box">
         <img class="qa-cadre-img" id="qa-cadre-img" src="img/cadre-historya.png" alt=""/>
         <div class="qa-video-content">
-          <div class="qa-video-title">🎬 <span id="qa-video-chap-name"></span></div>
+          <div class="qa-video-title" style="visibility:hidden;">🎬 <span id="qa-video-chap-name"></span></div>
           <div class="qa-video-layout">
             <div class="qa-frame-wrap" id="qa-frame-wrap">
               <div class="video-wrapper">
@@ -168,7 +168,8 @@ window.stopQuestVideo = function() {
 
 function openVideoModal(chap, mat) {
   _lanternChapId = chap.id;
-  document.getElementById('qa-video-chap-name').textContent = chap.nom || '';
+  const chapNameEl = document.getElementById('qa-video-chap-name');
+  if (chapNameEl) chapNameEl.textContent = chap.nom || '';
 
   const theme = VIDEO_THEMES[mat?.id] || { flavor: '', cadre: 'historya' };
 

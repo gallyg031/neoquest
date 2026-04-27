@@ -21,7 +21,7 @@
 }
 .qa-video-content {
   position:absolute; inset:0;
-  padding:15% 13% 15% 21%;
+  padding:14% 12% 14% 20%;
   display:flex; flex-direction:column; justify-content:center;
   z-index:2;
 }
@@ -59,10 +59,28 @@
   animation:eclatEnter 0.75s cubic-bezier(.4,0,.2,1) forwards;
 }
 
-/* Responsive */
+/* Responsive — réduit lanterne quand fenêtre rétrécit */
+@media (max-width:1100px) {
+  .qa-lantern-col { width:80px; transform:translateX(3.5rem); padding-left:0.6rem; }
+  .qa-lantern-wrap, .qa-lantern-img { width:72px; }
+  .qa-video-title { font-size:0.95rem; }
+}
+@media (max-width:850px) {
+  .qa-lantern-col { width:64px; transform:translateX(2.5rem); padding-left:0.4rem; }
+  .qa-lantern-wrap, .qa-lantern-img { width:56px; }
+  .qa-video-title { font-size:0.85rem; margin-bottom:0.4rem; }
+  .qa-lantern-label { font-size:0.55rem; }
+  .qa-lantern-pct { font-size:0.62rem; }
+}
 @media (max-width:600px) {
-  .qa-video-layout { flex-direction:column; }
-  .qa-lantern-col { flex-direction:row; width:100%; padding-left:0; padding-top:0.75rem; justify-content:center; }
+  .qa-video-content { padding:12% 10% 12% 16%; }
+  .qa-video-layout { flex-direction:column; gap:0.4rem; }
+  .qa-lantern-col {
+    flex-direction:row; width:100%;
+    padding-left:0; padding-top:0.5rem;
+    justify-content:center;
+    transform:none;
+  }
   .qa-lantern-wrap, .qa-lantern-img { width:44px; }
 }
 
