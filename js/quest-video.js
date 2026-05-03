@@ -50,7 +50,16 @@ const LANTERN_IMGS = [
   'img/lantern_100.png'
 ];
 
+const LANTERN_MAX = 10;
 const VIDEO_ECLATS = 5;
+
+function _imageForEclats(n) {
+  if (n <= 0) return LANTERN_IMGS[0];
+  if (n <= 3) return LANTERN_IMGS[1];
+  if (n <= 6) return LANTERN_IMGS[2];
+  if (n <= 9) return LANTERN_IMGS[3];
+  return LANTERN_IMGS[4];
+}
 
 let _lanternChapId = null;
 let _currentEclats = 0;
@@ -69,7 +78,7 @@ function _saveEclats(chapId, n) {
 function _updateLanternDisplay(n) {
   const img = document.getElementById('qa-lantern-img');
   const label = document.getElementById('qa-lantern-pct');
-  if (img) img.src = LANTERN_IMGS[Math.min(n, LANTERN_IMGS.length - 1)];
+  if (img) img.src = _imageForEclats(n);
   if (label) label.textContent = n === 1 ? '1 éclat' : `${n} éclats`;
 }
 
@@ -84,11 +93,24 @@ function _spawnEclatAnim(onDone) {
   wrap.appendChild(eclat);
 }
 
+function _glowLantern() {
+  const img = document.getElementById('qa-lantern-img');
+  if (!img) return;
+  img.classList.remove('glow');
+  void img.offsetWidth;
+  img.classList.add('glow');
+  setTimeout(() => img.classList.remove('glow'), 1100);
+}
+
 function _earnEclat() {
+  if (_currentEclats >= LANTERN_MAX) return;
   const newCount = _currentEclats + 1;
   _currentEclats = newCount;
   if (_lanternChapId) _saveEclats(_lanternChapId, newCount);
-  _spawnEclatAnim(() => _updateLanternDisplay(newCount));
+  _spawnEclatAnim(() => {
+    _updateLanternDisplay(newCount);
+    _glowLantern();
+  });
 }
 
 window.addLanternEclats = function(n) {
@@ -135,10 +157,19 @@ function _createOrLoadPlayer(ytId) {
       onStateChange: (e) => {
         if (e.data === YT.PlayerState.PLAYING) _startLanternPoll();
         else _stopLanternPoll();
+        if (e.data === YT.PlayerState.ENDED) _awardRemainingVideoEclats();
       },
       onError: () => { document.getElementById('qa-yt-fallback').style.display = 'flex'; }
     }
   });
+}
+
+function _awardRemainingVideoEclats() {
+  const target = Math.min(VIDEO_ECLATS, LANTERN_MAX);
+  const missing = Math.max(0, target - _currentEclats);
+  for (let i = 0; i < missing; i++) {
+    setTimeout(() => _earnEclat(), i * 450);
+  }
 }
 
 function _startLanternPoll() {
@@ -147,7 +178,8 @@ function _startLanternPoll() {
     if (!ytPlayer || typeof ytPlayer.getCurrentTime !== 'function') return;
     const dur = ytPlayer.getDuration();
     if (dur <= 0) return;
-    const earned = Math.min(Math.floor((ytPlayer.getCurrentTime() / dur) * VIDEO_ECLATS), VIDEO_ECLATS);
+    const ratio = ytPlayer.getCurrentTime() / dur;
+    const earned = Math.min(Math.floor(ratio * VIDEO_ECLATS + 0.05), VIDEO_ECLATS);
     if (earned > _currentEclats) _earnEclat();
   }, 500);
 }
