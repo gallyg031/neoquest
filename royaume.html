@@ -8,12 +8,19 @@
   <meta name="theme-color" content="#a855f7" />
   <link rel="apple-touch-icon" href="img/Neo_assis.png" />
   <title>NeoQuest TV — Royaume</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Cinzel:wght@600;700;900&family=Cormorant+Garamond:wght@500;700&family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="assets/royaume.css" />
   <link rel="stylesheet" href="assets/quest-modal.css" />
+  <link rel="stylesheet" href="assets/combat.css" />
+  <link rel="stylesheet" href="assets/chrono.css" />
+  <link rel="stylesheet" href="assets/neo.css" />
   <script src="js/xp.js"></script>
   <script src="data/data.js"></script>
+  <script src="data/boss-intro-lines.js"></script>
+  <script src="data/neo-lines.js"></script>
 </head>
 <body>
 <div class="blob blob-1"></div>
@@ -129,11 +136,20 @@
 <script src="js/royaume-panel.js"></script>
 <!-- <script src="js/pomodoro.js"></script> -->
 <script src="js/quest-modal.js"></script>
+<script src="js/quest-lantern.js"></script>
+<script src="js/quest-neo.js"></script>
 <script src="js/quest-video.js"></script>
+<script src="js/quest-flashcards-modal.js"></script>
 <script src="js/quest-flashcards.js"></script>
 <script src="js/quest-quiz-modal.js"></script>
-<script src="js/quest-quiz-boss.js"></script>
+<script src="js/quest-quiz-hud.js"></script>
+<script src="js/quest-quiz-vfx.js"></script>
+<script src="js/quest-quiz-audio.js"></script>
+<script src="js/quest-quiz-intro.js"></script>
 <script src="js/quest-quiz.js"></script>
+<script src="js/quest-quiz-tweaker.js"></script>
+<script src="js/quest-chrono-modal.js"></script>
+<script src="js/quest-chrono.js"></script>
 <script>
   if("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js").catch(()=>{});
 </script>

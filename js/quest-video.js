@@ -19,13 +19,7 @@
                 </div>
               </div>
             </div>
-            <div class="qa-lantern-col">
-              <div class="qa-lantern-wrap" id="qa-lantern-wrap">
-                <img class="qa-lantern-img" id="qa-lantern-img" src="img/lantern_0.png" alt="Lanterne"/>
-              </div>
-              <span class="qa-lantern-label">Énergie</span>
-              <span class="qa-lantern-pct" id="qa-lantern-pct">0 éclat</span>
-            </div>
+            <div class="qa-lantern-col" id="qa-video-lantern-col"></div>
           </div>
         </div>
       </div>
@@ -42,90 +36,25 @@ const VIDEO_THEMES = {
   'francais':        { cadre: 'lexoria' }
 };
 
-const LANTERN_IMGS = [
-  'img/lantern_0.png',
-  'img/lantern_25.png',
-  'img/lantern_50.png',
-  'img/lantern_75.png',
-  'img/lantern_100.png'
-];
-
-const LANTERN_MAX = 10;
 const VIDEO_ECLATS = 5;
+let _videoChapId = null;
+let _videoEclatsThisChap = 0;
 
-function _imageForEclats(n) {
-  if (n <= 0) return LANTERN_IMGS[0];
-  if (n <= 3) return LANTERN_IMGS[1];
-  if (n <= 6) return LANTERN_IMGS[2];
-  if (n <= 9) return LANTERN_IMGS[3];
-  return LANTERN_IMGS[4];
-}
-
-let _lanternChapId = null;
-let _currentEclats = 0;
-
-function _lanternKey(id) { return `neoquest_lantern_${id}`; }
-
-function _loadEclats(chapId) {
-  try { return Math.max(0, parseInt(localStorage.getItem(_lanternKey(chapId)) || '0', 10)); }
+function _videoEclatsKey(id) { return `neoquest_video_eclats_${id}`; }
+function _loadVideoEclats(chapId) {
+  try { return Math.max(0, parseInt(localStorage.getItem(_videoEclatsKey(chapId)) || '0', 10)); }
   catch(e) { return 0; }
 }
-
-function _saveEclats(chapId, n) {
-  try { localStorage.setItem(_lanternKey(chapId), String(n)); } catch(e) {}
+function _saveVideoEclats(chapId, n) {
+  try { localStorage.setItem(_videoEclatsKey(chapId), String(n)); } catch(e) {}
 }
 
-function _updateLanternDisplay(n) {
-  const img = document.getElementById('qa-lantern-img');
-  const label = document.getElementById('qa-lantern-pct');
-  if (img) img.src = _imageForEclats(n);
-  if (label) label.textContent = n === 1 ? '1 éclat' : `${n} éclats`;
+function _earnVideoEclat() {
+  if (_videoEclatsThisChap >= VIDEO_ECLATS) return;
+  _videoEclatsThisChap++;
+  if (_videoChapId) _saveVideoEclats(_videoChapId, _videoEclatsThisChap);
+  if (typeof window.addLanternEclats === 'function') window.addLanternEclats(1);
 }
-
-function _spawnEclatAnim(onDone) {
-  const wrap = document.getElementById('qa-lantern-wrap');
-  if (!wrap) { onDone && onDone(); return; }
-  const eclat = document.createElement('img');
-  eclat.src = 'img/eclat.png';
-  eclat.className = 'qa-eclat-fly';
-  eclat.alt = 'éclat';
-  eclat.onanimationend = () => { eclat.remove(); onDone && onDone(); };
-  wrap.appendChild(eclat);
-}
-
-function _glowLantern() {
-  const img = document.getElementById('qa-lantern-img');
-  if (!img) return;
-  img.classList.remove('glow');
-  void img.offsetWidth;
-  img.classList.add('glow');
-  setTimeout(() => img.classList.remove('glow'), 1100);
-}
-
-function _earnEclat() {
-  if (_currentEclats >= LANTERN_MAX) return;
-  const newCount = _currentEclats + 1;
-  _currentEclats = newCount;
-  if (_lanternChapId) _saveEclats(_lanternChapId, newCount);
-  _spawnEclatAnim(() => {
-    _updateLanternDisplay(newCount);
-    _glowLantern();
-  });
-}
-
-window.addLanternEclats = function(n) {
-  for (let i = 0; i < n; i++) {
-    setTimeout(() => _earnEclat(), i * 400);
-  }
-};
-
-window.resetLantern = function() {
-  _stopLanternPoll();
-  if (_lanternChapId) {
-    _currentEclats = _loadEclats(_lanternChapId);
-    _updateLanternDisplay(_currentEclats);
-  }
-};
 
 // ── YouTube IFrame API ──
 let ytPlayer = null, ytPollInterval = null;
@@ -165,10 +94,9 @@ function _createOrLoadPlayer(ytId) {
 }
 
 function _awardRemainingVideoEclats() {
-  const target = Math.min(VIDEO_ECLATS, LANTERN_MAX);
-  const missing = Math.max(0, target - _currentEclats);
+  const missing = Math.max(0, VIDEO_ECLATS - _videoEclatsThisChap);
   for (let i = 0; i < missing; i++) {
-    setTimeout(() => _earnEclat(), i * 450);
+    setTimeout(() => _earnVideoEclat(), i * 450);
   }
 }
 
@@ -180,7 +108,7 @@ function _startLanternPoll() {
     if (dur <= 0) return;
     const ratio = ytPlayer.getCurrentTime() / dur;
     const earned = Math.min(Math.floor(ratio * VIDEO_ECLATS + 0.05), VIDEO_ECLATS);
-    if (earned > _currentEclats) _earnEclat();
+    if (earned > _videoEclatsThisChap) _earnVideoEclat();
   }, 500);
 }
 
@@ -189,6 +117,7 @@ function _stopLanternPoll() {
 }
 
 window.stopQuestVideo = function() {
+  _stopLanternPoll();
   if (ytPlayer && typeof ytPlayer.stopVideo === 'function') {
     try { ytPlayer.stopVideo(); } catch(e) {}
   } else {
@@ -199,19 +128,21 @@ window.stopQuestVideo = function() {
 };
 
 function openVideoModal(chap, mat) {
-  _lanternChapId = chap.id;
+  _videoChapId = chap.id;
+  _videoEclatsThisChap = _loadVideoEclats(chap.id);
+
   const chapNameEl = document.getElementById('qa-video-chap-name');
   if (chapNameEl) chapNameEl.textContent = chap.nom || '';
 
   const theme = VIDEO_THEMES[mat?.id] || { flavor: '', cadre: 'historya' };
-
   const cadreImg = document.getElementById('qa-cadre-img');
   if (cadreImg && theme.cadre) {
     cadreImg.src = `img/cadre-${theme.cadre}.png`;
   }
 
-  _currentEclats = _loadEclats(chap.id);
-  _updateLanternDisplay(_currentEclats);
+  if (typeof window.mountLantern === 'function') {
+    window.mountLantern(document.getElementById('qa-video-lantern-col'), chap.id, { label: 'Énergie' });
+  }
 
   const ytId = chap.youtube;
   if (ytId) {

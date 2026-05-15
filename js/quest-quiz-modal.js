@@ -1,4 +1,5 @@
-// ── Modal Quiz — injection DOM + styles ──
+// ── Modal Quiz — structure DOM "Arène de Vérité" (combat 40/60 fullscreen) ──
+// Les IDs sont consommés par quest-quiz.js. À NE PAS RENOMMER sans mettre à jour ce fichier.
 (function() {
   const style = document.createElement('style');
   style.textContent = `
@@ -42,34 +43,77 @@
 
   const el = document.createElement('div');
   el.innerHTML = `
-    <div class="qa-overlay" id="qa-modal-quiz">
-      <div style="position:relative;z-index:1;max-width:560px;width:100%;margin:auto;background:rgba(12,18,40,0.85);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);border:1.5px solid rgba(34,211,238,0.3);border-radius:1.5rem;padding:1rem 1.1rem 1.1rem;box-shadow:0 0 60px rgba(34,211,238,0.15),0 0 120px rgba(34,211,238,0.06);max-height:calc(100vh - 2rem);overflow-y:auto;">
+    <div class="qa-overlay combat-mode" id="qa-modal-quiz">
+      <div class="combat-shell" id="qa-combat-shell">
         <button class="qa-close" onclick="closeQuestActivity()">✕</button>
-        <div id="qa-quiz-boss"></div>
-        <div id="qa-quiz-header-prog" style="margin-bottom:0.85rem;">
-          <div style="display:flex;justify-content:flex-end;align-items:center;gap:0.5rem;font-size:0.75rem;font-weight:700;margin-bottom:0.3rem;">
-            <span id="qa-quiz-streak-badge" class="hidden"></span>
-            <span id="qa-quiz-pts-label" style="color:#fbbf24;">0 pts</span>
+
+        <!-- ── SCÈNE (haut, 40%) ── -->
+        <div class="combat-stage" id="qa-combat-stage">
+          <div class="combat-stage-bg-img"></div>
+          <div class="combat-vignette"></div>
+          <div class="combat-fog combat-fog-left"  id="qa-combat-fog-left"></div>
+          <div class="combat-fog combat-fog-right" id="qa-combat-fog-right"></div>
+
+          <!-- HUD : nom Neo + compteur Éclats à gauche / nom Boss + PV à droite -->
+          <div class="combat-hud">
+            <div class="combat-hud-side combat-hud-side-left">
+              <div class="combat-hud-name combat-hud-name-neo">Neo</div>
+              <div class="combat-eclat-counter">
+                <span class="combat-eclat-icon">✦</span>
+                <span id="qa-combat-eclat-num">0</span>
+                <span class="combat-eclat-label">Éclats de Savoir</span>
+              </div>
+            </div>
+            <div class="combat-hud-side combat-hud-side-right">
+              <div class="combat-hud-name combat-hud-name-boss" id="qa-combat-boss-name">…</div>
+              <div class="combat-hp-bar"><div class="combat-hp-fill" id="qa-combat-hp-fill" style="width:100%"></div></div>
+              <div class="combat-hp-num"><span id="qa-combat-hp-num">100</span> / <span id="qa-combat-hp-max">100</span> PV</div>
+            </div>
           </div>
-          <div class="qa-prog-track"><div class="qa-prog-fill prog-facile" id="qa-quiz-prog-bar" style="width:0%"></div></div>
+
+          <!-- Acteurs : Neo + sa lanterne (groupés) à gauche, Boss à droite -->
+          <div class="combat-actors">
+            <div class="combat-actors-left">
+              <div class="combat-lantern-near" id="qa-combat-lantern-slot"></div>
+              <div class="combat-sprite combat-sprite-neo" id="qa-combat-sprite-neo">🧑‍🎓</div>
+            </div>
+            <div class="combat-sprite combat-sprite-boss" id="qa-combat-sprite-boss">👹</div>
+          </div>
         </div>
-        <div id="qa-quiz-content">
-          <div style="display:flex;align-items:center;justify-content:flex-end;gap:0.5rem;margin-bottom:0.75rem;">
-            <span id="qa-quiz-pts-badge" class="diff-badge" style="background:rgba(250,204,21,0.1);border-color:#fbbf2444;color:#fbbf24;">+10 pts</span>
-            <button id="qa-hint-btn" onclick="showHint()" title="Indice de Neo" style="display:flex;align-items:center;gap:0.4rem;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.35);border-radius:9999px;padding:0.3rem 0.8rem;color:#fbbf24;font-weight:800;font-size:0.8rem;cursor:pointer;font-family:'Nunito',sans-serif;transition:all 0.2s;">💡 Indice</button>
-          </div>
-          <div id="qa-hint-box" class="hidden" style="margin-bottom:0.7rem;background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.3);border-radius:0.85rem;padding:0.6rem 0.8rem;display:flex;align-items:center;gap:0.6rem;">
-            <img src="img/Neo_assis.png" alt="Neo" style="width:40px;height:40px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 8px #fbbf24);" />
-            <p id="qa-hint-text" style="color:#fde68a;font-size:0.88rem;line-height:1.45;flex:1;"></p>
-          </div>
-          <p id="qa-quiz-question" style="font-weight:900;font-size:1.15rem;color:#fff;margin-bottom:0.85rem;line-height:1.4;"></p>
-          <div id="qa-quiz-choix" style="display:flex;flex-direction:column;gap:0.5rem;position:relative;"></div>
-          <div id="qa-quiz-feedback" class="hidden"></div>
-          <div style="margin-top:0.75rem;display:flex;gap:0.75rem;">
-            <button id="qa-quiz-next-btn" class="btn-quiz-nav hidden" onclick="quizNext()">Question suivante →</button>
+
+        <!-- ── GRIMOIRE (bas, hauteur natural — 2 colonnes : quiz à gauche, NeoGuide à droite) ── -->
+        <div class="combat-grimoire">
+          <div class="combat-grimoire-inner">
+            <div class="combat-grimoire-quiz">
+              <div id="qa-quiz-header-prog" style="margin-bottom:0.7rem;">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;font-size:0.75rem;font-weight:700;margin-bottom:0.3rem;">
+                  <span id="qa-quiz-progress-num" style="color:#cbd5e1;letter-spacing:0.04em;">Question <strong id="qa-quiz-prog-current" style="color:#fff;">1</strong> / <span id="qa-quiz-prog-total">12</span></span>
+                  <span id="qa-quiz-streak-badge" class="hidden"></span>
+                </div>
+                <div class="qa-prog-track"><div class="qa-prog-fill prog-facile" id="qa-quiz-prog-bar" style="width:0%"></div></div>
+              </div>
+              <div id="qa-quiz-content">
+                <div style="display:flex;align-items:center;justify-content:flex-end;gap:0.5rem;margin-bottom:0.75rem;">
+                  <button id="qa-hint-btn" onclick="showHint()" title="Indice de Neo" style="display:flex;align-items:center;gap:0.4rem;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.35);border-radius:9999px;padding:0.3rem 0.8rem;color:#fbbf24;font-weight:800;font-size:0.8rem;cursor:pointer;font-family:'Nunito',sans-serif;transition:all 0.2s;">💡 Indice</button>
+                </div>
+                <div id="qa-hint-box" class="hidden" style="margin-bottom:0.7rem;background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.3);border-radius:0.85rem;padding:0.6rem 0.8rem;display:flex;align-items:center;gap:0.6rem;">
+                  <img src="img/Neo_assis.png" alt="Neo" style="width:40px;height:40px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 8px #fbbf24);" />
+                  <p id="qa-hint-text" style="color:#fde68a;font-size:0.88rem;line-height:1.45;flex:1;"></p>
+                </div>
+                <p id="qa-quiz-question" style="font-weight:900;font-size:1.15rem;color:#fff;margin-bottom:0.85rem;line-height:1.4;"></p>
+                <div id="qa-quiz-choix" style="display:flex;flex-direction:column;gap:0.5rem;position:relative;"></div>
+                <div id="qa-quiz-feedback" class="hidden"></div>
+                <div style="margin-top:0.75rem;display:flex;gap:0.75rem;">
+                  <button id="qa-quiz-next-btn" class="btn-quiz-nav qz-pending" onclick="quizNext()">Question suivante →</button>
+                </div>
+              </div>
+              <div id="qa-quiz-final" class="hidden"></div>
+            </div>
+            <div class="combat-grimoire-guide">
+              <div class="combat-sprite-neoguide" id="qa-combat-sprite-neoguide" title="NeoGuide">🦉</div>
+            </div>
           </div>
         </div>
-        <div id="qa-quiz-final" class="hidden"></div>
       </div>
     </div>
   `;

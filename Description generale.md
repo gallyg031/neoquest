@@ -42,9 +42,7 @@ C'est ici que l'enfant "forge" ses munitions avant le combat.
         
     *   **Le Module Flashcards :** Système de "Acquis / À réviser".
         
-    *   **Le Compteur d'Éclats :** Une jauge qui se remplit (100% = 10 Éclats).
-        
-    *   **Le Bonus de Maîtrise :** Si 100% des cartes sont vues, on passe à 15 Éclats (le sac de munitions étendu).
+    *   **Le Compteur d'Éclats :** Une jauge qui se remplit jusqu'à 15 Éclats. La vidéo donne +5, une série de flashcards terminée donne +5.
         
 
 ### **4\. L'Arène de Combat (Le Quiz du Boss)**
@@ -57,7 +55,7 @@ La page d'action pure où le savoir devient une arme.
     
     *   **Le Quiz :** 12 questions pour terrasser les 100 PV du Boss.
         
-    *   **Gestion des Munitions :** Chaque réponse consomme un **Éclat** (10 PV). Si le stock tombe à zéro, Neo lance des **Cailloux** (1 PV).
+    *   **Gestion des Munitions :** Chaque réponse consomme un **Éclat** (10 PV). Si le stock tombe à zéro, Neo lance des **Cailloux** (2 PV). Refaire des flashcards recharge les Éclats.
         
     *   **VFX :** Tremblements d'écran, flashs lumineux, et chiffres de dégâts qui sautent.
         

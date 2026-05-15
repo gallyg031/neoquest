@@ -215,6 +215,11 @@ function renderMapRoute(niveau, c, mapImg, lastActiveIdx, neoSrc, container) {
 
     const progressBar = (statut==='in-progress') ? `<div style="height:3px;background:rgba(255,255,255,0.1);border-radius:9999px;overflow:hidden;margin-top:7px;"><div style="height:100%;width:55%;background:linear-gradient(90deg,${c},#22d3ee);border-radius:9999px;animation:tipProgress 2s ease-in-out infinite alternate;"></div></div>` : '';
 
+    const eclatLantern = parseInt(localStorage.getItem('neoquest_lantern_' + chap.id) || '0');
+    const eclatTip = (!isEmpty && eclatLantern > 0)
+      ? `<div style="font-size:0.62rem;color:#fbbf24;font-weight:800;margin-top:5px;">🔆 ${eclatLantern}/15</div>`
+      : '';
+
     const miniPion = pionSrc ? `<img src="${pionSrc}" style="width:26px;height:26px;object-fit:contain;display:block;margin:0 auto 5px;${isEmpty?'filter:grayscale(1) brightness(0.65) opacity(0.75);':''}"/>` : '';
 
     const node = document.createElement('div');
@@ -254,6 +259,7 @@ function renderMapRoute(niveau, c, mapImg, lastActiveIdx, neoSrc, container) {
         <div style="font-size:0.75rem;font-weight:900;color:#fff;line-height:1.3;">${chap.nom_quete||chap.nom}</div>
         ${statutBadge}
         ${progressBar}
+        ${eclatTip}
         ${lootTip}
         <div style="position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:rgba(168,85,247,0.35);"></div>
       </div>
@@ -513,6 +519,11 @@ function renderZigzag(niveau, c, lastActiveIdx, neoSrc, container) {
       const isEven  = globalIdx % 2 === 0;
       const thumbBg = chap.youtube ? `background-image:url('https://img.youtube.com/vi/${chap.youtube}/mqdefault.jpg');` : '';
 
+      const eclatLantern = parseInt(localStorage.getItem('neoquest_lantern_' + chap.id) || '0');
+      const eclatRow = (!isEmpty && eclatLantern > 0)
+        ? `<div style="font-size:0.65rem;color:#fbbf24;font-weight:800;margin-top:3px;">🔆 ${eclatLantern}/15</div>`
+        : '';
+
       const cardHTML = `
         <a href="#" class="quest-card ${isEmpty?'empty':statut}" data-chap-id="${chap.id}">
           <div class="quest-card-thumb" style="${thumbBg}"></div>
@@ -523,6 +534,7 @@ function renderZigzag(niveau, c, lastActiveIdx, neoSrc, container) {
               ${isEmpty ? '🚧 Bientôt' : STATUS_LABEL[statut]}
             </span>
             ${statut!=='not-started'&&!isEmpty?`<div class="quest-progress-bar"><div class="quest-progress-fill" style="width:${pct2}%;background:${STATUS_COL[statut]};"></div></div>`:''}
+            ${eclatRow}
           </div>
         </a>`;
 

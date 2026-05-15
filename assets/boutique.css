@@ -1,0 +1,495 @@
+/* ── Bazar du Hibou ── */
+
+/* En-tête */
+.bazar-header {
+  display:flex; align-items:center; gap:2rem;
+  flex-wrap:wrap;
+  padding:1.5rem 0;
+}
+.bazar-owl {
+  position:relative;
+  width:140px; height:140px;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+}
+.bazar-owl-glow {
+  position:absolute; inset:-30px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(251,191,36,0.35) 0%, rgba(168,85,247,0.15) 50%, transparent 75%);
+  filter:blur(20px);
+  animation:owlPulse 3s ease-in-out infinite;
+}
+.bazar-owl-emoji {
+  position:relative; z-index:1;
+  font-size:7rem;
+  animation:owlFloat 4s ease-in-out infinite;
+  filter:drop-shadow(0 4px 16px rgba(251,191,36,0.45));
+}
+@keyframes owlFloat { 0%,100%{transform:translateY(0) rotate(-4deg)} 50%{transform:translateY(-10px) rotate(4deg)} }
+@keyframes owlPulse { 0%,100%{opacity:0.7;transform:scale(1)} 50%{opacity:1;transform:scale(1.08)} }
+.bazar-intro { flex:1; min-width:280px; }
+
+/* Onglets */
+.bazar-tabs {
+  display:flex; gap:0.6rem;
+  flex-wrap:wrap;
+  border-bottom:1px solid rgba(168,85,247,0.15);
+  padding-bottom:0;
+  margin-top:1rem;
+}
+.bazar-tab {
+  display:flex; align-items:center; gap:0.5rem;
+  background:transparent;
+  border:none;
+  color:#94a3b8;
+  font-family:inherit;
+  font-weight:800;
+  font-size:0.95rem;
+  padding:0.85rem 1.4rem;
+  cursor:pointer;
+  border-bottom:3px solid transparent;
+  transition:color 0.2s, border-color 0.2s, background 0.2s;
+  border-radius:0.5rem 0.5rem 0 0;
+}
+.bazar-tab:hover { color:#e9d5ff; background:rgba(168,85,247,0.06); }
+.bazar-tab.active {
+  color:#fbbf24;
+  border-bottom-color:#fbbf24;
+  background:rgba(251,191,36,0.06);
+}
+.bazar-tab-emoji { font-size:1.2rem; line-height:1; }
+
+/* Bourse intégrée à la barre d'onglets */
+.bazar-purse {
+  margin-left:auto;
+  display:flex; flex-direction:column;
+  align-items:flex-end; justify-content:center;
+  padding:0.4rem 1rem 0.5rem;
+  background:linear-gradient(135deg, rgba(251,191,36,0.12), rgba(251,191,36,0.05));
+  border:1px solid rgba(251,191,36,0.4);
+  border-radius:0.75rem;
+  margin-bottom:0.4rem;
+  box-shadow:0 0 18px rgba(251,191,36,0.12);
+}
+.bazar-purse-label {
+  font-size:0.65rem;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  color:#fbbf24cc;
+  line-height:1;
+}
+.bazar-purse-amount {
+  display:inline-flex; align-items:center; gap:0.4rem;
+  font-size:1.4rem;
+  font-weight:900;
+  color:#fbbf24;
+  line-height:1.1;
+  text-shadow:0 0 12px rgba(251,191,36,0.4);
+}
+.bazar-purse-emoji { font-size:1.1rem; }
+
+/* Grille items */
+.bazar-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));
+  gap:1.2rem;
+  margin-top:1.75rem;
+}
+
+.bazar-empty {
+  text-align:center;
+  color:#64748b;
+  font-style:italic;
+  padding:3rem 1rem;
+}
+
+/* Carte item */
+.bazar-card {
+  position:relative;
+  background:rgba(255,255,255,0.04);
+  backdrop-filter:blur(18px);
+  border:1px solid rgba(168,85,247,0.2);
+  border-radius:1rem;
+  padding:1.25rem 1rem 1rem;
+  display:flex; flex-direction:column;
+  transition:transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+}
+.bazar-card:hover {
+  transform:translateY(-4px);
+  border-color:rgba(168,85,247,0.5);
+  box-shadow:0 10px 30px rgba(168,85,247,0.18);
+  z-index:10;
+}
+
+/* Visuel */
+.bazar-card-visual {
+  height:120px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:4.5rem;
+  margin-bottom:0.6rem;
+  position:relative;
+  filter:drop-shadow(0 4px 12px rgba(0,0,0,0.4));
+}
+.bazar-card-visual::before {
+  content:''; position:absolute;
+  inset:10% 15%;
+  border-radius:50%;
+  background:radial-gradient(circle, var(--rarity-glow, rgba(168,85,247,0.3)) 0%, transparent 70%);
+  filter:blur(12px);
+  z-index:0;
+}
+.bazar-card-visual > * { position:relative; z-index:1; }
+
+/* Rareté */
+.bazar-card.rarity-commun       { --rarity-color:#94a3b8; --rarity-glow:rgba(148,163,184,0.3); }
+.bazar-card.rarity-rare         { --rarity-color:#22d3ee; --rarity-glow:rgba(34,211,238,0.35); }
+.bazar-card.rarity-legendaire   { --rarity-color:#fbbf24; --rarity-glow:rgba(251,191,36,0.45); }
+.bazar-card.rarity-legendaire   { border-color:rgba(251,191,36,0.35); }
+
+.bazar-card-rarity {
+  position:absolute; top:0.7rem; right:0.7rem;
+  font-size:0.6rem; font-weight:900;
+  text-transform:uppercase; letter-spacing:0.08em;
+  color:var(--rarity-color);
+  background:rgba(0,0,0,0.4);
+  border:1px solid var(--rarity-color);
+  border-radius:9999px;
+  padding:0.2rem 0.55rem;
+}
+
+.bazar-card-name {
+  font-size:1rem; font-weight:900;
+  color:#fff;
+  line-height:1.25;
+  margin-bottom:0.3rem;
+}
+.bazar-card-desc {
+  font-size:0.78rem;
+  color:#94a3b8;
+  line-height:1.45;
+  flex:1;
+  margin-bottom:0.85rem;
+}
+
+/* Pied de carte : prix + bouton */
+.bazar-card-foot {
+  display:flex; align-items:center; justify-content:space-between;
+  gap:0.5rem;
+  padding-top:0.7rem;
+  border-top:1px solid rgba(168,85,247,0.12);
+}
+.bazar-price {
+  display:inline-flex; align-items:center; gap:0.3rem;
+  font-size:1rem; font-weight:900;
+  color:#fbbf24;
+}
+.bazar-price-emoji { font-size:0.9rem; }
+
+.bazar-buy {
+  background:linear-gradient(135deg, #fbbf24, #f59e0b);
+  color:#0f0a0a;
+  border:none;
+  font-family:inherit;
+  font-weight:900;
+  font-size:0.78rem;
+  letter-spacing:0.05em;
+  text-transform:uppercase;
+  padding:0.55rem 1rem;
+  border-radius:9999px;
+  cursor:pointer;
+  box-shadow:0 4px 14px rgba(251,191,36,0.35);
+  transition:transform 0.15s, box-shadow 0.2s, filter 0.2s;
+}
+.bazar-buy:hover:not(:disabled) {
+  transform:scale(1.06);
+  box-shadow:0 6px 20px rgba(251,191,36,0.55);
+  filter:brightness(1.1);
+}
+.bazar-buy:active:not(:disabled) { transform:scale(0.98); }
+.bazar-buy:disabled {
+  background:rgba(255,255,255,0.06);
+  color:#475569;
+  cursor:not-allowed;
+  box-shadow:none;
+}
+.bazar-buy.owned {
+  background:rgba(34,211,238,0.12);
+  color:#22d3ee;
+  border:1px solid rgba(34,211,238,0.4);
+}
+
+/* Indication "trop pauvre" — opacity sur le contenu, PAS la carte, sinon le tooltip hérite */
+.bazar-card.too-poor .bazar-card-visual,
+.bazar-card.too-poor .bazar-card-name,
+.bazar-card.too-poor .bazar-card-desc,
+.bazar-card.too-poor .bazar-card-rarity,
+.bazar-card.too-poor .bazar-card-foot { opacity:0.55; }
+.bazar-card.too-poor .bazar-card-visual { filter:grayscale(0.6); }
+
+/* Tooltip custom (les boutons disabled ne déclenchent pas le title natif sous Chrome) */
+.bazar-card[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position:absolute;
+  top:calc(100% + 8px);
+  left:50%;
+  transform:translateX(-50%) translateY(-4px);
+  background:rgba(8,6,26,0.97);
+  border:1px solid rgba(168,85,247,0.5);
+  border-radius:0.6rem;
+  padding:0.5rem 0.85rem;
+  font-size:0.78rem;
+  font-weight:800;
+  color:#fff;
+  white-space:nowrap;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity 0.2s ease, transform 0.2s ease;
+  z-index:50;
+  box-shadow:0 8px 24px rgba(0,0,0,0.5);
+}
+.bazar-card[data-tooltip]::before {
+  content:'';
+  position:absolute;
+  top:calc(100% + 2px);
+  left:50%;
+  transform:translateX(-50%) translateY(-4px);
+  width:0; height:0;
+  border-left:6px solid transparent;
+  border-right:6px solid transparent;
+  border-bottom:6px solid rgba(168,85,247,0.5);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity 0.2s ease, transform 0.2s ease;
+  z-index:50;
+}
+.bazar-card[data-tooltip]:hover::after,
+.bazar-card[data-tooltip]:hover::before {
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+
+/* Bulle Neo — bas-centre pour rester dans le champ de vision après modale */
+.neo-comment-wrap {
+  position:fixed;
+  bottom:1.5rem;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:9000;
+  display:flex; align-items:flex-end; gap:0.7rem;
+  max-width:min(440px, calc(100vw - 2rem));
+  animation:neoIn 0.35s cubic-bezier(.4,0,.2,1) forwards;
+}
+.neo-comment-avatar {
+  width:80px; height:80px;
+  flex-shrink:0;
+  filter:drop-shadow(0 4px 12px rgba(168,85,247,0.5));
+}
+.neo-comment-bubble {
+  position:relative;
+  background:rgba(8,6,26,0.94);
+  border:1px solid rgba(34,211,238,0.45);
+  border-radius:1rem 1rem 1rem 0.2rem;
+  padding:0.85rem 1.1rem;
+  color:#e2e8f0;
+  font-size:0.9rem;
+  line-height:1.45;
+  box-shadow:0 10px 30px rgba(0,0,0,0.5);
+  font-style:italic;
+}
+/* Petite queue qui pointe vers Neo (à gauche-bas) */
+.neo-comment-bubble::before {
+  content:'';
+  position:absolute;
+  left:-7px; bottom:6px;
+  width:0; height:0;
+  border-top:7px solid transparent;
+  border-bottom:7px solid transparent;
+  border-right:7px solid rgba(34,211,238,0.45);
+}
+@keyframes neoIn  { from{opacity:0;transform:translate(-50%,20px)} to{opacity:1;transform:translate(-50%,0)} }
+@keyframes neoOut { from{opacity:1;transform:translate(-50%,0)} to{opacity:0;transform:translate(-50%,20px)} }
+.neo-comment-wrap.out { animation:neoOut 0.3s ease forwards; }
+
+/* Toast (alertes courtes) */
+.bazar-toast {
+  position:fixed;
+  top:5rem; left:50%;
+  transform:translateX(-50%);
+  z-index:9500;
+  background:rgba(8,6,26,0.95);
+  border:1px solid rgba(168,85,247,0.4);
+  border-radius:9999px;
+  padding:0.7rem 1.5rem;
+  font-weight:800;
+  font-size:0.9rem;
+  color:#fff;
+  box-shadow:0 10px 30px rgba(0,0,0,0.4);
+  animation:toastIn 0.25s ease forwards;
+}
+.bazar-toast.error { border-color:rgba(244,63,94,0.5); color:#fda4af; }
+.bazar-toast.success { border-color:rgba(34,211,238,0.5); color:#67e8f9; }
+@keyframes toastIn  { from{opacity:0;transform:translate(-50%,-10px)} to{opacity:1;transform:translate(-50%,0)} }
+@keyframes toastOut { from{opacity:1;transform:translate(-50%,0)} to{opacity:0;transform:translate(-50%,-10px)} }
+.bazar-toast.out { animation:toastOut 0.25s ease forwards; }
+
+/* Anim flash quand or change */
+@keyframes goldFlash {
+  0%   { color:#fbbf24; transform:scale(1); }
+  40%  { color:#fff;    transform:scale(1.4); text-shadow:0 0 12px #fbbf24; }
+  100% { color:#fbbf24; transform:scale(1); text-shadow:none; }
+}
+.gold-flash { animation:goldFlash 0.6s ease; display:inline-block; }
+
+/* ── Modale confirmation ── */
+.bazar-modal {
+  position:fixed; inset:0; z-index:9800;
+  display:flex; align-items:center; justify-content:center;
+  padding:1rem;
+  animation:bzModalIn 0.25s ease forwards;
+}
+.bazar-modal.out { animation:bzModalOut 0.2s ease forwards; }
+@keyframes bzModalIn  { from{opacity:0} to{opacity:1} }
+@keyframes bzModalOut { from{opacity:1} to{opacity:0} }
+
+.bazar-modal-backdrop {
+  position:absolute; inset:0;
+  background:rgba(8,6,26,0.82);
+  backdrop-filter:blur(10px);
+  cursor:pointer;
+}
+.bazar-modal-card {
+  position:relative;
+  width:100%; max-width:420px;
+  background:linear-gradient(165deg, rgba(28,20,55,0.95), rgba(8,6,26,0.97));
+  border:1px solid rgba(251,191,36,0.3);
+  border-radius:1.5rem;
+  padding:2.5rem 1.5rem 1.5rem;
+  box-shadow:0 30px 60px rgba(0,0,0,0.5), 0 0 40px rgba(251,191,36,0.15);
+  animation:bzCardPop 0.35s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes bzCardPop {
+  0%   { transform:scale(0.85) translateY(20px); opacity:0; }
+  100% { transform:scale(1) translateY(0); opacity:1; }
+}
+
+.bazar-modal-close {
+  position:absolute; top:0.65rem; right:0.85rem;
+  background:transparent;
+  border:none;
+  color:#94a3b8;
+  font-size:1.6rem; line-height:1;
+  cursor:pointer;
+  padding:0.25rem 0.5rem;
+  transition:color 0.2s, transform 0.15s;
+}
+.bazar-modal-close:hover { color:#fff; transform:rotate(90deg); }
+
+/* Neo + bulle */
+.bazar-modal-neo {
+  display:flex; align-items:flex-end; gap:0.6rem;
+  margin-bottom:1.2rem;
+}
+.bazar-modal-neo img {
+  width:70px; height:70px;
+  flex-shrink:0;
+  filter:drop-shadow(0 4px 10px rgba(168,85,247,0.5));
+}
+.bazar-modal-bubble {
+  flex:1;
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(34,211,238,0.4);
+  border-radius:1rem 1rem 1rem 0.2rem;
+  padding:0.7rem 0.95rem;
+  font-size:0.92rem;
+  color:#e2e8f0;
+  font-style:italic;
+  line-height:1.4;
+}
+
+/* Aperçu item */
+.bazar-modal-preview {
+  text-align:center;
+  padding:1rem 0.5rem;
+  background:rgba(251,191,36,0.05);
+  border:1px solid rgba(251,191,36,0.2);
+  border-radius:1rem;
+  margin-bottom:1.2rem;
+}
+.bazar-modal-emoji {
+  font-size:4rem;
+  line-height:1;
+  margin-bottom:0.4rem;
+  filter:drop-shadow(0 4px 12px rgba(251,191,36,0.4));
+  animation:bzEmojiPop 0.5s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes bzEmojiPop {
+  0%   { transform:scale(0.2) rotate(-12deg); opacity:0; }
+  60%  { transform:scale(1.15) rotate(6deg);  opacity:1; }
+  100% { transform:scale(1) rotate(0deg);     opacity:1; }
+}
+.bazar-modal-name {
+  font-weight:900;
+  font-size:1.1rem;
+  color:#fff;
+  margin-bottom:0.4rem;
+}
+.bazar-modal-price {
+  display:flex; align-items:center; justify-content:center;
+  gap:0.4rem; flex-wrap:wrap;
+  font-size:0.95rem;
+  font-weight:800;
+  color:#fbbf24;
+}
+.bazar-modal-price-after {
+  font-size:0.75rem;
+  color:#64748b;
+  font-weight:600;
+  margin-left:0.4rem;
+}
+.bazar-modal-price-after strong { color:#94a3b8; font-weight:900; }
+
+/* Actions */
+.bazar-modal-actions {
+  display:flex; gap:0.6rem;
+}
+.bazar-modal-btn {
+  flex:1;
+  font-family:inherit;
+  font-weight:900;
+  font-size:0.85rem;
+  letter-spacing:0.04em;
+  padding:0.85rem 1rem;
+  border-radius:9999px;
+  cursor:pointer;
+  border:none;
+  transition:transform 0.15s, box-shadow 0.2s, filter 0.2s;
+}
+.bazar-modal-btn.cancel {
+  background:rgba(255,255,255,0.05);
+  color:#94a3b8;
+  border:1px solid rgba(168,85,247,0.2);
+}
+.bazar-modal-btn.cancel:hover { background:rgba(255,255,255,0.08); color:#e2e8f0; }
+.bazar-modal-btn.confirm {
+  background:linear-gradient(135deg, #fbbf24, #f59e0b);
+  color:#0f0a0a;
+  box-shadow:0 4px 14px rgba(251,191,36,0.4);
+}
+.bazar-modal-btn.confirm:hover {
+  transform:scale(1.04);
+  box-shadow:0 6px 22px rgba(251,191,36,0.6);
+  filter:brightness(1.1);
+}
+.bazar-modal-btn:active { transform:scale(0.97); }
+
+/* Responsive */
+@media (max-width:640px) {
+  .bazar-header { gap:1rem; padding:0.5rem 0; }
+  .bazar-owl { width:100px; height:100px; }
+  .bazar-owl-emoji { font-size:5rem; }
+  .bazar-grid { grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:0.85rem; }
+  .bazar-card-visual { height:90px; font-size:3.5rem; }
+  .neo-comment-wrap { bottom:0.7rem; }
+  .neo-comment-avatar { width:60px; height:60px; }
+}

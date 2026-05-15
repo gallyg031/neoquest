@@ -58,6 +58,17 @@ function addPts(n) {
   } catch(e) {}
 }
 
+var GOLD_PER_ECLAT = 10;
+
+function addGold(n) {
+  if (!n || n <= 0) return;
+  const p = getProgress();
+  p.totalGold = (p.totalGold || 0) + n;
+  saveProgress(p);
+  if (typeof nqRefreshGoldDisplay === 'function') nqRefreshGoldDisplay();
+}
+window.addGold = addGold;
+
 function getWeakQuestions() { try { return JSON.parse(localStorage.getItem('neoquest_weak')||'{}'); } catch { return {}; } }
 function recordResult(q,ok) { const w=getWeakQuestions(); if(!ok) w[q]=(w[q]||0)+1; else if(w[q]) w[q]=Math.max(0,w[q]-1); try { localStorage.setItem('neoquest_weak',JSON.stringify(w)); } catch {} }
 function weightedShuffle(questions) { const weak=getWeakQuestions(),pool=[]; questions.forEach(q=>{const weight=1+(weak[q.question]||0)*2;for(let i=0;i<weight;i++)pool.push(q);}); return shuffle(pool); }
@@ -66,6 +77,41 @@ function getFCWeak() { try { return JSON.parse(localStorage.getItem('neoquest_fc
 function saveFCWeak(w) { try { localStorage.setItem('neoquest_fc_weak',JSON.stringify(w)); } catch {} }
 function markFCRevoir(q) { const w=getFCWeak(); w[q]=(w[q]||0)+1; saveFCWeak(w); }
 function markFCAcquis(q) { const w=getFCWeak(); delete w[q]; saveFCWeak(w); }
+
+// ── Cartes acquises au moins une fois (par chapitre) — pour la jauge X/total + bonus de maîtrise ──
+function _fcMasteredKey(chapId) { return `neoquest_fc_mastered_${chapId}`; }
+function getFCMasteredSet(chapId) {
+  try { return new Set(JSON.parse(localStorage.getItem(_fcMasteredKey(chapId))||'[]')); }
+  catch { return new Set(); }
+}
+function addFCMastered(chapId, question) {
+  if (!chapId || !question) return;
+  const s = getFCMasteredSet(chapId);
+  if (s.has(question)) return;
+  s.add(question);
+  try { localStorage.setItem(_fcMasteredKey(chapId), JSON.stringify([...s])); } catch {}
+}
+function getFCMasteredCount(chapId) { return getFCMasteredSet(chapId).size; }
+
+// ── Éclats (lanterne max 15) ──
+var ECLAT_MAX = 15;
+function getEclats(chapId)    { return parseInt(localStorage.getItem('neoquest_lantern_' + chapId) || '0'); }
+function setEclats(chapId, n) { try { localStorage.setItem('neoquest_lantern_' + chapId, String(n)); } catch(e) {} }
+
+function addEclats(chapId, amount) {
+  setEclats(chapId, Math.min(ECLAT_MAX, getEclats(chapId) + amount));
+}
+
+function consumeEclatForQuiz(chapId) {
+  const n = getEclats(chapId);
+  if (n > 0) { setEclats(chapId, n - 1); return 'eclat'; }
+  return 'caillou';
+}
+
+function renderEclatCounter(elId, chapId) {
+  const el = document.getElementById(elId);
+  if (el) el.textContent = `🔆 ${getEclats(chapId)}/15`;
+}
 
 // ── Thème custom par chapitre ──
 function applyChapterTheme(chap) {
@@ -99,9 +145,12 @@ function openQuestActivity(chap, niveau, mat, tab) {
     document.getElementById('qa-modal-quiz').classList.add('active');
     document.body.style.overflow = 'hidden';
   } else if (tab === 'chrono') {
-    if (typeof window.pExpand === 'function') {
-      const compact = document.getElementById('p-compact');
-      if (compact && compact.style.display !== 'none') window.pExpand();
+    // Mode Défi (speedrun). Tant que le quiz refactor n'expose pas la liste des
+    // questions "non vues", on tire dans tout chap.quiz.
+    if (typeof initChrono === 'function') {
+      initChrono(chap.quiz || []);
+      document.getElementById('qa-modal-chrono').classList.add('active');
+      document.body.style.overflow = 'hidden';
     }
   }
 }
@@ -110,6 +159,9 @@ function closeQuestActivity() {
   document.getElementById('qa-modal-video').classList.remove('active');
   document.getElementById('qa-modal-fc').classList.remove('active');
   document.getElementById('qa-modal-quiz').classList.remove('active');
+  const chronoEl = document.getElementById('qa-modal-chrono');
+  if (chronoEl) chronoEl.classList.remove('active');
+  if (typeof window.chronoStop === 'function') window.chronoStop();
   if (typeof window.stopQuestVideo === 'function') {
     window.stopQuestVideo();
   } else {
@@ -117,20 +169,17 @@ function closeQuestActivity() {
     if (frame) frame.src = '';
   }
   if (typeof window.resetLantern === 'function') window.resetLantern();
+  // Neo reste monté (singleton) — on coupe juste sa bulle / idle / expression
+  if (typeof window.neoReset === 'function') window.neoReset();
   document.body.style.overflow = '';
   if (chapitreId) {
     window.dispatchEvent(new CustomEvent('questActivityCompleted', { detail: { chapId: chapitreId, type: 'close' } }));
   }
 }
 
-// Fermer clic sur overlay (délégation — fonctionne même si les modals sont injectés après)
-document.body.addEventListener('click', e => {
-  if (e.target.classList.contains('qa-overlay') && e.target.classList.contains('active')) {
-    closeQuestActivity();
-  }
-});
-
-// Fermer via Escape
+// Fermeture uniquement via la croix (.qa-close) ou Escape.
+// Pas de close par clic-sur-overlay : Neo sit dessus (position:fixed) et les
+// "ratés" de clic sur Neo fermaient la modale par accident.
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape' && document.querySelector('.qa-overlay.active')) {
     closeQuestActivity();

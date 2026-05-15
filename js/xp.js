@@ -23,7 +23,8 @@ const NQ_LEVELS = [
 function nqGetProgress() {
   try { return JSON.parse(localStorage.getItem('neoquest_progress') || '{}'); } catch { return {}; }
 }
-function nqGetXP() { return nqGetProgress().totalPts || 0; }
+function nqGetXP()   { return nqGetProgress().totalPts  || 0; }
+function nqGetGold() { return nqGetProgress().totalGold || 0; }
 
 // ── Calcul niveau actuel ──
 function nqGetLevel(xp) {
@@ -41,50 +42,69 @@ function nqGetLevelProgress(xp) {
   return Math.round(((xp - cur.minXP) / (next.minXP - cur.minXP)) * 100);
 }
 
-// ── Injection du badge dans la navbar ──
+// ── Injection des badges dans la navbar ──
 function nqInjectLevelBadge() {
   const xp   = nqGetXP();
   const lvl  = nqGetLevel(xp);
   const next = nqGetNextLevel(xp);
   const pct  = nqGetLevelProgress(xp);
 
-  // Cherche le profil link dans la navbar pour insérer avant
   const profileLink = document.getElementById('nav-profile');
   if (!profileLink) return;
 
-  // Évite les doublons
-  if (document.getElementById('nq-level-badge')) return;
-
-  const badge = document.createElement('a');
-  badge.href = 'profil.html';
-  badge.id   = 'nq-level-badge';
-  badge.title = `${lvl.title} — ${xp} XP${next ? ` · ${next.minXP - xp} XP pour niveau ${next.level}` : ' · Niveau max !'}`;
-  badge.style.cssText = `
-    display:inline-flex; align-items:center; gap:5px;
-    text-decoration:none; cursor:pointer;
-    background:rgba(255,255,255,0.04);
-    border:1px solid ${lvl.color}55;
-    border-radius:9999px;
-    padding:3px 10px 3px 6px;
-    transition:all 0.2s;
-    position:relative; overflow:hidden;
-  `;
-
-  // Mini barre XP dans le badge
-  badge.innerHTML = `
-    <span style="font-size:14px;line-height:1;">${lvl.emoji}</span>
-    <div>
-      <div style="font-size:10px;font-weight:800;color:${lvl.color};line-height:1.1;white-space:nowrap;">Niv. ${lvl.level} · ${lvl.title}</div>
-      <div style="width:60px;height:3px;background:rgba(255,255,255,0.08);border-radius:9999px;margin-top:2px;overflow:hidden;">
-        <div style="width:${pct}%;height:100%;border-radius:9999px;background:${lvl.color};transition:width 0.8s ease;"></div>
+  // Badge XP
+  if (!document.getElementById('nq-level-badge')) {
+    const badge = document.createElement('a');
+    badge.href = 'profil.html';
+    badge.id   = 'nq-level-badge';
+    badge.title = `${lvl.title} — ${xp} XP${next ? ` · ${next.minXP - xp} XP pour niveau ${next.level}` : ' · Niveau max !'}`;
+    badge.style.cssText = `
+      display:inline-flex; align-items:center; gap:5px;
+      text-decoration:none; cursor:pointer;
+      background:rgba(255,255,255,0.04);
+      border:1px solid ${lvl.color}55;
+      border-radius:9999px;
+      padding:3px 10px 3px 6px;
+      transition:all 0.2s;
+      position:relative; overflow:hidden;
+    `;
+    badge.innerHTML = `
+      <span style="font-size:14px;line-height:1;">${lvl.emoji}</span>
+      <div>
+        <div style="font-size:10px;font-weight:800;color:${lvl.color};line-height:1.1;white-space:nowrap;">Niv. ${lvl.level} · ${lvl.title}</div>
+        <div style="width:60px;height:3px;background:rgba(255,255,255,0.08);border-radius:9999px;margin-top:2px;overflow:hidden;">
+          <div style="width:${pct}%;height:100%;border-radius:9999px;background:${lvl.color};transition:width 0.8s ease;"></div>
+        </div>
       </div>
-    </div>
-  `;
+    `;
+    badge.onmouseover = () => badge.style.background = `${lvl.color}18`;
+    badge.onmouseout  = () => badge.style.background = 'rgba(255,255,255,0.04)';
+    profileLink.parentNode.insertBefore(badge, profileLink);
+  }
 
-  badge.onmouseover = () => badge.style.background = `${lvl.color}18`;
-  badge.onmouseout  = () => badge.style.background = 'rgba(255,255,255,0.04)';
-
-  profileLink.parentNode.insertBefore(badge, profileLink);
+  // Badge Or
+  if (!document.getElementById('nq-gold-badge')) {
+    const gold = document.createElement('a');
+    gold.href  = 'profil.html';
+    gold.id    = 'nq-gold-badge';
+    gold.title = `Or disponible : ${nqGetGold()}`;
+    gold.style.cssText = `
+      display:inline-flex; align-items:center; gap:5px;
+      text-decoration:none; cursor:pointer;
+      background:rgba(255,255,255,0.04);
+      border:1px solid #fbbf2455;
+      border-radius:9999px;
+      padding:3px 10px 3px 8px;
+      transition:all 0.2s;
+    `;
+    gold.innerHTML = `
+      <span style="font-size:14px;line-height:1;">💰</span>
+      <span id="nq-gold-amount" style="font-size:11px;font-weight:800;color:#fbbf24;white-space:nowrap;">${nqGetGold()}</span>
+    `;
+    gold.onmouseover = () => gold.style.background = '#fbbf2418';
+    gold.onmouseout  = () => gold.style.background = 'rgba(255,255,255,0.04)';
+    profileLink.parentNode.insertBefore(gold, profileLink);
+  }
 }
 
 // ── Notification de montée de niveau ──
@@ -143,11 +163,16 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ── Export pour usage dans d'autres scripts ──
-window.NQ_LEVELS           = NQ_LEVELS;
-window.nqGetXP             = nqGetXP;
-window.nqGetLevel          = nqGetLevel;
-window.nqGetNextLevel      = nqGetNextLevel;
-window.nqGetLevelProgress  = nqGetLevelProgress;
-window.nqCheckLevelUp      = nqCheckLevelUp;
-window.nqShowLevelUpOverlay= nqShowLevelUpOverlay;
-window.nqInjectLevelBadge  = nqInjectLevelBadge;
+window.NQ_LEVELS            = NQ_LEVELS;
+window.nqGetXP              = nqGetXP;
+window.nqGetGold            = nqGetGold;
+window.nqGetLevel           = nqGetLevel;
+window.nqGetNextLevel       = nqGetNextLevel;
+window.nqGetLevelProgress   = nqGetLevelProgress;
+window.nqCheckLevelUp       = nqCheckLevelUp;
+window.nqShowLevelUpOverlay = nqShowLevelUpOverlay;
+window.nqInjectLevelBadge   = nqInjectLevelBadge;
+window.nqRefreshGoldDisplay = function() {
+  const el = document.getElementById('nq-gold-amount');
+  if (el) el.textContent = nqGetGold();
+};
