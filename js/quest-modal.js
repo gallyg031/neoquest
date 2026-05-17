@@ -169,6 +169,8 @@ function closeQuestActivity() {
     if (frame) frame.src = '';
   }
   if (typeof window.resetLantern === 'function') window.resetLantern();
+  // Mentor combat : on cache la bulle (l'orbe reste monté, ré-utilisé au prochain combat)
+  if (typeof window.mentorHide === 'function') window.mentorHide();
   // Neo reste monté (singleton) — on coupe juste sa bulle / idle / expression
   if (typeof window.neoReset === 'function') window.neoReset();
   document.body.style.overflow = '';

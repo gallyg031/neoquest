@@ -124,6 +124,10 @@ function bossInit(opts) {
     if (slot) window.mountLantern(slot, opts.chapId, { max: 15, label: 'Éclats' });
   }
   hudUpdateEclatCounter();
+
+  // Mentor sur l'épaule de Neo (idempotent, ré-monte si pas déjà là)
+  if (typeof window.mountMentor === 'function') window.mountMentor();
+  if (typeof window.mentorHide   === 'function') window.mentorHide();
 }
 
 function hudUpdateEclatCounter() {
@@ -221,53 +225,20 @@ function _setGlow(ratio) {
   if (stage) stage.style.setProperty('--combat-glow-opacity', Math.max(0, Math.min(1, ratio)));
 }
 
-// ─── Bulle de feedback NeoGuide (positionnée au-dessus du sprite mentor, peut chevaucher la scène) ───
+// ─── Bulle de feedback (déléguée au mentor sur l'épaule de Neo) ───
 function hudShowFeedbackBubble(opts) {
-  const shell = document.getElementById('qa-combat-shell');
-  const guide = document.getElementById('qa-combat-sprite-neoguide');
-  if (!shell || !guide) return;
-
-  // Retire une éventuelle ancienne bulle
-  const old = shell.querySelector('.combat-bubble');
-  if (old) old.remove();
-
+  if (typeof window.mentorSay !== 'function') return;
   const isCorrect = !!opts.isCorrect;
-  const bubble = document.createElement('div');
-  bubble.className = 'combat-bubble ' + (isCorrect ? 'ok' : 'ko');
-  bubble.innerHTML = `
-    <div class="combat-bubble-title ${isCorrect ? 'ok' : 'ko'}">${isCorrect ? '👍 Bravo !' : '😬 Pas tout à fait…'}</div>
-    ${!isCorrect && opts.correctAnswer ? `<div class="combat-bubble-answer">✅ ${opts.correctAnswer}</div>` : ''}
-    ${opts.explication ? `<div class="combat-bubble-expl">${opts.explication}</div>` : ''}
+  const html = `
+    <div class="combat-mentor-bubble-title ${isCorrect ? 'ok' : 'ko'}">${isCorrect ? '👍 Bravo !' : '😬 Pas tout à fait…'}</div>
+    ${!isCorrect && opts.correctAnswer ? `<div class="combat-mentor-bubble-answer">✅ ${opts.correctAnswer}</div>` : ''}
+    ${opts.explication ? `<div class="combat-mentor-bubble-expl">${opts.explication}</div>` : ''}
   `;
-  shell.appendChild(bubble);
-
-  // Position : bulle au-dessus de NeoGuide, sa queue alignée avec le centre de NeoGuide
-  const shellRect = shell.getBoundingClientRect();
-  const guideRect = guide.getBoundingClientRect();
-  const guideRightInShell = guideRect.right - shellRect.left;
-  const guideTopInShell   = guideRect.top  - shellRect.top;
-
-  // Le bord droit de la bulle dépasse légèrement le bord droit de NeoGuide → CSS right
-  bubble.style.right    = (shellRect.width - guideRightInShell - 4) + 'px';
-  bubble.style.bottom   = (shellRect.height - guideTopInShell + 18) + 'px';
-  bubble.style.maxWidth = '420px';
-
-  // Position de la queue (variable CSS) : alignée avec le centre de NeoGuide
-  bubble.style.setProperty('--bubble-queue-right', (guideRect.width / 2 - 4) + 'px');
-
-  guide.classList.add('active');
+  window.mentorSay(html, { variant: isCorrect ? 'ok' : 'ko', persist: true });
 }
 
 function hudHideFeedbackBubble() {
-  const shell = document.getElementById('qa-combat-shell');
-  if (!shell) return;
-  const guide = document.getElementById('qa-combat-sprite-neoguide');
-  if (guide) guide.classList.remove('active');
-  const b = shell.querySelector('.combat-bubble');
-  if (b) {
-    b.classList.add('exit');
-    setTimeout(() => b.remove(), 260);
-  }
+  if (typeof window.mentorHide === 'function') window.mentorHide();
 }
 
 window.bossInit              = bossInit;

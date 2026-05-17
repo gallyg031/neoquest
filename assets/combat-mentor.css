@@ -1,0 +1,130 @@
+/* ─────────────── Mentor — orbe doré perché sur l'épaule de Neo combattant ─────────────── */
+/* Monté dans #qa-combat-sprite-neo par mountMentor() (quest-quiz-mentor.js). */
+/* La bulle sort en haut-droit, dans l'axe des réponses (lecture naturelle gauche→droite). */
+
+.combat-sprite-neo { position: relative; }
+
+.combat-mentor {
+  position: absolute;
+  top: -14px; left: -12px;
+  width: 40px; height: 40px;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.combat-mentor-orb {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255,255,255,0.95), #fde68a 48%, #d97706 100%);
+  border: 2px solid rgba(255,230,160,0.75);
+  box-shadow:
+    0 0 0 5px rgba(251,191,36,0.18),
+    0 0 22px rgba(251,191,36,0.55),
+    inset 0 -3px 6px rgba(180,120,40,0.4);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--combat-title-font, 'Cinzel', 'Trajan Pro', serif);
+  font-weight: 900;
+  font-size: 17px;
+  color: #2a1a08;
+  animation: mentorFloat 3.5s ease-in-out infinite;
+  pointer-events: auto;
+  user-select: none;
+}
+@keyframes mentorFloat {
+  0%, 100% { transform: translateY(0)    rotate(-2deg); }
+  50%      { transform: translateY(-4px) rotate(2deg); }
+}
+
+/* ─── Bulle ─── */
+.combat-mentor-bubble {
+  position: absolute;
+  left: 48px; top: -6px;
+  min-width: 220px; max-width: 320px;
+  padding: 0.6rem 0.85rem;
+  background: rgba(15,18,38,0.94);
+  border: 1.5px solid rgba(251,191,36,0.4);
+  border-radius: 14px 14px 14px 4px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.88rem;
+  line-height: 1.4;
+  color: #f3eedf;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.5);
+  opacity: 0;
+  transform: scale(0.92) translateX(-6px);
+  transform-origin: 0 30%;
+  pointer-events: none;
+  z-index: 6;
+  white-space: normal;
+  word-wrap: break-word;
+}
+.combat-mentor-bubble.show {
+  animation: mentorBubbleIn 0.32s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+  pointer-events: auto;
+}
+@keyframes mentorBubbleIn {
+  to { opacity: 1; transform: scale(1) translateX(0); }
+}
+.combat-mentor-bubble.exit {
+  animation: mentorBubbleOut 0.22s ease-in forwards;
+}
+@keyframes mentorBubbleOut {
+  0%   { opacity: 1; transform: scale(1) translateX(0); }
+  100% { opacity: 0; transform: scale(0.92) translateX(-6px); }
+}
+.combat-mentor-bubble b,
+.combat-mentor-bubble strong { color: #fbbf24; font-weight: 700; }
+
+/* Queue de bulle (pointe vers l'orbe en bas-gauche) */
+.combat-mentor-bubble::before {
+  content: '';
+  position: absolute;
+  left: -6px; bottom: 10px;
+  width: 12px; height: 12px;
+  background: rgba(15,18,38,0.94);
+  border-left: 1.5px solid rgba(251,191,36,0.4);
+  border-bottom: 1.5px solid rgba(251,191,36,0.4);
+  transform: rotate(45deg);
+}
+
+/* ─── Variantes (feedback bonne/mauvaise réponse) ─── */
+.combat-mentor-bubble.ok          { border-color: rgba(34,211,238,0.65); box-shadow: 0 12px 28px rgba(0,0,0,0.5), 0 0 22px rgba(34,211,238,0.3); }
+.combat-mentor-bubble.ok::before  { border-left-color: rgba(34,211,238,0.65); border-bottom-color: rgba(34,211,238,0.65); }
+.combat-mentor-bubble.ko          { border-color: rgba(244,114,182,0.7);  box-shadow: 0 12px 28px rgba(0,0,0,0.5), 0 0 22px rgba(244,114,182,0.3); }
+.combat-mentor-bubble.ko::before  { border-left-color: rgba(244,114,182,0.7);  border-bottom-color: rgba(244,114,182,0.7); }
+
+/* ─── Contenu structuré (titre + réponse + explication) ─── */
+.combat-mentor-bubble-title    { font-weight: 900; font-size: 0.95rem; margin-bottom: 0.25rem; letter-spacing: 0.01em; }
+.combat-mentor-bubble-title.ok { color: #67e8f9; }
+.combat-mentor-bubble-title.ko { color: #fda4af; }
+
+.combat-mentor-bubble-answer {
+  display: inline-block;
+  margin-top: 0.35rem;
+  background: rgba(34,211,238,0.14);
+  border: 1px solid rgba(34,211,238,0.45);
+  border-radius: 0.45rem;
+  padding: 0.22rem 0.55rem;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #67e8f9;
+}
+.combat-mentor-bubble-expl {
+  font-size: 0.82rem;
+  color: #cbd5e1;
+  margin-top: 0.4rem;
+  line-height: 1.45;
+  font-weight: 500;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 700px) {
+  .combat-mentor          { top: -10px; left: -10px; width: 32px; height: 32px; }
+  .combat-mentor-orb      { width: 32px; height: 32px; font-size: 14px; }
+  .combat-mentor-bubble   { left: 38px; min-width: 180px; max-width: 240px; font-size: 0.8rem; padding: 0.5rem 0.7rem; }
+}
+@media (max-width: 480px) {
+  .combat-mentor-bubble   { max-width: 200px; font-size: 0.76rem; }
+}

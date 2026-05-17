@@ -11,7 +11,8 @@
       "Bash(echo -n \"window.__neoData = \")",
       "Bash(cat data/data.json)",
       "Bash(echo \";\")",
-      "Bash(xxd data/data.json)"
+      "Bash(xxd data/data.json)",
+      "Bash(git reset *)"
     ]
   }
 }

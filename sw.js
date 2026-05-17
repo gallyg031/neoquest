@@ -1,6 +1,6 @@
 // NeoQuest TV — Service Worker
 // Version du cache — incrémenter à chaque mise à jour du site
-const CACHE_NAME = 'neoquest-v3';
+const CACHE_NAME = 'neoquest-v4';
 
 // Fichiers à mettre en cache pour le mode hors-ligne
 const ASSETS = [
@@ -51,6 +51,9 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   // Ignore les requêtes non-GET
   if(event.request.method !== 'GET') return;
+
+  // L'outil admin est dev-only : jamais caché, toujours servi depuis le réseau
+  if(event.request.url.includes('/admin/')) return;
 
   // Pour data.json : Network First (pour avoir les dernières questions)
   if(event.request.url.includes('data.json')) {

@@ -81,7 +81,7 @@
           </div>
         </div>
 
-        <!-- ── GRIMOIRE (bas, hauteur natural — 2 colonnes : quiz à gauche, NeoGuide à droite) ── -->
+        <!-- ── GRIMOIRE (bas, hauteur naturelle — quiz centré pleine largeur) ── -->
         <div class="combat-grimoire">
           <div class="combat-grimoire-inner">
             <div class="combat-grimoire-quiz">
@@ -108,9 +108,6 @@
                 </div>
               </div>
               <div id="qa-quiz-final" class="hidden"></div>
-            </div>
-            <div class="combat-grimoire-guide">
-              <div class="combat-sprite-neoguide" id="qa-combat-sprite-neoguide" title="NeoGuide">🦉</div>
             </div>
           </div>
         </div>
