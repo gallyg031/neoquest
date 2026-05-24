@@ -10,20 +10,30 @@
   <title>NeoQuest TV — Royaume</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Cinzel:wght@600;700;900&family=Cormorant+Garamond:wght@500;700&family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Cinzel:wght@600;700;900&family=Cormorant+Garamond:wght@500;700&family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=IM+Fell+DW+Pica:ital@0;1&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="assets/royaume.css" />
   <link rel="stylesheet" href="assets/quest-modal.css" />
+  <link rel="stylesheet" href="assets/flashcards-v5.css" />
   <link rel="stylesheet" href="assets/combat.css" />
   <link rel="stylesheet" href="assets/combat-mentor.css" />
+  <link rel="stylesheet" href="assets/combat-hearts.css" />
+  <link rel="stylesheet" href="assets/combat-timer.css" />
+  <link rel="stylesheet" href="assets/combat-phase2.css" />
+  <link rel="stylesheet" href="assets/combat-pills.css" />
+  <link rel="stylesheet" href="assets/combat-neo-cheer.css" />
+  <link rel="stylesheet" href="assets/combat-pageflip.css" />
+  <link rel="stylesheet" href="assets/combat-annale.css" />
+  <link rel="stylesheet" href="assets/combat-intro.css" />
   <link rel="stylesheet" href="assets/chrono.css" />
   <link rel="stylesheet" href="assets/neo.css" />
   <script src="js/xp.js"></script>
   <script src="data/data.js"></script>
   <script src="data/boss-intro-lines.js"></script>
   <script src="data/neo-lines.js"></script>
+  <script src="data/neo-skins.js"></script>
 </head>
-<body>
+<body data-lieu="map-royaume">
 <div class="blob blob-1"></div>
 <div class="blob blob-2"></div>
 
@@ -131,6 +141,7 @@
   <button class="btn-sos" onclick="openGlobeModal(event)">🌍 Changer de Province</button>
 </div>
 
+<script src="js/quest-images.js"></script>
 <script src="js/royaume-globe.js"></script>
 <script src="js/royaume-init.js"></script>
 <script src="js/royaume-map.js"></script>
@@ -139,11 +150,21 @@
 <script src="js/quest-modal.js"></script>
 <script src="js/quest-lantern.js"></script>
 <script src="js/quest-neo.js"></script>
+<script src="js/quest-astuce-neo.js"></script>
+<script src="js/neo-outfit.js"></script>
 <script src="js/quest-video.js"></script>
 <script src="js/quest-flashcards-modal.js"></script>
+<script src="js/quest-flashcards-drops.js"></script>
+<script src="js/quest-flashcards-cristal.js"></script>
 <script src="js/quest-flashcards.js"></script>
 <script src="js/quest-quiz-modal.js"></script>
 <script src="js/quest-quiz-mentor.js"></script>
+<script src="js/quest-quiz-hearts.js"></script>
+<script src="js/quest-quiz-timer.js"></script>
+<script src="js/quest-quiz-phase2.js"></script>
+<script src="js/quest-quiz-neo-cheer.js"></script>
+<script src="js/quest-quiz-pageflip.js"></script>
+<script src="js/quest-quiz-annale.js"></script>
 <script src="js/quest-quiz-hud.js"></script>
 <script src="js/quest-quiz-vfx.js"></script>
 <script src="js/quest-quiz-audio.js"></script>
@@ -152,6 +173,15 @@
 <script src="js/quest-quiz-tweaker.js"></script>
 <script src="js/quest-chrono-modal.js"></script>
 <script src="js/quest-chrono.js"></script>
+<script src="js/recup-counter.js"></script>
+<script src="js/neo-notebook-store.js"></script>
+<script src="js/neo-notebook-modal.js"></script>
+<script src="js/neo-controle-store.js"></script>
+<script src="js/neo-controle-saisie.js"></script>
+<script src="js/neo-controle-mixer.js"></script>
+<script src="js/neo-controle-modal.js"></script>
+<script src="js/neo-controle-prompt.js"></script>
+<script src="js/neo-notebook-prompt.js"></script>
 <script>
   if("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js").catch(()=>{});
 </script>

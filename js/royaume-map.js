@@ -391,7 +391,7 @@ function renderMapRoute(niveau, c, mapImg, lastActiveIdx, neoSrc, container) {
         }
 
         if (chap.loot_quete) {
-          document.getElementById('qp-loot-img').textContent  = chap.loot_quete.emoji;
+          nqRenderLoot(document.getElementById('qp-loot-img'), chap, { size:'2.4rem' });
           document.getElementById('qp-loot-name').textContent = `+50 XP & ${chap.loot_quete.nom}`;
         }
 
@@ -402,7 +402,7 @@ function renderMapRoute(niveau, c, mapImg, lastActiveIdx, neoSrc, container) {
           lootBox.style.display = 'none';
           victoryEl.classList.add('active');
           if (chap.loot_quete) {
-            document.getElementById('qp-victory-loot-img').textContent  = chap.loot_quete.emoji;
+            nqRenderLoot(document.getElementById('qp-victory-loot-img'), chap, { size:'1.4rem', inline:true });
             document.getElementById('qp-victory-loot-name').textContent = chap.loot_quete.nom;
           }
           document.getElementById('qp-victory-score-value').textContent = `${getPts(chap.id)} pts`;
@@ -413,6 +413,10 @@ function renderMapRoute(niveau, c, mapImg, lastActiveIdx, neoSrc, container) {
           if (panel2) panel2.classList.remove('mastered');
           lootBox.style.display = '';
           victoryEl.classList.remove('active');
+        }
+
+        if (typeof window.ctrlMountInPanel === 'function') {
+          window.ctrlMountInPanel(chap, matiereId, regionColor);
         }
       });
     }
