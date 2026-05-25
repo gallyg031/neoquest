@@ -71,7 +71,7 @@
         <div id="p-neo" style="font-size:48px;line-height:1;position:relative;z-index:1;transition:filter 0.5s;">🦊</div>
         <div id="p-books" style="display:flex;gap:2px;justify-content:center;align-items:flex-end;height:18px;margin-top:4px;"></div>
       </div>
-      <div id="p-bubble" style="background:rgba(255,255,255,0.05);border:1px solid rgba(168,85,247,0.2);border-radius:10px;padding:6px 10px;font-size:11px;color:#cbd5e1;line-height:1.4;text-align:center;margin-bottom:0.75rem;">Choisis ta durée et c'est parti !</div>
+      <div id="p-bubble" style="background:rgba(255,255,255,0.05);border:1px solid rgba(168,85,247,0.2);border-radius:10px;padding:6px 10px;font-size:11px;color:#cbd5e1;line-height:1.4;text-align:center;margin-bottom:0.75rem;">Choisis ta durée. On y va.</div>
       <div style="display:flex;justify-content:center;margin-bottom:0.75rem;">
         <div style="position:relative;width:100px;height:100px;">
           <svg width="100" height="100" style="transform:rotate(-90deg);">
@@ -123,20 +123,20 @@
   const P_DURS = [5, 10, 15, 30, 45, 60];
   const P_BOOK_COLORS = ['#7F77DD','#22d3ee','#f472b6','#fbbf24','#4ade80','#a855f7','#06b6d4','#c084fc'];
   const P_MESSAGES = [
-    {pct:0,  txt:"C'est parti pour la quête du savoir ! 🚀"},
-    {pct:10, txt:"Bien démarré ! Chaque minute compte."},
-    {pct:20, txt:"Tu construis ton savoir brique par brique 🧱"},
-    {pct:30, txt:"Neo est fier de toi, continue !"},
-    {pct:40, txt:"Tu es dans la zone ! Reste focus 🎯"},
-    {pct:50, txt:"La moitié du chemin est faite ! 💪"},
-    {pct:60, txt:"Le savoir s'accumule dans ta tête 🧠"},
-    {pct:70, txt:"Dernière ligne droite, ne lâche rien !"},
-    {pct:80, txt:"80% ! Les grands explorateurs ne s'arrêtent pas 🗺️"},
-    {pct:90, txt:"Presque fini ! Encore un effort ⚡"},
-    {pct:95, txt:"Les dernières secondes sont les plus précieuses ✨"},
+    {pct:0,  txt:"OK. On s'y met. 🚀"},
+    {pct:10, txt:"Bien lancé. Tiens la cadence."},
+    {pct:20, txt:"Ça rentre, brique par brique. 🧱"},
+    {pct:30, txt:"T'es dedans. Reste."},
+    {pct:40, txt:"Zone atteinte. Bouge pas. 🎯"},
+    {pct:50, txt:"Moitié faite. L'autre attend. 💪"},
+    {pct:60, txt:"Ton cerveau enregistre. Continue. 🧠"},
+    {pct:70, txt:"Ligne droite. Lâche rien."},
+    {pct:80, txt:"80%. Pas le moment de lâcher. 🗺️"},
+    {pct:90, txt:"Presque. Encore un peu. ⚡"},
+    {pct:95, txt:"Dernières secondes. Profite. ✨"},
   ];
-  const P_BREAK_MSGS = ["Ding ! Pose ton stylo, va boire un verre d'eau ! 🍎","Repose tes yeux, regarde au loin 30 secondes 👀","Étire-toi, bouge un peu ! 🌿","Pause méritée ! Tu as bien bossé 🌟"];
-  const P_IDLE_MSG = "C'est pas grave, on reprend la quête quand tu es prêt !";
+  const P_BREAK_MSGS = ["Pause. Lève-toi, bois un verre d'eau. 🍎","Repose tes yeux. Regarde par la fenêtre 30 secondes. 👀","Étire-toi. Bouge. 🌿","Pause méritée. T'as bossé. 🌟"];
+  const P_IDLE_MSG = "Pas grave. On reprend quand t'es prêt.";
 
   let pDur = 30*60, pRem = pDur, pRun = false, pBreak = false, pStarted = false;
   let pIdle = 0, pSess = 0, pLastBubbleMin = -1, pTicker = null, pMaxCycles = 2, pIdlePaused = false;
@@ -199,7 +199,7 @@
           document.getElementById('p-setup').style.display='block';
           document.getElementById('p-startbtn').textContent='▶ Démarrer';
           document.getElementById('p-startbtn').onclick=pStart;
-          pSetBubble('🎉 Bravo ! Tu as complété tous tes cycles !');
+          pSetBubble('🎉 Tous les cycles bouclés. T\'as géré.');
           pPlayDone('work');
           const w=document.getElementById('p-full');
           w.classList.add('glow-done');setTimeout(()=>w.classList.remove('glow-done'),3000);
@@ -242,7 +242,7 @@
   function pResumeFromIdle(){pRun=true;pIdlePaused=false;pIdle=0;document.getElementById('p-startbtn').textContent='⏸ Pause';document.getElementById('p-startbtn').onclick=pPause;pUpdateUI();}
   function pStart(){pRun=true;pStarted=true;pIdle=0;pLastBubbleMin=-1;pIdlePaused=false;pSess=0;document.getElementById('p-setup').style.display='none';document.getElementById('p-startbtn').textContent='⏸ Pause';document.getElementById('p-startbtn').onclick=pPause;pSetBubble(pGetMsg(0));pRenderBooks(0);pUpdateUI();}
   function pPause(){pRun=false;pIdlePaused=false;document.getElementById('p-startbtn').textContent='▶ Reprendre';document.getElementById('p-startbtn').onclick=pResumeFromIdle;pSetBubble(P_IDLE_MSG);pUpdateUI();}
-  function pReset(){pRun=false;pBreak=false;pStarted=false;pRem=pDur;pIdle=0;pLastBubbleMin=-1;pSess=0;pIdlePaused=false;document.getElementById('p-setup').style.display='block';document.getElementById('p-startbtn').textContent='▶ Démarrer';document.getElementById('p-startbtn').onclick=pStart;document.getElementById('p-full').className='pomo-wrap';pSetBubble("Choisis ta durée et c'est parti !");document.getElementById('p-books').innerHTML='';pUpdateUI();}
+  function pReset(){pRun=false;pBreak=false;pStarted=false;pRem=pDur;pIdle=0;pLastBubbleMin=-1;pSess=0;pIdlePaused=false;document.getElementById('p-setup').style.display='block';document.getElementById('p-startbtn').textContent='▶ Démarrer';document.getElementById('p-startbtn').onclick=pStart;document.getElementById('p-full').className='pomo-wrap';pSetBubble("Choisis ta durée. On y va.");document.getElementById('p-books').innerHTML='';pUpdateUI();}
   function pSetD(min){pDur=min*60;pRem=pDur;document.querySelectorAll('.pdur-btn').forEach((b,i)=>{if(i<P_DURS.length)b.classList.toggle('active',P_DURS[i]===min);});pUpdateUI();}
   function pSetCycles(n){pMaxCycles=n;const allBtns=document.querySelectorAll('.pdur-btn');const cycleBtns=Array.from(allBtns).slice(6);cycleBtns.forEach((b,i)=>b.classList.toggle('active',i+1===n));pUpdateUI();}
   function pCollapse(){document.getElementById('p-full').style.display='none';document.getElementById('p-compact').style.display='flex';pUpdateUI();}

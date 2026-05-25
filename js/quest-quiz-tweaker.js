@@ -122,6 +122,44 @@
         <button class="tweaker-btn" data-action="shake-hard">Shake hard</button>
         <button class="tweaker-btn" data-action="shake-dazed">Shake dazed (désorientation)</button>
       </div>
+
+      <div class="tweaker-group">
+        <div class="tweaker-group-label">Cœurs Neo</div>
+        <button class="tweaker-btn" data-action="heart-lose">Perdre 1 cœur</button>
+        <button class="tweaker-btn" data-action="heart-reset">Reset 3 cœurs</button>
+      </div>
+
+      <div class="tweaker-group">
+        <div class="tweaker-group-label">Timer 15s</div>
+        <button class="tweaker-btn" data-action="timer-start">Start (15s)</button>
+        <button class="tweaker-btn" data-action="timer-start-short">Start (5s)</button>
+        <button class="tweaker-btn" data-action="timer-pause">Pause / Resume</button>
+        <button class="tweaker-btn" data-action="timer-stop">Stop</button>
+      </div>
+
+      <div class="tweaker-group">
+        <div class="tweaker-group-label">Phase II</div>
+        <button class="tweaker-btn" data-action="phase2-trigger">⚠ Trigger banner</button>
+        <button class="tweaker-btn" data-action="phase2-reset">Reset flag (one-shot)</button>
+      </div>
+
+      <div class="tweaker-group">
+        <div class="tweaker-group-label">Feedback gagnant</div>
+        <button class="tweaker-btn" data-action="neo-cheer">↑ Neo cheer (+25 XP)</button>
+        <button class="tweaker-btn" data-action="eclat-flash">✦ Flash compteur éclats</button>
+      </div>
+
+      <div class="tweaker-group">
+        <div class="tweaker-group-label">Page-flip</div>
+        <button class="tweaker-btn" data-action="page-flip">↻ Tourner la page</button>
+      </div>
+
+      <div class="tweaker-group">
+        <div class="tweaker-group-label">Annale</div>
+        <button class="tweaker-btn" data-action="annale-correct">📜 Révéler (correct)</button>
+        <button class="tweaker-btn" data-action="annale-wrong">📜 Révéler (faux)</button>
+        <button class="tweaker-btn" data-action="annale-continue">↪ Continuer (close)</button>
+      </div>
     `;
 
     toggle.onclick = () => panel.classList.toggle('open');
@@ -171,17 +209,21 @@
         break;
       case 'boss-full':
         if (typeof bossInit === 'function') {
-          // Réutilise l'état courant
+          // Réutilise l'état courant (préserve aussi les images si chargées via portrait)
+          const sprite = document.getElementById('qa-combat-sprite-boss');
           const name = document.getElementById('qa-combat-boss-name')?.textContent || 'Le Gardien';
-          const icon = document.getElementById('qa-combat-sprite-boss')?.textContent || '👹';
-          bossInit({ name, icon, maxHP: 100, chapId });
+          const icon = sprite?.dataset.icon || sprite?.textContent || '👹';
+          const artImg = sprite?.querySelector('img.combat-sprite-art')?.src;
+          bossInit({ name, icon, imgMechant: artImg || null, maxHP: 100, chapId });
         }
         break;
       case 'boss-15':
         if (typeof bossInit === 'function') {
+          const sprite = document.getElementById('qa-combat-sprite-boss');
           const name = document.getElementById('qa-combat-boss-name')?.textContent || 'Le Gardien';
-          const icon = document.getElementById('qa-combat-sprite-boss')?.textContent || '👹';
-          bossInit({ name, icon, maxHP: 100, chapId });
+          const icon = sprite?.dataset.icon || sprite?.textContent || '👹';
+          const artImg = sprite?.querySelector('img.combat-sprite-art')?.src;
+          bossInit({ name, icon, imgMechant: artImg || null, maxHP: 100, chapId });
           // Baisse à 15 immédiatement
           if (typeof bossDamage === 'function') bossDamage(85, '#fbbf24');
         }
@@ -197,6 +239,63 @@
         break;
       case 'shake-dazed':
         if (typeof vfxScreenShake === 'function') vfxScreenShake('dazed');
+        break;
+      case 'heart-lose':
+        if (typeof window.loseHeart === 'function') window.loseHeart();
+        break;
+      case 'heart-reset':
+        if (typeof window.resetHearts === 'function') window.resetHearts(3);
+        break;
+      case 'timer-start':
+        if (typeof window.startTimer === 'function') window.startTimer(15, () => console.log('[tweaker] timer expired'));
+        break;
+      case 'timer-start-short':
+        if (typeof window.startTimer === 'function') window.startTimer(5, () => console.log('[tweaker] timer expired (5s)'));
+        break;
+      case 'timer-pause':
+        if (typeof window.pauseTimer === 'function' && typeof window.resumeTimer === 'function') {
+          const ring = document.getElementById('qa-quiz-timer');
+          if (ring && ring.classList.contains('is-paused')) window.resumeTimer();
+          else window.pauseTimer();
+        }
+        break;
+      case 'timer-stop':
+        if (typeof window.stopTimer === 'function') window.stopTimer();
+        break;
+      case 'phase2-trigger':
+        if (typeof window.phase2Reset === 'function') window.phase2Reset();
+        if (typeof window.triggerPhase2 === 'function') window.triggerPhase2();
+        break;
+      case 'phase2-reset':
+        if (typeof window.phase2Reset === 'function') window.phase2Reset();
+        break;
+      case 'neo-cheer':
+        if (typeof window.neoCheer === 'function') window.neoCheer({ xp: 25 });
+        break;
+      case 'eclat-flash':
+        if (typeof window.eclatCounterFlash === 'function') window.eclatCounterFlash();
+        break;
+      case 'page-flip':
+        if (typeof window.pageFlip === 'function') window.pageFlip(() => { /* swap no-op */ });
+        break;
+      case 'annale-correct':
+        if (typeof window.revealAnnale === 'function') window.revealAnnale({
+          letter: 'A', isCorrect: true,
+          correctAnswer: 'En 1198, après la guerre des Lanternes',
+          explication: 'Le sceau des Annales fut posé alors que les cendres des Lanternes fumaient encore — date gravée au fronton de la crypte.',
+          dmg: 10, xp: 25, streak: 3, previousStreak: 2
+        });
+        break;
+      case 'annale-wrong':
+        if (typeof window.revealAnnale === 'function') window.revealAnnale({
+          letter: 'C', isCorrect: false,
+          correctAnswer: 'En 1198, après la guerre des Lanternes',
+          explication: 'Le sceau des Annales fut posé alors que les cendres des Lanternes fumaient encore — date gravée au fronton de la crypte.',
+          dmg: 0, xp: 0, streak: 0, previousStreak: 3
+        });
+        break;
+      case 'annale-continue':
+        if (typeof window.continueFromAnnale === 'function') window.continueFromAnnale();
         break;
     }
   }

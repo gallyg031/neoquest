@@ -5,6 +5,7 @@ window.__neoData = {
       "nom": "Histoire-Géographie",
       "logo": "img/NeoGeo-Transp.png",
       "couleur": "#a855f7",
+      "couleur_print": "#4c1d95",
       "niveaux": [
         {
           "id": "6eme",
@@ -69,15 +70,421 @@ window.__neoData = {
                   "id": "heritage-aigles",
                   "nom": "Byzance & Carolingiens",
                   "nom_quete": "L'Héritage des Aigles",
-                  "icone_quete": "🏛️",
+                  "icone_quete": "👑",
+                  "presentation": "Deux empereurs jumeaux se proclamèrent héritiers de Rome — l'un à Byzance, l'autre à Aix-la-Chapelle — et leurs couronnes brillèrent côte à côte pendant des siècles. Sauras-tu démêler leurs deux trônes avant que le schisme ne les avale tout entiers ?",
+                  "boss": {
+                    "nom": "Schismaeon, le Chœur Brisé",
+                    "personnage": "Une immense cloche de bronze fracturée en deux moitiés qui flottent dos à dos, chacune sonnant dans une langue différente, entourée d'un nuage de vitraux éclatés et de mosaïques d'or en suspension.",
+                    "lore": "Né au cœur du Brouillard de l'Oubli le jour où les chrétientés d'Orient et d'Occident cessèrent de se comprendre, Schismaeon est l'écho fantôme du schisme qui a déchiré la foi médiévale en deux. De son battant de fer pend une lourde chaîne ornée d'un anneau gravé d'une croix latine d'un côté et d'une croix orthodoxe de l'autre : la Chaîne de Sainte-Sophie, forgée dans les fondations mêmes de la grande basilique de Constantinople. Tant qu'il sonne, les élèves confondent pape et patriarche, latin et grec, catholiques et orthodoxes — il ne libérera la Chaîne qu'à un Explorateur capable de remettre l'harmonie entre les deux Églises.",
+                    "presentation": "Dans un fracas de bronze et un nuage de vitraux brisés, deux demi-cloches s'élèvent du Brouillard — Schismaeon s'éveille, et son double tintement fait vaciller mille ans d'Histoire.",
+                    "image_mechant": "img/boss/boss-schismaeon-le-choeur-brise-mechant",
+                    "image_apaise": "img/boss/boss-schismaeon-le-choeur-brise-apaise",
+                    "image_mechant_profil": "img/boss/boss-schismaeon-le-choeur-brise-mechant-profil",
+                    "image_apaise_profil": "img/boss/boss-schismaeon-le-choeur-brise-apaise-profil",
+                    "panini_mechant": "img/panini/panini-schismaeon-le-choeur-brise-mechant",
+                    "panini_apaise": "img/panini/panini-schismaeon-le-choeur-brise-apaise",
+                    "dialogues": {
+                      "avant_combat": [
+                        "Petit Neo... entends-tu mon double écho ? L'un en latin, l'autre en grec — sauras-tu accorder mes deux voix ?",
+                        "Ding... dong... ma cloche fissurée fait taire la moitié de l'Histoire à chaque coup. Lequel de mes deux chants choisiras-tu ?",
+                        "Avant moi, la chrétienté ne formait qu'une seule note. Depuis mille ans, je sonne en discord. Prouve-moi que tu sais entendre les deux !"
+                      ],
+                      "touche": [
+                        "Cling ! Une fêlure se referme... comment connais-tu ces voix oubliées ?",
+                        "Mon bronze tremble... tu rappelles à mes vitraux leur couleur d'origine !",
+                        "Aïe ! Tu accordes mes deux moitiés... la Chaîne se desserre !"
+                      ],
+                      "rate": [
+                        "Ha ha ! Tu mélanges Constantinople et Aix-la-Chapelle comme on mélange deux chants discordants !",
+                        "Encore une fausse note, Explorateur... mon double écho s'amplifie dans l'Oubli.",
+                        "Tu confonds le pape et le patriarche... ma cloche sonne plus fort, et toi tu trembles."
+                      ],
+                      "defaite": "Mes deux moitiés... s'accordent enfin... dans un dernier silence harmonieux...",
+                      "phare_idle": [
+                        "Repose-toi, Explorateur. Ma cloche enfin posée, laisse-moi te conter ce que mes deux moitiés savaient sans jamais s'entendre.",
+                        "Souviens-toi : en 395, l'Empire romain se fendit en deux. Rome chuta en 476, mais Byzance survécut, jusqu'à la prise de Constantinople par les Ottomans en 1453.",
+                        "À l'ouest, Charlemagne fut sacré empereur à Rome en l'an 800, et son immense royaume se gouverna depuis Aix-la-Chapelle. Mais ses fils se déchirèrent au traité de Verdun en 843, et l'Empire carolingien se brisa en trois.",
+                        "Le basileus régnait à Constantinople, gardien du Code justinien rédigé en grec ; Charlemagne, lui, réunissait ses comtes en plaids et bâtissait sa chapelle en latin. Deux mondes, deux langues, deux empires héritiers de Rome.",
+                        "Et en 1054, le schisme — ce mot grec qui signifie « séparation » — divisa la chrétienté pour toujours : le pape à Rome, le patriarche à Constantinople, les catholiques en latin, les orthodoxes en grec. Garde ma Chaîne, Explorateur : tant qu'elle résonnera juste, tu n'oublieras plus quelle croix se tient à quel autel."
+                      ]
+                    }
+                  },
                   "loot_quete": {
-                    "nom": "Le Sceau de Charlemagne",
-                    "emoji": "📿"
+                    "nom": "La Chaîne de Sainte-Sophie",
+                    "emoji": "⛓️",
+                    "image": "img/loot/loot-la-chaine-de-sainte-sophie"
                   },
                   "youtube": "",
                   "pdf": "",
-                  "flashcards": [],
-                  "quiz": []
+                  "flashcards": [
+                    {
+                      "question": "En quelle année l'Empire romain est-il partagé en deux ?",
+                      "reponse": "En 395, l'Empire romain est partagé entre l'Empire romain d'Occident et l'Empire romain d'Orient.",
+                      "indice": "C'est à la toute fin du IVe siècle, juste avant la chute de Rome."
+                    },
+                    {
+                      "question": "Quand l'Empire romain d'Occident s'effondre-t-il ?",
+                      "reponse": "L'Empire romain d'Occident s'effondre en 476, suite aux invasions venues du Nord et du Sud.",
+                      "indice": "Date classique qui marque la fin de l'Antiquité."
+                    },
+                    {
+                      "question": "Quel empire survit à l'effondrement de Rome en 476 ?",
+                      "reponse": "L'Empire byzantin survit à l'est et perdure près de mille ans encore.",
+                      "indice": "Son cœur se trouve à Constantinople, capitale d'Orient."
+                    },
+                    {
+                      "question": "Quel empereur byzantin règne de 527 à 565 ?",
+                      "reponse": "L'empereur Justinien, dont le règne marque l'apogée de l'Empire byzantin.",
+                      "indice": "Son nom est associé à un grand code de lois et à Sainte-Sophie."
+                    },
+                    {
+                      "question": "Quel est l'objectif politique de Justinien ?",
+                      "reponse": "Justinien souhaite restaurer l'ancien Empire romain en reconquérant les terres perdues à l'ouest.",
+                      "indice": "Il se considère comme l'héritier des empereurs romains antiques."
+                    },
+                    {
+                      "question": "Que signifie le titre « basileus » et qui le porte ?",
+                      "reponse": "« Basileus » signifie « roi » en grec ; c'est le titre de l'empereur byzantin.",
+                      "indice": "Il remplace l'ancien titre romain « Auguste »."
+                    },
+                    {
+                      "question": "Quelle est la capitale de l'Empire byzantin ?",
+                      "reponse": "La capitale est Constantinople, où réside le basileus.",
+                      "indice": "Une cité fondée par l'empereur Constantin, sur le Bosphore."
+                    },
+                    {
+                      "question": "Quels pouvoirs concentre le basileus ?",
+                      "reponse": "Le basileus est à la fois chef militaire, politique et religieux de l'empire.",
+                      "indice": "Il concentre presque tous les pouvoirs, comme les anciens empereurs romains."
+                    },
+                    {
+                      "question": "Qu'est-ce que le Code justinien ?",
+                      "reponse": "Le Code justinien est un recueil unifiant le droit byzantin, rédigé en grec et inspiré des lois romaines.",
+                      "indice": "Il porte le nom de l'empereur qui l'a commandé."
+                    },
+                    {
+                      "question": "Quel événement marque la fin de l'Empire byzantin ?",
+                      "reponse": "La prise de Constantinople par les Ottomans en 1453 marque la fin de l'Empire byzantin.",
+                      "indice": "Cette date est souvent prise comme la fin du Moyen Âge."
+                    },
+                    {
+                      "question": "De quelle dynastie Charlemagne est-il l'héritier ?",
+                      "reponse": "Charlemagne appartient à la dynastie des Carolingiens, qui dirige le royaume des Francs depuis le VIIIe siècle.",
+                      "indice": "La dynastie porte le nom d'un de ses plus grands rois."
+                    },
+                    {
+                      "question": "Quel roi précède Charlemagne et renforce le royaume des Francs ?",
+                      "reponse": "Pépin le Bref, son père, renforce le royaume avant sa mort en 768.",
+                      "indice": "Son surnom évoque sa petite taille."
+                    },
+                    {
+                      "question": "En quelle année Charlemagne est-il sacré empereur ?",
+                      "reponse": "Charlemagne est sacré empereur à Rome en l'an 800, par le pape.",
+                      "indice": "Une date ronde, juste au tournant des VIIIe et IXe siècles."
+                    },
+                    {
+                      "question": "Quelle est la capitale de l'Empire carolingien ?",
+                      "reponse": "La capitale est Aix-la-Chapelle, où Charlemagne s'entoure d'une cour fastueuse.",
+                      "indice": "Une ville aujourd'hui à la frontière entre l'Allemagne et la Belgique."
+                    },
+                    {
+                      "question": "Comment Charlemagne organise-t-il son empire ?",
+                      "reponse": "Il charge des comtes de faire respecter les lois, lever les impôts et rendre la justice dans chaque province.",
+                      "indice": "Des hommes de confiance représentent l'empereur dans chaque région."
+                    },
+                    {
+                      "question": "Qu'est-ce qu'un plaid à l'époque carolingienne ?",
+                      "reponse": "Un plaid est une grande réunion où l'empereur et ses comtes discutent des affaires importantes de l'empire.",
+                      "indice": "Un mot qui désigne aujourd'hui une couverture, mais signifiait à l'origine « assemblée »."
+                    },
+                    {
+                      "question": "Qui succède à Charlemagne en 814 ?",
+                      "reponse": "Son fils Louis le Pieux lui succède en 814.",
+                      "indice": "Son surnom évoque sa grande dévotion religieuse."
+                    },
+                    {
+                      "question": "Que se passe-t-il en 843 ?",
+                      "reponse": "Le partage de Verdun divise l'Empire carolingien en trois royaumes : Lotharingie, Francie occidentale et Francie orientale.",
+                      "indice": "Une division entre les héritiers qui marque la fin de l'Empire carolingien."
+                    },
+                    {
+                      "question": "Qu'est-ce que le schisme de 1054 ?",
+                      "reponse": "Le schisme de 1054 divise la chrétienté en deux Églises : l'Église catholique (Occident) et l'Église orthodoxe (Orient).",
+                      "indice": "Le mot « schisme » signifie « séparation » en grec."
+                    },
+                    {
+                      "question": "Qui dirige chacune des deux Églises après le schisme ?",
+                      "reponse": "L'Église catholique est dirigée par le pape à Rome ; l'Église orthodoxe par le patriarche de Constantinople.",
+                      "indice": "Deux capitales religieuses, l'une à l'ouest, l'autre à l'est."
+                    }
+                  ],
+                  "quiz": [
+                    {
+                      "question": "En quelle année l'Empire romain est-il partagé en deux ?",
+                      "difficulte": "Facile",
+                      "choix": [
+                        "En 395 après J.-C.",
+                        "En 476 après J.-C.",
+                        "En 800 après J.-C.",
+                        "En 1054 après J.-C."
+                      ],
+                      "bonne_reponse": "En 395 après J.-C.",
+                      "indice": "Date proche de la chute de Rome (476).",
+                      "explication": "En 395, à la mort de l'empereur Théodose, l'Empire romain est partagé entre Orient et Occident."
+                    },
+                    {
+                      "question": "Quelle est la capitale de l'Empire byzantin ?",
+                      "difficulte": "Facile",
+                      "choix": [
+                        "Constantinople, en Orient",
+                        "Rome, sur le Tibre",
+                        "Aix-la-Chapelle, à l'ouest",
+                        "Athènes, en mer Égée"
+                      ],
+                      "bonne_reponse": "Constantinople, en Orient",
+                      "indice": "Une cité fondée par l'empereur Constantin.",
+                      "explication": "Constantinople est la capitale byzantine depuis 330 jusqu'à sa prise par les Ottomans en 1453."
+                    },
+                    {
+                      "question": "Comment s'appelle l'empereur byzantin ?",
+                      "difficulte": "Facile",
+                      "choix": [
+                        "Le basileus",
+                        "Le pontife",
+                        "Le sénateur",
+                        "Le tribun"
+                      ],
+                      "bonne_reponse": "Le basileus",
+                      "indice": "Un titre grec qui signifie « roi ».",
+                      "explication": "Le basileus est l'empereur byzantin ; le mot vient du grec et signifie « roi »."
+                    },
+                    {
+                      "question": "En quelle année Charlemagne est-il sacré empereur ?",
+                      "difficulte": "Facile",
+                      "choix": [
+                        "En l'an 800",
+                        "En l'an 768",
+                        "En l'an 843",
+                        "En l'an 1054"
+                      ],
+                      "bonne_reponse": "En l'an 800",
+                      "indice": "Une date qui tombe pile au tournant du IXe siècle.",
+                      "explication": "Charlemagne est sacré empereur par le pape Léon III à Rome, le 25 décembre 800."
+                    },
+                    {
+                      "question": "Quelle est la capitale de l'Empire carolingien ?",
+                      "difficulte": "Facile",
+                      "choix": [
+                        "Aix-la-Chapelle, au nord",
+                        "Constantinople, à l'est",
+                        "Rome, au centre de l'Italie",
+                        "Paris, sur la Seine"
+                      ],
+                      "bonne_reponse": "Aix-la-Chapelle, au nord",
+                      "indice": "Ville aujourd'hui à la frontière germano-belge.",
+                      "explication": "Charlemagne installe sa cour à Aix-la-Chapelle, qu'il transforme en capitale prestigieuse."
+                    },
+                    {
+                      "question": "Que signifie le mot « schisme » en grec ?",
+                      "difficulte": "Facile",
+                      "choix": [
+                        "Séparation",
+                        "Alliance",
+                        "Couronnement",
+                        "Conquête"
+                      ],
+                      "bonne_reponse": "Séparation",
+                      "indice": "Le mot vient du grec ancien.",
+                      "explication": "Le mot « schisme » signifie « séparation » en grec ; il désigne la division de la chrétienté en 1054."
+                    },
+                    {
+                      "question": "Qui Charlemagne charge-t-il d'appliquer ses lois dans les provinces ?",
+                      "difficulte": "Medium",
+                      "choix": [
+                        "Les comtes, ses hommes de confiance",
+                        "Les évêques qui dirigent les régions",
+                        "Les ducs qui commandent les armées",
+                        "Les patriarches venus de Constantinople"
+                      ],
+                      "bonne_reponse": "Les comtes, ses hommes de confiance",
+                      "indice": "Ils représentent l'empereur dans chaque province.",
+                      "explication": "Charlemagne nomme des comtes pour appliquer les lois, lever les impôts et rendre la justice dans ses provinces."
+                    },
+                    {
+                      "question": "Que sont les plaids dans l'Empire carolingien ?",
+                      "difficulte": "Medium",
+                      "choix": [
+                        "Des grandes réunions politiques de l'empire",
+                        "Des tribunaux pour juger les criminels",
+                        "Des cérémonies religieuses du sacre",
+                        "Des manuels rassemblant les lois écrites"
+                      ],
+                      "bonne_reponse": "Des grandes réunions politiques de l'empire",
+                      "indice": "L'empereur y discute avec ses comtes.",
+                      "explication": "Les plaids sont des assemblées où Charlemagne réunit ses comtes pour discuter les affaires de l'empire."
+                    },
+                    {
+                      "question": "Qu'est-ce que le Code justinien ?",
+                      "difficulte": "Medium",
+                      "choix": [
+                        "Un recueil de lois byzantines en grec",
+                        "Un livre de prières pour les moines",
+                        "Un traité d'alliance entre deux empires",
+                        "Un manuel de stratégie militaire navale"
+                      ],
+                      "bonne_reponse": "Un recueil de lois byzantines en grec",
+                      "indice": "Il porte le nom de l'empereur qui l'a commandé.",
+                      "explication": "Justinien fait rédiger le Code justinien pour unifier le droit byzantin ; inspiré des lois romaines, il est écrit en grec."
+                    },
+                    {
+                      "question": "Pourquoi les empereurs se font-ils sacrer par l'Église ?",
+                      "difficulte": "Medium",
+                      "choix": [
+                        "Pour montrer qu'ils reçoivent leur pouvoir de Dieu",
+                        "Pour obtenir l'autorisation de lever des impôts",
+                        "Pour conclure un traité de paix avec les voisins",
+                        "Pour pouvoir conduire eux-mêmes des batailles"
+                      ],
+                      "bonne_reponse": "Pour montrer qu'ils reçoivent leur pouvoir de Dieu",
+                      "indice": "Le sacre est une cérémonie religieuse symbolique.",
+                      "explication": "Le sacre est une cérémonie religieuse qui légitime le pouvoir politique en montrant qu'il vient directement de Dieu."
+                    },
+                    {
+                      "question": "Quels peuples Charlemagne envoie-t-il évangéliser ?",
+                      "difficulte": "Medium",
+                      "choix": [
+                        "Les Danois, les Polonais et les Suédois",
+                        "Les Bulgares, les Russes et les Serbes",
+                        "Les Arabes, les Perses et les Turcs",
+                        "Les Goths, les Vandales et les Huns"
+                      ],
+                      "bonne_reponse": "Les Danois, les Polonais et les Suédois",
+                      "indice": "Des peuples situés au nord et à l'est de son empire.",
+                      "explication": "Charlemagne envoie des missionnaires vers le Nord et l'Est de l'Europe ; les Byzantins, eux, évangélisent les Bulgares et les Russes."
+                    },
+                    {
+                      "question": "Quelle basilique Justinien fait-il construire à Constantinople ?",
+                      "difficulte": "Medium",
+                      "choix": [
+                        "La basilique Sainte-Sophie",
+                        "La basilique Saint-Pierre",
+                        "La basilique Sainte-Marie",
+                        "La basilique Saint-Marc"
+                      ],
+                      "bonne_reponse": "La basilique Sainte-Sophie",
+                      "indice": "Son nom signifie « sainte sagesse » en grec.",
+                      "explication": "Justinien fait bâtir Sainte-Sophie, l'une des plus vastes basiliques du monde chrétien à l'époque."
+                    },
+                    {
+                      "question": "Quelle langue Charlemagne utilise-t-il pour son administration ?",
+                      "difficulte": "Medium",
+                      "choix": [
+                        "Le latin, héritage des Romains",
+                        "Le grec, langue des byzantins",
+                        "Le franc, langue de ses ancêtres",
+                        "L'hébreu, langue des écritures"
+                      ],
+                      "bonne_reponse": "Le latin, héritage des Romains",
+                      "indice": "Même langue que celle de la cour antique romaine.",
+                      "explication": "Charlemagne reprend le latin comme langue d'administration, à l'image des anciens empereurs romains."
+                    },
+                    {
+                      "question": "Que partagent les fils de Louis le Pieux en 843 ?",
+                      "difficulte": "Medium",
+                      "choix": [
+                        "L'Empire carolingien en trois royaumes",
+                        "Le trésor familial entre les héritiers",
+                        "Les flottes navales entre les provinces",
+                        "Les terres d'Église entre les comtes"
+                      ],
+                      "bonne_reponse": "L'Empire carolingien en trois royaumes",
+                      "indice": "Le partage porte le nom d'une ville sur la Meuse.",
+                      "explication": "Le partage de Verdun en 843 divise l'Empire carolingien en Lotharingie, Francie occidentale et Francie orientale."
+                    },
+                    {
+                      "question": "Pourquoi Justinien et Charlemagne se disent-ils héritiers de Rome ?",
+                      "difficulte": "Hard",
+                      "choix": [
+                        "Tous deux cherchent à restaurer l'idéal impérial romain",
+                        "Tous deux parlent uniquement latin dans leur palais",
+                        "Tous deux gouvernent depuis l'ancienne ville de Rome",
+                        "Tous deux refusent toute religion autre que païenne"
+                      ],
+                      "bonne_reponse": "Tous deux cherchent à restaurer l'idéal impérial romain",
+                      "indice": "Pense à leurs ambitions politiques communes.",
+                      "explication": "Justinien et Charlemagne s'inspirent du modèle romain : reconquêtes, droit écrit, administration centralisée, cour fastueuse."
+                    },
+                    {
+                      "question": "Quelle différence essentielle distingue catholiques et orthodoxes après 1054 ?",
+                      "difficulte": "Hard",
+                      "choix": [
+                        "Ils partagent les mêmes croyances mais des pratiques différentes",
+                        "Ils croient en des dieux totalement différents l'un de l'autre",
+                        "Les catholiques ne reconnaissent plus la figure du Christ",
+                        "Les orthodoxes refusent la lecture des textes religieux"
+                      ],
+                      "bonne_reponse": "Ils partagent les mêmes croyances mais des pratiques différentes",
+                      "indice": "La rupture porte sur la pratique du culte, pas la foi.",
+                      "explication": "Après le schisme, ils partagent les mêmes croyances mais diffèrent sur les pratiques : langue, mariage des prêtres, autorité religieuse."
+                    },
+                    {
+                      "question": "Pourquoi l'Empire byzantin survit-il plus longtemps que l'Empire carolingien ?",
+                      "difficulte": "Hard",
+                      "choix": [
+                        "Il bénéficie d'une administration centralisée plus stable",
+                        "Il pratique une religion totalement différente des autres",
+                        "Il évite tout conflit avec les peuples des frontières",
+                        "Il bénéficie de la protection militaire des Carolingiens"
+                      ],
+                      "bonne_reponse": "Il bénéficie d'une administration centralisée plus stable",
+                      "indice": "Compare la cohésion politique des deux empires.",
+                      "explication": "L'Empire byzantin tient près de mille ans grâce à son administration centralisée ; le Carolingien, partagé dès 843, dure beaucoup moins."
+                    },
+                    {
+                      "question": "En quoi le sacre renforce-t-il le pouvoir impérial ?",
+                      "difficulte": "Hard",
+                      "choix": [
+                        "Il fait croire que l'empereur a été choisi par Dieu lui-même",
+                        "Il oblige l'empereur à céder ses biens aux pauvres",
+                        "Il transforme l'empereur en chef religieux du pape",
+                        "Il permet à l'empereur d'épouser une princesse étrangère"
+                      ],
+                      "bonne_reponse": "Il fait croire que l'empereur a été choisi par Dieu lui-même",
+                      "indice": "Symbole religieux combiné à l'autorité politique.",
+                      "explication": "Le sacre place le pouvoir de l'empereur sous une autorité divine ; cela rend très difficile la contestation de son pouvoir."
+                    },
+                    {
+                      "question": "Quel point commun rapproche le Code justinien et les comtes carolingiens ?",
+                      "difficulte": "Hard",
+                      "choix": [
+                        "Tous deux s'inspirent du modèle administratif romain antique",
+                        "Tous deux sont rédigés exclusivement en langue grecque",
+                        "Tous deux abolissent l'autorité religieuse du clergé",
+                        "Tous deux interdisent l'esclavage dans tout l'empire"
+                      ],
+                      "bonne_reponse": "Tous deux s'inspirent du modèle administratif romain antique",
+                      "indice": "Pense à ce que les deux empereurs ont en commun.",
+                      "explication": "Justinien rédige son Code en s'inspirant du droit romain ; Charlemagne organise ses comtes et ses plaids sur le modèle institutionnel romain."
+                    },
+                    {
+                      "question": "Pourquoi le schisme de 1054 a-t-il marqué durablement l'Europe ?",
+                      "difficulte": "Hard",
+                      "choix": [
+                        "Il a séparé deux mondes culturels qui ne se rejoindront plus",
+                        "Il a entraîné la disparition complète du christianisme",
+                        "Il a permis aux musulmans de conquérir toute l'Europe",
+                        "Il a forcé tous les chrétiens à se convertir au judaïsme"
+                      ],
+                      "bonne_reponse": "Il a séparé deux mondes culturels qui ne se rejoindront plus",
+                      "indice": "Une division qui persiste encore aujourd'hui.",
+                      "explication": "Le schisme acte la séparation Occident catholique / Orient orthodoxe : des cultures, des liturgies et des autorités qui structurent encore l'Europe contemporaine."
+                    }
+                  ],
+                  "diff_custom": {
+                    "facile": "Apprenti Hérault",
+                    "medium": "Chroniqueur des Empires",
+                    "hard": "Maître des Deux Trônes"
+                  }
                 },
                 {
                   "id": "souffle-desert",
@@ -955,13 +1362,14 @@ window.__neoData = {
               "icone_region": "🌍",
               "loot_region": {
                 "nom": "La Couronne de Soleil",
-                "emoji": "👑"
+                "emoji": "👑",
+                "image": "img/loot/loot-la-couronne-de-soleil"
               },
               "chapitres": [
                 {
                   "id": "duel-titans",
-                  "nom": "Les Deux Empires et l'Horizon",
-                  "nom_quete": "Les Deux Empires et l'Horizon",
+                  "nom": "Charles Quint & Soliman",
+                  "nom_quete": "Duel des Titans",
                   "icone_quete": "🧭",
                   "presentation": "Deux titans se disputent la Méditerranée pendant que des voiles inconnues s'élancent vers l'Ouest — et dans le Brouillard, un cartographe spectral a mêlé toutes les routes. Explorateur, sauras-tu redessiner le monde tel qu'il fut au siècle des audaces ?",
                   "boss": {
@@ -969,10 +1377,12 @@ window.__neoData = {
                     "personnage": "Une silhouette spectrale drapée dans une caravelle-manteau aux voiles déchirées, son visage est une mappemonde fissurée où les continents glissent et se confondent, et ses mains tiennent une boussole dont l'aiguille tourne follement sans jamais se fixer.",
                     "lore": "Né du Brouillard de l'Oubli au moment précis où un élève a confondu Christophe Colomb avec Vasco de Gama, Vespuccien est l'âme errante de tous les explorateurs perdus en mer dont les routes se sont entremêlées. Sa boussole, autrefois fidèle alliée des navigateurs portugais et espagnols, est devenue folle car les directions du Nouveau Monde se sont effacées de la mémoire des Explorateurs. Il porte autour du cou la Boussole des Découvertes, relique sacrée qu'il libérera seulement face à un Explorateur capable de retrouver les vraies routes du XVIe siècle.",
                     "presentation": "Dans un tourbillon de brume salée et de parchemins déchirés, une caravelle fantôme s'échoue aux pieds de Neo : Vespuccien le Cartographe Égaré surgit, sa boussole hurlant aux quatre vents oubliés.",
-                    "image_mechant": "img/boss/vespuccien-le-cartographe-egare-mechant",
-                    "image_apaise": "img/boss/vespuccien-le-cartographe-egare-apaise",
-                    "panini_mechant": "img/panini/vespuccien-le-cartographe-egare-mechant",
-                    "panini_apaise": "img/panini/vespuccien-le-cartographe-egare-apaise",
+                    "image_mechant": "img/boss/boss-vespuccien-le-cartographe-egare-mechant",
+                    "image_apaise": "img/boss/boss-vespuccien-le-cartographe-egare-apaise",
+                    "image_mechant_profil": "img/boss/boss-vespuccien-le-cartographe-egare-mechant-profil",
+                    "image_apaise_profil": "img/boss/boss-vespuccien-le-cartographe-egare-apaise-profil",
+                    "panini_mechant": "img/panini/panini-vespuccien-le-cartographe-egare-mechant",
+                    "panini_apaise": "img/panini/panini-vespuccien-le-cartographe-egare-apaise",
                     "dialogues": {
                       "avant_combat": [
                         "Petit Neo... sais-tu seulement où tu poses les pattes ? Mes mers sont sans nom, mes terres sans rivage !",
@@ -1000,9 +1410,9 @@ window.__neoData = {
                     }
                   },
                   "loot_quete": {
-                    "nom": "La Boussole des Découvertes",
+                    "nom": "La Boussole d'Explorateur",
                     "emoji": "🧭",
-                    "image": "img/loot/la-boussole-des-decouvertes"
+                    "image": "img/loot/loot-la-boussole-d-explorateur"
                   },
                   "youtube": "",
                   "pdf": "",
@@ -1374,6 +1784,12 @@ window.__neoData = {
                     "facile": "Apprenti Mousse",
                     "medium": "Navigateur Aguerri",
                     "hard": "Maître Conquistador"
+                  },
+                  "cadeau_plan": {
+                    "slot": "instrument de navigation",
+                    "nom_propose": "La Boussole d'Explorateur",
+                    "emoji_propose": "🧭",
+                    "lien_thematique": "Symbolise les routes nouvelles du XVIe siècle — celles que se disputent Charles Quint et Soliman en Méditerranée, et celles que tracent les caravelles vers l'Ouest pendant que les empires s'affrontent."
                   }
                 },
                 {
@@ -1388,7 +1804,13 @@ window.__neoData = {
                   "youtube": "",
                   "pdf": "",
                   "flashcards": [],
-                  "quiz": []
+                  "quiz": [],
+                  "cadeau_plan": {
+                    "slot": "codex",
+                    "nom_propose": "Le Livre Imprimé",
+                    "emoji_propose": "📖",
+                    "lien_thematique": "Évoque la presse de Gutenberg, l'humanisme d'Érasme et la Réforme de Luther — un seul livre tiré à mille exemplaires suffit désormais à fissurer mille ans d'autorité religieuse et intellectuelle."
+                  }
                 },
                 {
                   "id": "sacre-neo",
@@ -1402,9 +1824,42 @@ window.__neoData = {
                   "youtube": "",
                   "pdf": "",
                   "flashcards": [],
-                  "quiz": []
+                  "quiz": [],
+                  "cadeau_plan": {
+                    "slot": "insigne de cour",
+                    "nom_propose": "Le Médaillon de la Cour",
+                    "emoji_propose": "🎖️",
+                    "lien_thematique": "Symbolise Versailles, l'étiquette et la noblesse domestiquée par Louis XIV — porter ce médaillon, c'est exister sous le regard du Roi-Soleil et participer à la mise en scène quotidienne du pouvoir absolu."
+                  }
                 }
-              ]
+              ],
+              "lore_region": "Aux XVIe et XVIIe siècles, des voiles s'élancèrent vers l'inconnu et déchirèrent les cartes du monde connu. Boussole en main, livre sous le bras et médaillon de cour à la veste, l'Europe se rêva centre d'un univers élargi — entre soif d'or, soif de savoir et soif de pouvoir.",
+              "starter_pack": {
+                "theme_global": "Costume de l'Européen du Grand Siècle — boussole pour fendre les mers, livre imprimé pour fendre les esprits, médaillon de cour pour figurer dans la lumière du roi : Neo se forge la triple panoplie de l'aventurier, du penseur et du courtisan.",
+                "pieces": [
+                  {
+                    "quete_id": "duel-titans",
+                    "slot": "instrument de navigation",
+                    "nom_propose": "La Boussole d'Explorateur",
+                    "emoji_propose": "🧭",
+                    "lien_thematique": "Symbolise les routes nouvelles du XVIe siècle — celles que se disputent Charles Quint et Soliman en Méditerranée, et celles que tracent les caravelles vers l'Ouest pendant que les empires s'affrontent."
+                  },
+                  {
+                    "quete_id": "esprit-lumieres",
+                    "slot": "codex",
+                    "nom_propose": "Le Livre Imprimé",
+                    "emoji_propose": "📖",
+                    "lien_thematique": "Évoque la presse de Gutenberg, l'humanisme d'Érasme et la Réforme de Luther — un seul livre tiré à mille exemplaires suffit désormais à fissurer mille ans d'autorité religieuse et intellectuelle."
+                  },
+                  {
+                    "quete_id": "sacre-neo",
+                    "slot": "insigne de cour",
+                    "nom_propose": "Le Médaillon de la Cour",
+                    "emoji_propose": "🎖️",
+                    "lien_thematique": "Symbolise Versailles, l'étiquette et la noblesse domestiquée par Louis XIV — porter ce médaillon, c'est exister sous le regard du Roi-Soleil et participer à la mise en scène quotidienne du pouvoir absolu."
+                  }
+                ]
+              }
             }
           ],
           "soustitre": "Le Moyen Âge & les pouvoirs",
@@ -1426,7 +1881,20 @@ window.__neoData = {
                 "nom": "La Déclaration des Droits",
                 "emoji": "📋"
               },
-              "chapitres": []
+              "chapitres": [
+                {
+                  "id": "bourgeoisies-marchandes-negoces-internationaux-traites-negri",
+                  "nom": "Bourgeoisies marchandes, négoces internationaux, traites négrières et esclavage au XVIIIe siècle"
+                },
+                {
+                  "id": "l-europe-des-lumieres-circulation-des-idees-despotisme-eclai",
+                  "nom": "L'Europe des Lumières : circulation des idées, despotisme éclairé et contestation de l'absolutisme"
+                },
+                {
+                  "id": "la-revolution-francaise-et-l-empire-nouvel-ordre-politique-e",
+                  "nom": "La Révolution française et l'Empire : nouvel ordre politique et société révolutionnée en France et en Europe"
+                }
+              ]
             },
             {
               "id": "age-fer",
@@ -1437,7 +1905,16 @@ window.__neoData = {
                 "nom": "La Clé de la Locomotive",
                 "emoji": "🚂"
               },
-              "chapitres": []
+              "chapitres": [
+                {
+                  "id": "l-europe-de-la-revolution-industrielle",
+                  "nom": "L'Europe de la révolution industrielle"
+                },
+                {
+                  "id": "conquetes-et-societes-coloniales",
+                  "nom": "Conquêtes et sociétés coloniales"
+                }
+              ]
             },
             {
               "id": "marche-peuple",
@@ -1448,7 +1925,20 @@ window.__neoData = {
                 "nom": "Le Drapeau de la République",
                 "emoji": "🇫🇷"
               },
-              "chapitres": []
+              "chapitres": [
+                {
+                  "id": "une-difficile-conquete-voter-de-1815-a-1870",
+                  "nom": "Une difficile conquête : voter de 1815 à 1870"
+                },
+                {
+                  "id": "la-troisieme-republique",
+                  "nom": "La Troisième République"
+                },
+                {
+                  "id": "conditions-feminines-dans-une-societe-en-mutation",
+                  "nom": "Conditions féminines dans une société en mutation"
+                }
+              ]
             }
           ],
           "nom_province": "Les Révolutions",
@@ -1511,6 +2001,7 @@ window.__neoData = {
       "nom": "SVT",
       "logo": "",
       "couleur": "#4ade80",
+      "couleur_print": "#15803d",
       "niveaux": [],
       "emoji": "🌿",
       "nom_royaume": "Bioverde",
@@ -1521,6 +2012,7 @@ window.__neoData = {
       "nom": "Physique-Chimie",
       "logo": "",
       "couleur": "#f97316",
+      "couleur_print": "#9a3412",
       "niveaux": [],
       "emoji": "⚗️",
       "nom_royaume": "Quantix",
@@ -1531,6 +2023,7 @@ window.__neoData = {
       "nom": "Maths",
       "logo": "",
       "couleur": "#facc15",
+      "couleur_print": "#854d0e",
       "niveaux": [],
       "emoji": "📐",
       "nom_royaume": "Algebron",
@@ -1541,6 +2034,7 @@ window.__neoData = {
       "nom": "Français",
       "logo": "",
       "couleur": "#f472b6",
+      "couleur_print": "#9d174d",
       "niveaux": [],
       "emoji": "📖",
       "nom_royaume": "Lexoria",

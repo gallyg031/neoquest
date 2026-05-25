@@ -1,0 +1,98 @@
+/* ─────────────── Cœurs de Neo (3 vies, HUD Neo) ─────────────── */
+/* Montés par mountHearts() dans #qa-combat-hearts (sous le compteur d'éclats). */
+
+.combat-hearts {
+  display: flex;
+  gap: 4px;
+  margin-top: 0.35rem;
+  padding-top: 0.3rem;
+  border-top: 1px solid rgba(255,255,255,0.12);
+  pointer-events: none;
+}
+
+.combat-heart {
+  position: relative;
+  width: 22px; height: 20px;
+  display: block;
+  transition: filter 0.2s ease;
+}
+.combat-heart svg {
+  width: 100%; height: 100%;
+  display: block;
+  overflow: visible;
+}
+.combat-heart svg path {
+  fill: #ff5a78;
+  stroke: rgba(60,10,20,0.65);
+  stroke-width: 1.4;
+  stroke-linejoin: round;
+  filter:
+    drop-shadow(0 1px 0 rgba(0,0,0,0.5))
+    drop-shadow(0 0 6px rgba(255,90,120,0.35));
+}
+.combat-heart::after {
+  content: '';
+  position: absolute;
+  left: 5px; top: 3px;
+  width: 4px; height: 3px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.7);
+  filter: blur(0.4px);
+  pointer-events: none;
+}
+
+/* ─── Cœur perdu (vide) ─── */
+.combat-heart.is-lost svg path {
+  fill: rgba(255,255,255,0.05);
+  stroke: rgba(255,255,255,0.22);
+  filter: none;
+}
+.combat-heart.is-lost::after { opacity: 0; }
+
+/* ─── Anim perte (pop + crack) ─── */
+.combat-heart.is-losing {
+  animation: combatHeartLose 0.55s cubic-bezier(0.3, 0.7, 0.3, 1) forwards;
+}
+@keyframes combatHeartLose {
+  0%   { transform: scale(1)    rotate(0); }
+  25%  { transform: scale(1.45) rotate(-14deg); filter: brightness(1.8) drop-shadow(0 0 14px #ff5a78); }
+  50%  { transform: scale(1.1)  rotate(6deg); }
+  75%  { transform: scale(0.9)  rotate(-4deg); filter: brightness(0.4); }
+  100% { transform: scale(1)    rotate(0);     filter: brightness(0.4); }
+}
+
+/* ─── Mini-cœurs qui s'envolent à la perte ─── */
+.combat-heart-shard {
+  position: absolute;
+  top: 0; left: 50%;
+  pointer-events: none;
+  z-index: 8;
+  font-size: 18px;
+  color: #ff5a78;
+  filter: drop-shadow(0 0 6px rgba(255,90,120,0.7));
+  animation: combatHeartShardFly 0.85s cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
+  transform: translate(-50%, 0);
+}
+@keyframes combatHeartShardFly {
+  0%   { transform: translate(-50%, 0)   scale(0.6) rotate(0);                opacity: 0; }
+  20%  { transform: translate(-50%, -8px) scale(1.2) rotate(-10deg);          opacity: 1; }
+  100% { transform: translate(calc(-50% + var(--shard-dx, 16px)), -42px) scale(0.8) rotate(var(--shard-rot, 90deg)); opacity: 0; }
+}
+
+/* ─── K.O. shake (dernier cœur perdu) ─── */
+.combat-hud-side-left.is-ko .combat-hearts {
+  animation: combatHudKoShake 0.5s ease-in-out;
+}
+@keyframes combatHudKoShake {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-4px); }
+  40%      { transform: translateX(4px); }
+  60%      { transform: translateX(-3px); }
+  80%      { transform: translateX(2px); }
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 700px) {
+  .combat-heart { width: 18px; height: 16px; }
+  .combat-heart-shard { font-size: 15px; }
+}

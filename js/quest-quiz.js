@@ -42,24 +42,49 @@ function pickAndStart() {
   const shell = document.getElementById('qa-combat-shell');
   if (shell) shell.setAttribute('data-combat-theme', theme);
 
+  // Résolution boss : profil par chap → fallback profil chap → fallback image thématique (boss-intro-lines.js)
+  const themeLines = (window.__BOSS_INTRO_LINES && window.__BOSS_INTRO_LINES[theme]) || {};
+  const imgMechant = ((typeof nqGetBossImg === 'function') ? nqGetBossImg(ch, 'mechant', true) : null)
+                  || ((typeof nqGetBossImg === 'function') ? nqGetBossImg(ch, 'mechant', false) : null)
+                  || ch.image_boss
+                  || themeLines.bossImage
+                  || null;
+  const imgApaise  = ((typeof nqGetBossImg === 'function') ? nqGetBossImg(ch, 'apaise', true) : null)
+                  || ((typeof nqGetBossImg === 'function') ? nqGetBossImg(ch, 'apaise', false) : null)
+                  || null;
+  // Nom boss : chap.nom_boss > chap.boss.nom > thème > fallback. (Ne PAS prendre nom_quete = nom de la leçon.)
+  const bossDisplayName = ch.nom_boss
+                       || (ch.boss && ch.boss.nom)
+                       || themeLines.bossTitle
+                       || 'Le Gardien';
   bossInit({
-    name: quizState.isRevisionMode ? `${ch.nom_quete || 'Le Gardien'} — revanche` : (ch.nom_quete || 'Le Gardien'),
+    name: quizState.isRevisionMode ? `${bossDisplayName} — revanche` : bossDisplayName,
     icon: ch.icone_quete || '👹',
+    imgMechant,
+    imgApaise,
     maxHP,
     chapId: typeof chapitreId !== 'undefined' ? chapitreId : null
   });
+
+  // Reset Phase 2 features : cœurs, Phase II, timer (skippé en mode révision : pas de défaite)
+  if (typeof window.resetHearts === 'function') window.resetHearts(quizState.isRevisionMode ? 99 : 3);
+  if (typeof window.mountHearts  === 'function') window.mountHearts();
+  if (typeof window.phase2Reset  === 'function') window.phase2Reset();
+  if (typeof window.stopTimer    === 'function') window.stopTimer();
+  quizState.koDefeat = false;
+
   document.getElementById('qa-quiz-streak-badge').classList.add('hidden');
   document.getElementById('qa-quiz-final').classList.add('hidden');
   document.getElementById('qa-quiz-header-prog').style.display = '';
   document.getElementById('qa-quiz-content').classList.remove('hidden');
 
-  // Intro narrative (3 actes skippables) — skippée en mode révision (déjà vue au 1er run)
+  // Intro narrative (Flux A 1ʳᵉ fois, Flux C en replay) — skippée en mode révision
   const shouldPlayIntro = !quizState.isRevisionMode && typeof runIntroSequence === 'function';
   if (shouldPlayIntro) {
     runIntroSequence({
       theme,
-      bossName: ch.nom_quete || 'Le Gardien',
-      bossIcon: ch.icone_quete || '👹',
+      bossName: ch.nom_boss,       // si absent → fallback boss thématique (boss-intro-lines.js)
+      bossIcon: ch.image_boss,     // si absent → fallback image thématique (boss-intro-lines.js)
       chap: ch
     }, renderQuiz);
   } else {
@@ -70,17 +95,27 @@ function pickAndStart() {
 function renderQuiz() {
   if (quizState.quizIndex >= quizState.quizData.length) { showQuizFinal(); return; }
   const q = quizState.quizData[quizState.quizIndex]; quizState.quizAnswered = false;
+  // Reset face vers question (au cas où on revient d'une annale)
+  const grimPage = document.getElementById('qa-quiz-grim-page');
+  if (grimPage) grimPage.dataset.face = 'question';
   const content = document.getElementById('qa-quiz-content');
   content.classList.remove('quiz-slide-in', 'answered'); void content.offsetWidth; content.classList.add('quiz-slide-in');
   const progBar = document.getElementById('qa-quiz-prog-bar');
   progBar.style.width = `${Math.round((quizState.quizIndex/quizState.quizData.length)*100)}%`;
   const diff = q.difficulte || 'facile';
   progBar.className = `qa-prog-fill prog-${diff}`;
-  // Compteur "Question X / N"
-  const curEl = document.getElementById('qa-quiz-prog-current');
-  const totEl = document.getElementById('qa-quiz-prog-total');
+  // Compteur "Question X / N · difficulté"
+  const curEl  = document.getElementById('qa-quiz-prog-current');
+  const totEl  = document.getElementById('qa-quiz-prog-total');
+  const diffEl = document.getElementById('qa-quiz-prog-diff');
   if (curEl) curEl.textContent = quizState.quizIndex + 1;
   if (totEl) totEl.textContent = quizState.quizData.length;
+  if (diffEl) {
+    const diffLabel = diff === 'hard' ? 'difficile' : (diff === 'medium' ? 'moyen' : 'facile');
+    const diffColor = diff === 'hard' ? '#f472b6' : (diff === 'medium' ? '#c084fc' : '#22d3ee');
+    diffEl.textContent = diffLabel;
+    diffEl.style.color = diffColor;
+  }
   quizState.hintUsed = false;
   const hintBox = document.getElementById('qa-hint-box'); hintBox.classList.add('hidden');
   const hintBtn = document.getElementById('qa-hint-btn'); hintBtn.disabled = false; hintBtn.style.opacity = '1'; hintBtn.textContent = '💡 Indice';
@@ -93,7 +128,35 @@ function renderQuiz() {
   document.getElementById('qa-quiz-feedback').classList.add('hidden');
   document.getElementById('qa-quiz-next-btn').classList.add('qz-pending');
   const choixEl = document.getElementById('qa-quiz-choix'); choixEl.innerHTML = '';
-  q.choix.forEach((c,i) => { const btn = document.createElement('button'); btn.className = 'quiz-opt'; btn.textContent = c; btn.onclick = () => answer(i, q.bonne_reponse, q.difficulte||'facile'); choixEl.appendChild(btn); });
+  q.choix.forEach((c,i) => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt';
+    btn.type = 'button';
+    btn.dataset.letter = String.fromCharCode(65 + i);
+    const letter = document.createElement('span');
+    letter.className = 'quiz-opt-letter';
+    letter.textContent = btn.dataset.letter;
+    const text = document.createElement('span');
+    text.className = 'quiz-opt-text';
+    text.textContent = c;
+    btn.appendChild(letter);
+    btn.appendChild(text);
+    btn.onclick = () => answer(i, q.bonne_reponse, q.difficulte || 'facile');
+    choixEl.appendChild(btn);
+  });
+
+  // Timer 15s par question (sauf en révision ou Finish Him où on enlève la pression)
+  if (!quizState.isRevisionMode && !quizState.isFinishHim && typeof window.startTimer === 'function') {
+    window.startTimer(15, quizTimeout);
+  }
+}
+
+// Timeout : timer atteint 0 sans réponse → traité comme une mauvaise réponse
+function quizTimeout() {
+  if (quizState.quizAnswered) return;
+  const q = quizState.quizData[quizState.quizIndex];
+  if (!q) return;
+  answer(-1, q.bonne_reponse, q.difficulte || 'facile');
 }
 
 function showHint() {
@@ -105,6 +168,7 @@ function showHint() {
 
 function answer(selected, correct, diff) {
   if (quizState.quizAnswered) return; quizState.quizAnswered = true;
+  if (typeof window.stopTimer === 'function') window.stopTimer();
   const q = quizState.quizData[quizState.quizIndex];
   if (typeof window.pomoActivity === 'function') window.pomoActivity('quiz');
 
@@ -131,31 +195,47 @@ function answer(selected, correct, diff) {
 
   const isCorrect = selectedIdx === correctIdx;
   recordResult(q.question, isCorrect);
+  // Successive Relearning (Rawson 2011) — unifié avec le mode contrôle :
+  // chaque bonne réponse au quiz boss incrémente le compteur de récup de l'item
+  // (capé à 1 par jour côté recup-counter.js, sémantique « séances espacées »).
+  // Skip en mode révision (replay des ratées d'une même session) pour ne pas
+  // gonfler artificiellement. Lu par la Fiche parent pour afficher X/total justes.
+  if (isCorrect && chapitreId && !quizState.isRevisionMode && typeof window.rcInc === 'function') {
+    window.rcInc(chapitreId, q.question);
+  }
   quizState.quizHistory.push({question:q.question, questionObj:q, correct:isCorrect, hintUsed:quizState.hintUsed, correctAnswer:q.choix[correctIdx], diff});
+
+  // Mauvaise réponse (ou timeout) → perte de cœur (sauf révision / Finish Him où le joueur ne peut plus tomber)
+  if (!isCorrect && !quizState.isRevisionMode && !quizState.isFinishHim) {
+    if (typeof window.loseHeart === 'function') window.loseHeart();
+    if (typeof window.heartsKO === 'function' && window.heartsKO()) {
+      quizState.koDefeat = true;
+    }
+  }
 
   // Compacte l'affichage après réponse (cache question + hint)
   document.getElementById('qa-quiz-content').classList.add('answered');
 
   // Streak (suspendu en Finish Him pour ne pas perturber la cérémonie)
+  const previousStreak = quizState.streak || 0;
   if (!quizState.isFinishHim) {
     if (isCorrect) quizState.streak++; else quizState.streak = 0;
     const streakEl = document.getElementById('qa-quiz-streak-badge');
-    if (quizState.streak >= 2) { streakEl.className = 'streak-badge'; streakEl.textContent = `🔥 ×${quizState.streak}`; streakEl.classList.remove('hidden'); } else streakEl.classList.add('hidden');
+    if (quizState.streak >= 2) {
+      streakEl.className = 'streak-badge';
+      streakEl.innerHTML = `<span class="streak-runes">⟡⟡⟡</span><span class="streak-label">×${quizState.streak}</span>`;
+      streakEl.classList.remove('hidden');
+    } else {
+      streakEl.classList.add('hidden');
+    }
   }
 
-  // Feedback : bulle Neo ancrée au sprite dans la scène (libère le grimoire)
-  if (typeof hudShowFeedbackBubble === 'function') {
-    hudShowFeedbackBubble({
-      isCorrect,
-      correctAnswer: q.choix[correctIdx],
-      explication:   q.explication || ''
-    });
-  }
   const hintBtn2 = document.getElementById('qa-hint-btn'); hintBtn2.disabled = true; hintBtn2.style.opacity = '0.35';
 
   const nb = document.getElementById('qa-quiz-next-btn');
   const dmgColor = diff==='hard'?'#f472b6':diff==='medium'?'#c084fc':'#22d3ee';
   const dmg = quizState.isRevisionMode ? 1 : (munition === 'eclat' ? 10 : 3);
+  const xp  = quizState.isRevisionMode ? 0 : (munition === 'eclat' ? 25 : 8);
 
   const showNextBtn = () => {
     nb.classList.remove('qz-pending');
@@ -165,52 +245,90 @@ function answer(selected, correct, diff) {
     }
   };
 
+  const scheduleAnnale = () => {
+    if (quizState.annaleTimer) clearTimeout(quizState.annaleTimer);
+    const delay = isCorrect ? 1500 : 1800;
+    quizState.annaleTimer = setTimeout(() => {
+      if (typeof window.revealAnnale !== 'function') { showNextBtn(); return; }
+      window.revealAnnale({
+        letter: selectedIdx >= 0 ? String.fromCharCode(65 + selectedIdx) : null,
+        isCorrect,
+        timedOut: selectedIdx < 0,
+        correctAnswer: q.choix[correctIdx],
+        explication:   q.explication || '',
+        astuceNeo:     q.astuce_neo || '',
+        dmg, xp,
+        streak:         quizState.streak,
+        previousStreak: previousStreak
+      });
+    }, delay);
+  };
+
   if (typeof audioLaunchEclat === 'function') audioLaunchEclat();
 
   if (quizState.isFinishHim) {
-    // Question fatale : boss déjà mort, pas de bossDamage. On stocke juste le résultat.
+    // Cérémonie Finish Him : pas d'annale, on garde le bouton classique
     quizState.finishHimWon = isCorrect;
     if (isCorrect) { if (typeof audioCriticalHit === 'function') audioCriticalHit(); }
     else            { if (typeof audioMissBoss   === 'function') audioMissBoss();   }
     showNextBtn();
   } else if (typeof vfxAttack === 'function') {
+    // Annale schedulée en parallèle des VFX (cancellable si K.O. technique)
+    scheduleAnnale();
     vfxAttack(isCorrect, munition, () => {
       if (isCorrect) {
         if (typeof audioCriticalHit === 'function') audioCriticalHit();
         bossDamage(dmg, dmgColor);
-        // Détection K.O. technique → on bascule en Finish Him sur la PROCHAINE question
+        if (typeof window.neoCheer === 'function') window.neoCheer({ xp });
+        // K.O. technique → on annule l'annale et on bascule en Finish Him sur la PROCHAINE question
         if (bossIsDefeated() && !quizState.isRevisionMode && quizState.quizIndex < quizState.quizData.length - 1) {
+          if (quizState.annaleTimer) { clearTimeout(quizState.annaleTimer); quizState.annaleTimer = null; }
           quizState.questionsSavedByKO = Math.max(0, quizState.quizData.length - quizState.quizIndex - 2);
           quizState.finishHimPending = true;
-          quizState.quizData = quizState.quizData.slice(0, quizState.quizIndex + 2); // garde la prochaine, tronque le reste
+          quizState.quizData = quizState.quizData.slice(0, quizState.quizIndex + 2);
           nb.textContent = '🔥 FINISH HIM !';
           nb.classList.add('finish-him');
+          showNextBtn();
         }
       } else {
         if (typeof audioMissBoss === 'function') audioMissBoss();
-        // vfxAttack(false, …) joue déjà la séquence complète : Neo recule + bulle "Aïe!" +
-        // contre-attaque du Boss (rugissement, sort d'ombre, dazed shake). bossReact() est redondant ici.
       }
-      showNextBtn();
     });
   } else {
     // Fallback si VFX pas chargé
-    if (isCorrect) bossDamage(dmg, dmgColor); else bossReact();
-    showNextBtn();
+    if (isCorrect) {
+      bossDamage(dmg, dmgColor);
+      if (typeof window.neoCheer === 'function') window.neoCheer({ xp });
+    } else {
+      bossReact();
+    }
+    scheduleAnnale();
   }
 }
 
+
 function quizNext() {
-  const content = document.getElementById('qa-quiz-content');
-  content.classList.add('quiz-slide-out');
+  // KO : 3 cœurs perdus → défaite immédiate (placeholder, écran cinématique en Phase 5)
+  if (quizState.koDefeat) {
+    if (typeof window.stopTimer === 'function') window.stopTimer();
+    if (typeof hudHideFeedbackBubble === 'function') hudHideFeedbackBubble();
+    showQuizFinalKO();
+    return;
+  }
   if (typeof hudHideFeedbackBubble === 'function') hudHideFeedbackBubble();
   const goingToFinishHim = quizState.finishHimPending;
   if (goingToFinishHim) {
     quizState.finishHimPending = false;
     quizState.isFinishHim = true;
     showFinishHimOverlay();
+    setTimeout(() => { quizState.quizIndex++; renderQuiz(); }, 600);
+    return;
   }
-  setTimeout(() => { content.classList.remove('quiz-slide-out'); quizState.quizIndex++; renderQuiz(); }, goingToFinishHim ? 600 : 150);
+  if (typeof window.pageFlip === 'function') {
+    window.pageFlip(() => { quizState.quizIndex++; renderQuiz(); });
+  } else {
+    setTimeout(() => { quizState.quizIndex++; renderQuiz(); }, 150);
+  }
 }
 
 function showFinishHimOverlay() {
@@ -224,7 +342,63 @@ function showFinishHimOverlay() {
   setTimeout(() => ov.remove(), 1400);
 }
 
+// Carnet d'oublis de Neo : enregistre les questions ratées (hors mode révision)
+function _nbEnqueueFromQuiz() {
+  if (quizState.isRevisionMode) return;
+  if (typeof window.nbAdd !== 'function') return;
+  var failed = (quizState.quizHistory || []).filter(function(h) { return !h.correct; }).map(function(h) { return h.questionObj; });
+  if (!failed.length) return;
+  var royaumeId = (typeof currentMat !== 'undefined' && currentMat) ? currentMat.id : null;
+  var chId = (typeof chapitreId !== 'undefined') ? chapitreId : null;
+  if (!royaumeId || !chId) return;
+  try { window.nbAdd(chId, royaumeId, failed); } catch (e) {}
+}
+
+// K.O. — écran cinématique Défaite avec reason='ko'
+function showQuizFinalKO() {
+  _nbEnqueueFromQuiz();
+  document.getElementById('qa-quiz-content').classList.add('hidden');
+  document.getElementById('qa-quiz-header-prog').style.display = 'none';
+  document.getElementById('qa-quiz-final').classList.add('hidden');
+
+  const correctCount = quizState.quizHistory.filter(h => h.correct).length;
+  const total        = quizState.quizData.length;
+  const ch           = quizState.chap || {};
+  const theme        = ch.theme || ch.matiere || matiereId || 'historya';
+  const bossHp       = (typeof bossState !== 'undefined' && bossState && bossState.hp != null) ? Math.max(0, bossState.hp) : 0;
+  const eclatsLeft   = (typeof getEclats === 'function' && chapitreId) ? getEclats(chapitreId) : 0;
+  const shardsUsed   = Math.max(0, (typeof ECLAT_MAX !== 'undefined' ? ECLAT_MAX : 15) - eclatsLeft);
+
+  if (typeof runDefeatScreen === 'function') {
+    runDefeatScreen({
+      theme,
+      bossName: ch.nom_boss,
+      bossImage: ch.image_boss,
+      reason: 'ko',
+      correct: correctCount, total,
+      bossHp, shardsUsed,
+    }, function onReplay() { quizRestart(); },
+       null, // pas de bouton "récup éclats" tant que la mécanique n'est pas câblée
+       function onQuit()   { closeQuestActivity(); });
+    return;
+  }
+
+  // Fallback inline si runDefeatScreen pas chargé
+  document.getElementById('qa-quiz-final').innerHTML = `
+    <div class="qzf-wrap">
+      <div class="qzf-neo"><img src="img/Neo_assis.png" alt="Neo" style="transform:scaleX(-1);filter:drop-shadow(0 0 14px #ef444499);" /></div>
+      <div class="qzf-title" style="color:#ef4444;">💔 K.O.</div>
+      <div class="qzf-best">${correctCount}/${total} avant de tomber</div>
+      <div class="qzf-btns">
+        <button class="qzf-btn qzf-btn-restart" onclick="quizRestart()">🔄 Recommencer</button>
+        <button class="qzf-btn qzf-btn-back" onclick="closeQuestActivity()">← Retour</button>
+      </div>
+    </div>`;
+  document.getElementById('qa-quiz-final').classList.remove('hidden');
+}
+
 function showQuizFinal() {
+  _nbEnqueueFromQuiz();
   document.getElementById('qa-quiz-content').classList.add('hidden');
   document.getElementById('qa-quiz-header-prog').style.display = 'none';
 
@@ -240,9 +414,33 @@ function showQuizFinal() {
   const defeated = typeof bossIsDefeated === 'function' && bossIsDefeated();
   var goldEarned = 0;
   var goldBreakdown = null;
+  var xpBreakdown = null;
   if (defeated) {
-    addPts(100);
-    // Nouvelle formule (Specs Quiz) : (Éclats restants × 10) + (Questions non posées × 5)
+    // XP modulé par difficulté — uniquement à la 1ʳᵉ victoire du chapitre (anti-farm).
+    // Rejeu = 0 XP mais Or normal (l'Or est limité par l'économie des éclats).
+    var isFirstWin = false;
+    try { isFirstWin = !localStorage.getItem(`neoquest_quiz_${chapitreId}`); } catch(e) {}
+    if (isFirstWin) {
+      const XP_BY_DIFF = { facile: 5, medium: 10, hard: 15 };
+      const buckets = { facile:{n:0,xp:0}, medium:{n:0,xp:0}, hard:{n:0,xp:0} };
+      let xpFromQ = 0;
+      quizState.quizHistory.forEach(h => {
+        if (!h.correct) return;
+        const diff = ((h.questionObj && h.questionObj.difficulte) || 'facile').toLowerCase();
+        if (XP_BY_DIFF[diff] != null) {
+          xpFromQ += XP_BY_DIFF[diff];
+          buckets[diff].n++;
+          buckets[diff].xp += XP_BY_DIFF[diff];
+        }
+      });
+      const xpBonus = 50;
+      const xpTotal = xpFromQ + xpBonus;
+      addPts(xpTotal);
+      xpBreakdown = { facile: buckets.facile, medium: buckets.medium, hard: buckets.hard, bonus: xpBonus, total: xpTotal, alreadyMastered: false };
+    } else {
+      xpBreakdown = { alreadyMastered: true, total: 0 };
+    }
+    // Or — inchangé. Formule Specs Quiz : (Éclats restants × 10) + (Questions non posées × 5)
     const eclatsLeft = (typeof getEclats === 'function' && chapitreId) ? getEclats(chapitreId) : 0;
     const savedQ     = quizState.questionsSavedByKO || 0;
     const goldEclats = eclatsLeft * 10;
@@ -254,41 +452,97 @@ function showQuizFinal() {
     if (typeof addGold === 'function') addGold(goldEarned);
     try { localStorage.setItem(`neoquest_quiz_${chapitreId}`, '1'); } catch(e) {}
   }
-  renderQuizFinal(defeated, correctCount, total, goldEarned, goldBreakdown);
+  renderQuizFinal(defeated, correctCount, total, goldEarned, goldBreakdown, xpBreakdown);
 }
 
-function renderQuizFinal(defeated, correct, total, goldEarned, breakdown) {
+function renderQuizFinal(defeated, correct, total, goldEarned, breakdown, xpInfo) {
   const failedCount = quizState.quizHistory.filter(h => !h.correct).length;
 
   if (defeated) {
-    const b = breakdown || {};
-    const koBadge = (b.savedQ > 0)
-      ? `<span style="background:rgba(239,68,68,0.14);border:1px solid #f59e0b88;border-radius:999px;padding:0.4rem 1rem;font-size:0.85rem;font-weight:900;color:#fcd34d;">🔥 K.O. technique — ${b.savedQ} question${b.savedQ>1?'s':''} non posée${b.savedQ>1?'s':''} (+${b.goldSaved} Or)</span>`
-      : '';
-    const doubleBadge = b.doubled
-      ? `<span style="background:linear-gradient(135deg,#dc262633,#f59e0b33);border:1px solid #fbbf24;border-radius:999px;padding:0.4rem 1rem;font-size:0.85rem;font-weight:900;color:#fef3c7;">✨ DOUBLE OR (Finish Him réussi)</span>`
-      : '';
+    // ── Victoire — écran cinématique dédié (combat-victory.css + quest-quiz-victory.js) ──
+    const xi = xpInfo || {};
+    const ch = quizState.chap || {};
+    const theme = ch.theme || ch.matiere || matiereId || 'historya';
+    const heartsLeft = (typeof window.heartsCount === 'function') ? window.heartsCount() : 0;
+    const heartsMax  = (typeof window.heartsState !== 'undefined' && window.heartsState && window.heartsState.max) || 3;
+    const flavor = (!quizState.isRevisionMode && heartsLeft === heartsMax) ? 'flawless' : 'win';
+    const shards = (typeof getEclats === 'function' && chapitreId) ? getEclats(chapitreId) : 0;
+    const bonus  = (flavor === 'flawless') ? 50 : 0;
+    const xpTotal = (xi.total || 0) + bonus;
+
+    if (typeof runVictoryScreen === 'function') {
+      document.getElementById('qa-quiz-content').classList.add('hidden');
+      document.getElementById('qa-quiz-final').classList.add('hidden');
+      runVictoryScreen({
+        theme,
+        bossName: ch.nom_boss,
+        bossImage: ch.image_boss,
+        flavor,
+        gold: goldEarned,
+        xp: xi.total || 0,
+        bonus,
+        correct, total,
+        shards,
+        hearts: heartsLeft,
+        // Mode défi serait l'idéal (Phase 7 future) ; pour l'instant retour map en primaire, rejouer en ghost.
+        primaryLabel: '✓ Retour à la map',
+        primarySub: xpTotal > 0 ? `+${xpTotal} xp · +${goldEarned} or` : `+${goldEarned} or`,
+        secondaryLabel: '↻ Rejouer',
+        secondarySub: 'retenter ce combat',
+      }, function onPrimary() { closeQuestActivity(); },
+         function onSecondary() { quizRestart(); });
+      return;
+    }
+    // Fallback (si runVictoryScreen pas chargé) : ancien recap inline
     document.getElementById('qa-quiz-final').innerHTML = `
       <div class="qzf-wrap">
         <div class="qzf-neo"><img src="img/Neo_assis.png" alt="Neo" style="filter:drop-shadow(0 0 14px #22d3ee99);" /></div>
         <div class="qzf-title" style="color:#22d3ee;">⚔️ Victoire !</div>
-        <div style="font-size:0.85rem;color:#94a3b8;font-weight:700;margin-bottom:1rem;">Le boss est vaincu !</div>
-        <div style="display:flex;gap:0.75rem;margin-bottom:1rem;flex-wrap:wrap;justify-content:center;">
-          <span style="background:rgba(251,191,36,0.12);border:1px solid #fbbf2444;border-radius:999px;padding:0.4rem 1rem;font-size:0.88rem;font-weight:900;color:#fbbf24;">💰 +${goldEarned} Or</span>
-          <span style="background:rgba(34,211,238,0.1);border:1px solid #22d3ee44;border-radius:999px;padding:0.4rem 1rem;font-size:0.88rem;font-weight:900;color:#22d3ee;">⬆ +100 XP</span>
-        </div>
-        ${(koBadge || doubleBadge) ? `<div style="display:flex;gap:0.5rem;margin-bottom:0.9rem;flex-wrap:wrap;justify-content:center;">${koBadge}${doubleBadge}</div>` : ''}
-        <div class="qzf-best">${correct}/${total} réponses correctes</div>
+        <div class="qzf-best">${correct}/${total} · +${goldEarned} Or</div>
         <div class="qzf-btns">
           <button class="qzf-btn qzf-btn-back" onclick="closeQuestActivity()">✓ Retour à la map</button>
         </div>
       </div>`;
+    document.getElementById('qa-quiz-final').classList.remove('hidden');
+    return;
   } else {
+    // ── Timeout — quiz fini, boss encore debout. Écran cinématique Défaite reason='timeout' ──
+    const ch = quizState.chap || {};
+    const theme = ch.theme || ch.matiere || matiereId || 'historya';
+    const bossHp = (typeof bossState !== 'undefined' && bossState && bossState.hp != null) ? Math.max(0, bossState.hp) : 0;
+    const eclatsLeft = (typeof getEclats === 'function' && chapitreId) ? getEclats(chapitreId) : 0;
+    const shardsUsed = Math.max(0, (typeof ECLAT_MAX !== 'undefined' ? ECLAT_MAX : 15) - eclatsLeft);
+
+    if (typeof runDefeatScreen === 'function') {
+      document.getElementById('qa-quiz-content').classList.add('hidden');
+      document.getElementById('qa-quiz-final').classList.add('hidden');
+      // En mode timeout, le slot doré "Récup éclats" est détourné pour "Réviser erreurs"
+      // (mécanique pédago importante — récup active sur les questions ratées).
+      const hasFailed = failedCount > 0;
+      runDefeatScreen({
+        theme,
+        bossName: ch.nom_boss,
+        bossImage: ch.image_boss,
+        reason: 'timeout',
+        correct, total,
+        bossHp, shardsUsed,
+        replayLabel: '↻ Réessayer',
+        replaySub: 'reprendre le combat',
+        shardsLabel: '📖 Réviser les erreurs',
+        shardsSub: hasFailed ? `${failedCount} à reprendre` : '',
+        quitLabel: '↩ Retour',
+        quitSub: 'à la map',
+      }, function onReplay() { quizRestart(); },
+         hasFailed ? function onRevise() { startRevisionMode(); } : null,
+         function onQuit()    { closeQuestActivity(); });
+      return;
+    }
+
+    // Fallback inline si runDefeatScreen pas chargé (garde le bouton "Réviser erreurs")
     document.getElementById('qa-quiz-final').innerHTML = `
       <div class="qzf-wrap">
         <div class="qzf-neo"><img src="img/Neo_assis.png" alt="Neo" style="transform:scaleX(-1);filter:drop-shadow(0 0 14px #f472b699);" /></div>
         <div class="qzf-title" style="color:#f472b6;">😤 Le boss tient encore…</div>
-        <div style="font-size:0.85rem;color:#94a3b8;font-weight:700;margin-bottom:1rem;">Retourne réviser et reviens plus fort !</div>
         <div class="qzf-best">${correct}/${total} réponses correctes</div>
         <div class="qzf-btns">
           <button class="qzf-btn qzf-btn-restart" onclick="quizRestart()">🔄 Réessayer</button>

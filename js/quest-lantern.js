@@ -11,7 +11,7 @@
 (function() {
   const LANTERN_IMGS = [
     'img/lantern_0.png',
-    'img/lantern_25.png',
+    'img/lantern_20.png',
     'img/lantern_50.png',
     'img/lantern_75.png',
     'img/lantern_100.png'

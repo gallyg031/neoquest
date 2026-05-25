@@ -1,0 +1,9 @@
+{
+  "liveServer.settings.ignoreFiles": [
+    "img/cours/**",
+    "docs/cours/**",
+    "admin/**",
+    ".vscode/**",
+    "**/credits.json"
+  ]
+}

@@ -171,6 +171,10 @@ function closeQuestActivity() {
   if (typeof window.resetLantern === 'function') window.resetLantern();
   // Mentor combat : on cache la bulle (l'orbe reste monté, ré-utilisé au prochain combat)
   if (typeof window.mentorHide === 'function') window.mentorHide();
+  // Timer combat : stop si en cours (évite un callback orphelin après fermeture)
+  if (typeof window.stopTimer === 'function') window.stopTimer();
+  // Annale : reset le timer auto + face=question pour le prochain combat
+  if (typeof window.resetAnnale === 'function') window.resetAnnale();
   // Neo reste monté (singleton) — on coupe juste sa bulle / idle / expression
   if (typeof window.neoReset === 'function') window.neoReset();
   document.body.style.overflow = '';

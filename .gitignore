@@ -1,3 +1,5 @@
 admin/
 _design-import/
 *.md
+node_modules/
+tools/.cache/

@@ -77,7 +77,7 @@
   document.head.appendChild(style);
 })();
 
-var bossState = { hp: 0, maxHP: 0, name: '', icon: '' };
+var bossState = { hp: 0, maxHP: 0, name: '', icon: '', imgMechant: null, imgApaise: null };
 
 function bossInit(opts) {
   opts = opts || {};
@@ -85,7 +85,9 @@ function bossInit(opts) {
     hp:    opts.maxHP || 0,
     maxHP: opts.maxHP || 0,
     name:  opts.name  || 'Le Gardien',
-    icon:  opts.icon  || '👹'
+    icon:  opts.icon  || '👹',
+    imgMechant: opts.imgMechant || null,
+    imgApaise:  opts.imgApaise  || null
   };
 
   // Nom + barre PV + chiffres
@@ -100,12 +102,30 @@ function bossInit(opts) {
   if (hpNum) hpNum.textContent = bossState.hp;
   if (hpMax) hpMax.textContent = bossState.maxHP;
 
-  // Sprite Boss : icône du chap
+  // Sprite Boss : image profil du chap si dispo, sinon icône emoji
+  // L'emoji est conservé en data-icon pour le fallback onerror + le tweaker.
   const spriteBoss = document.getElementById('qa-combat-sprite-boss');
   if (spriteBoss) {
-    spriteBoss.classList.remove('shake', 'ko');
-    spriteBoss.textContent = bossState.icon;
+    spriteBoss.classList.remove('shake', 'ko', 'is-apaise');
     spriteBoss.style.opacity = '';
+    spriteBoss.style.transform = '';
+    spriteBoss.dataset.icon = bossState.icon;
+    if (bossState.imgMechant) {
+      spriteBoss.classList.add('has-art');
+      const img = document.createElement('img');
+      img.className = 'combat-sprite-art';
+      img.src = bossState.imgMechant;
+      img.alt = bossState.name;
+      img.onerror = function() {
+        spriteBoss.classList.remove('has-art');
+        spriteBoss.textContent = bossState.icon;
+      };
+      spriteBoss.textContent = '';
+      spriteBoss.appendChild(img);
+    } else {
+      spriteBoss.classList.remove('has-art');
+      spriteBoss.textContent = bossState.icon;
+    }
   }
   const spriteNeo = document.getElementById('qa-combat-sprite-neo');
   if (spriteNeo) spriteNeo.classList.remove('shake');
@@ -190,6 +210,11 @@ function bossDamage(amount, color) {
   _setFog(ratio);
   _setGlow(1 - ratio);
 
+  // Phase II à ≤20% PV (one-shot, le module gère le flag fired)
+  if (bossState.hp > 0 && ratio <= 0.20 && typeof window.maybeTriggerPhase2 === 'function') {
+    window.maybeTriggerPhase2();
+  }
+
   if (bossState.hp === 0) bossDefeated();
 }
 
@@ -205,7 +230,25 @@ function bossReact() {
 
 function bossDefeated() {
   const spriteBoss = document.getElementById('qa-combat-sprite-boss');
-  if (spriteBoss) spriteBoss.classList.add('ko');
+  if (spriteBoss) {
+    spriteBoss.classList.add('ko');
+    // Après l'anim KO (1.1s), bascule vers le portrait apaisé si dispo.
+    if (bossState.imgApaise) {
+      setTimeout(function() {
+        spriteBoss.classList.remove('ko');
+        spriteBoss.style.opacity = '';
+        spriteBoss.style.transform = '';
+        spriteBoss.classList.add('has-art', 'is-apaise');
+        const img = document.createElement('img');
+        img.className = 'combat-sprite-art';
+        img.src = bossState.imgApaise;
+        img.alt = bossState.name + ' (apaisé)';
+        img.onerror = function() { spriteBoss.classList.remove('has-art', 'is-apaise'); };
+        spriteBoss.textContent = '';
+        spriteBoss.appendChild(img);
+      }, 1100);
+    }
+  }
   _setFog(0);
   _setGlow(1);
 }
@@ -230,7 +273,7 @@ function hudShowFeedbackBubble(opts) {
   if (typeof window.mentorSay !== 'function') return;
   const isCorrect = !!opts.isCorrect;
   const html = `
-    <div class="combat-mentor-bubble-title ${isCorrect ? 'ok' : 'ko'}">${isCorrect ? '👍 Bravo !' : '😬 Pas tout à fait…'}</div>
+    <div class="combat-mentor-bubble-title ${isCorrect ? 'ok' : 'ko'}">${isCorrect ? '✓ Touché.' : '✗ Manqué.'}</div>
     ${!isCorrect && opts.correctAnswer ? `<div class="combat-mentor-bubble-answer">✅ ${opts.correctAnswer}</div>` : ''}
     ${opts.explication ? `<div class="combat-mentor-bubble-expl">${opts.explication}</div>` : ''}
   `;

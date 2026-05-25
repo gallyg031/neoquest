@@ -1,0 +1,59 @@
+/* ─────────────── Neo cheer (feedback gagnant sur bonne réponse) ─────────────── */
+/* Déclenché par neoCheer() après bossDamage. Triple effet : lift sprite + +XP flottant + flash compteur. */
+
+/* ─── Lift + glow doré ─── */
+.combat-sprite-neo.fx-cheer {
+  animation: combatNeoCheerLift 0.78s cubic-bezier(0.25, 0.7, 0.3, 1.15);
+  box-shadow:
+    0 0 28px rgba(34,211,238,0.4),
+    0 0 36px rgba(251,191,36,0.55),
+    0 8px 16px rgba(0,0,0,0.5);
+}
+@keyframes combatNeoCheerLift {
+  0%   { transform: translateY(0)    rotate(0); }
+  18%  { transform: translateY(-14px) rotate(-3deg); }
+  42%  { transform: translateY(-6px)  rotate(2deg); }
+  68%  { transform: translateY(-10px) rotate(-1deg); }
+  100% { transform: translateY(0)    rotate(0); }
+}
+
+/* ─── +XP flottant doré ─── */
+@keyframes combatXpFloat {
+  0%   { transform: translate(-50%, 0)    scale(0.6); opacity: 0; }
+  18%  { transform: translate(-50%, -16px) scale(1.15); opacity: 1; }
+  100% { transform: translate(-50%, -56px) scale(0.9); opacity: 0; }
+}
+.combat-xp-gain {
+  position: absolute;
+  left: 50%; top: -8px;
+  transform: translate(-50%, 0);
+  font-family: var(--combat-title-font, 'Cinzel', 'Trajan Pro', serif);
+  font-weight: 900;
+  font-size: 1.4rem;
+  color: #fde68a;
+  text-shadow:
+    0 0 12px #fbbf24,
+    0 1px 4px rgba(0,0,0,0.8);
+  pointer-events: none;
+  z-index: 7;
+  animation: combatXpFloat 1.05s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+/* ─── Flash doré sur compteur éclats ─── */
+@keyframes combatCounterFlash {
+  0%, 100% { transform: scale(1);   color: #fde68a; text-shadow: 0 1px 3px rgba(0,0,0,0.75); }
+  30%      { transform: scale(1.35); color: #fff;    text-shadow: 0 0 14px #fbbf24, 0 0 22px rgba(251,191,36,0.7); }
+}
+#qa-combat-eclat-num.flash-gold {
+  animation: combatCounterFlash 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@keyframes combatCounterIconFlash {
+  0%, 100% { transform: scale(1);    filter: drop-shadow(0 0 6px rgba(251,191,36,0.55)); }
+  30%      { transform: scale(1.45); filter: drop-shadow(0 0 14px #fbbf24); }
+}
+.combat-eclat-icon.flash-gold {
+  display: inline-block;
+  animation: combatCounterIconFlash 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}

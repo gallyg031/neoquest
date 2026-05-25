@@ -1,0 +1,124 @@
+/* ─────────────── Timer runique 15s par question ─────────────── */
+/* Anneau SVG dans la prog-row du grimoire (à gauche de la barre de progression). */
+/* États : normal (violet) → warn ≤6s (doré) → danger ≤3s (rouge + pulse) → expired (flash). */
+
+.qa-quiz-timer {
+  position: relative;
+  width: 56px; height: 56px;
+  flex: none;
+  user-select: none;
+}
+.qa-quiz-timer svg {
+  width: 100%; height: 100%;
+  transform: rotate(-90deg);
+  overflow: visible;
+}
+.qa-quiz-timer .qtimer-bg {
+  fill: none;
+  stroke: rgba(255,255,255,0.10);
+  stroke-width: 4;
+}
+.qa-quiz-timer .qtimer-arc {
+  fill: none;
+  stroke: var(--combat-accent, #c084fc);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 131.95;   /* 2π·21 */
+  stroke-dashoffset: 0;
+  transition: stroke 0.25s ease, filter 0.25s ease;
+  filter: drop-shadow(0 0 6px rgba(168,85,247,0.5));
+}
+.qa-quiz-timer .qtimer-num {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--combat-title-font, 'Cinzel', 'Trajan Pro', serif);
+  font-weight: 800;
+  font-size: 22px; line-height: 1;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+}
+.qa-quiz-timer .qtimer-notches {
+  stroke: rgba(255,255,255,0.22);
+  transition: stroke 0.25s ease;
+}
+
+/* ─── État warn (≤6s) — doré ─── */
+.qa-quiz-timer.is-warn .qtimer-arc {
+  stroke: #fbbf24;
+  filter: drop-shadow(0 0 8px rgba(251,191,36,0.7));
+}
+.qa-quiz-timer.is-warn .qtimer-num { color: #fde68a; }
+
+/* ─── État danger (≤3s) — rouge cramoisi + pulse ─── */
+.qa-quiz-timer.is-danger .qtimer-arc {
+  stroke: #ef4444;
+  filter: drop-shadow(0 0 12px rgba(239,68,68,0.85));
+}
+.qa-quiz-timer.is-danger .qtimer-num {
+  color: #fca5a5;
+  animation: qtimerNumPulse 0.6s ease-in-out infinite;
+}
+.qa-quiz-timer.is-danger {
+  animation: qtimerRingPulse 0.6s ease-in-out infinite;
+}
+.qa-quiz-timer.is-danger .qtimer-notches { stroke: rgba(239,68,68,0.6); }
+@keyframes qtimerRingPulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.05); }
+}
+@keyframes qtimerNumPulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.4; }
+}
+
+/* ─── État paused (gris + barres) ─── */
+.qa-quiz-timer.is-paused .qtimer-arc {
+  stroke: rgba(255,255,255,0.3);
+  filter: none;
+}
+.qa-quiz-timer.is-paused .qtimer-num { color: transparent; }
+.qa-quiz-timer.is-paused .qtimer-num::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to right,
+      transparent 38%, rgba(255,255,255,0.55) 38%,
+      rgba(255,255,255,0.55) 46%, transparent 46%,
+      transparent 54%, rgba(255,255,255,0.55) 54%,
+      rgba(255,255,255,0.55) 62%, transparent 62%);
+}
+
+/* ─── État expired (flash ring expansif) ─── */
+.qa-quiz-timer.is-expired::before {
+  content: '';
+  position: absolute; inset: -8px;
+  border-radius: 50%;
+  border: 2px solid #ef4444;
+  animation: qtimerExpireRing 0.55s ease-out forwards;
+  pointer-events: none;
+}
+@keyframes qtimerExpireRing {
+  0%   { opacity: 0.9; transform: scale(0.7); }
+  100% { opacity: 0;   transform: scale(1.8); }
+}
+
+/* ─── Intégration dans la prog-row du grimoire (timer à gauche, barre à droite) ─── */
+.qa-quiz-prog-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.qa-quiz-prog-row .qa-quiz-prog-stack {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 600px) {
+  .qa-quiz-timer { width: 46px; height: 46px; }
+  .qa-quiz-timer .qtimer-num { font-size: 18px; }
+}

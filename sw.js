@@ -1,6 +1,6 @@
 // NeoQuest TV — Service Worker
 // Version du cache — incrémenter à chaque mise à jour du site
-const CACHE_NAME = 'neoquest-v4';
+const CACHE_NAME = 'neoquest-v7';
 
 // Fichiers à mettre en cache pour le mode hors-ligne
 const ASSETS = [

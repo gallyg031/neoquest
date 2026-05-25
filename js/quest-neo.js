@@ -26,6 +26,7 @@
   var _idleCb = null;
   var _indiceText = null;          // texte d'indice en attente (null = pas d'indice dispo)
   var _bubblePersistent = false;   // bulle actuelle persistante (clic pour fermer)
+  var _currentSkin = 'neutre';     // skin courant (dossier sous img/neo/) — pilote `_imgFor`
 
   // ── Mute global persisté ──
   function neoIsMuted() {
@@ -44,14 +45,21 @@
   }
 
   // ── Expression (change l'image affichée) ──
-  // Pour l'instant : visuel unique (NeoHist5.2.png) pour tous les états.
-  // La différenciation visuelle se fait via la couleur de bordure de l'avatar (CSS data-state).
-  // Quand les vraies images d'expressions seront prêtes, remplacer par :
-  //   return 'img/neo/neo-' + state + '.svg';   // ou .png
+  // Sprite par état dans le dossier du skin courant : img/neo/<currentSkin>/neo-<state>.svg
   function _imgFor(state) {
     if (NEO_STATES.indexOf(state) === -1) state = 'neutre';
-    return 'img/NeoHist5.2.png';
+    return 'img/neo/' + _currentSkin + '/neo-' + state + '.svg';
   }
+  // ── Skin courant (change le dossier source des sprites) ──
+  // Ne touche pas à l'état (neutre/reflexion/...), seulement au préfixe img/neo/<skin>/.
+  function neoSetSkin(skinId) {
+    _currentSkin = skinId || 'neutre';
+    if (_imgEl && _avatarEl) {
+      var state = _avatarEl.getAttribute('data-state') || 'neutre';
+      _imgEl.src = _imgFor(state);
+    }
+  }
+  function neoGetSkin() { return _currentSkin; }
   function neoSetExpression(state, opts) {
     if (!_imgEl || !_avatarEl) return;
     opts = opts || {};
@@ -238,4 +246,6 @@
   window.neoIsMuted          = neoIsMuted;
   window.neoStartIdleWatch   = neoStartIdleWatch;
   window.neoStopIdleWatch    = neoStopIdleWatch;
+  window.neoSetSkin          = neoSetSkin;
+  window.neoGetSkin          = neoGetSkin;
 })();

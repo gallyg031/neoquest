@@ -1,0 +1,13 @@
+{
+  "name": "neoquest-tools",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Outils Node de Neoquest (génération PDF, etc.). Le site lui-même est statique HTML/JS vanilla.",
+  "scripts": {
+    "pdf-server": "node tools/pdf-server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "puppeteer": "^23.0.0"
+  }
+}

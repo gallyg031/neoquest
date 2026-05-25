@@ -63,6 +63,7 @@
                 <span id="qa-combat-eclat-num">0</span>
                 <span class="combat-eclat-label">Éclats de Savoir</span>
               </div>
+              <div class="combat-hearts" id="qa-combat-hearts" aria-label="Cœurs de Neo"></div>
             </div>
             <div class="combat-hud-side combat-hud-side-right">
               <div class="combat-hud-name combat-hud-name-boss" id="qa-combat-boss-name">…</div>
@@ -85,12 +86,34 @@
         <div class="combat-grimoire">
           <div class="combat-grimoire-inner">
             <div class="combat-grimoire-quiz">
-              <div id="qa-quiz-header-prog" style="margin-bottom:0.7rem;">
-                <div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;font-size:0.75rem;font-weight:700;margin-bottom:0.3rem;">
-                  <span id="qa-quiz-progress-num" style="color:#cbd5e1;letter-spacing:0.04em;">Question <strong id="qa-quiz-prog-current" style="color:#fff;">1</strong> / <span id="qa-quiz-prog-total">12</span></span>
-                  <span id="qa-quiz-streak-badge" class="hidden"></span>
+              <div id="qa-quiz-header-prog" class="qa-quiz-prog-row" style="margin-bottom:0.7rem;">
+                <div class="qa-quiz-timer" id="qa-quiz-timer" aria-label="Temps restant">
+                  <svg viewBox="0 0 52 52" aria-hidden="true">
+                    <g class="qtimer-notches">
+                      <line x1="26" y1="2"  x2="26" y2="5"  stroke-width="1.2"/>
+                      <line x1="50" y1="26" x2="47" y2="26" stroke-width="1.2"/>
+                      <line x1="26" y1="50" x2="26" y2="47" stroke-width="1.2"/>
+                      <line x1="2"  y1="26" x2="5"  y2="26" stroke-width="1.2"/>
+                    </g>
+                    <circle class="qtimer-bg"  cx="26" cy="26" r="21"/>
+                    <circle class="qtimer-arc" id="qa-quiz-timer-arc" cx="26" cy="26" r="21"/>
+                  </svg>
+                  <div class="qtimer-num" id="qa-quiz-timer-num">15</div>
                 </div>
-                <div class="qa-prog-track"><div class="qa-prog-fill prog-facile" id="qa-quiz-prog-bar" style="width:0%"></div></div>
+                <div class="qa-quiz-prog-stack">
+                  <div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;font-size:0.75rem;font-weight:700;">
+                    <span id="qa-quiz-progress-num" style="color:#cbd5e1;letter-spacing:0.04em;">Question <strong id="qa-quiz-prog-current" style="color:#fff;">1</strong> / <span id="qa-quiz-prog-total">12</span> · <span id="qa-quiz-prog-diff" style="color:#22d3ee;text-transform:uppercase;letter-spacing:0.06em;font-size:0.7rem;">facile</span></span>
+                    <span id="qa-quiz-streak-badge" class="hidden"></span>
+                  </div>
+                  <div class="annale-tally" aria-live="polite">
+                    <span class="tally-item tally-item--dmg"    id="qa-tally-dmg"><b>−10</b><em>pv au Gardien</em></span>
+                    <span class="tally-sep">⟡</span>
+                    <span class="tally-item tally-item--xp"     id="qa-tally-xp"><b>+25</b><em>xp</em></span>
+                    <span class="tally-sep">⟡</span>
+                    <span class="tally-item tally-item--streak" id="qa-tally-streak"><b>×3</b><em>streak</em></span>
+                  </div>
+                  <div class="qa-prog-track"><div class="qa-prog-fill prog-facile" id="qa-quiz-prog-bar" style="width:0%"></div></div>
+                </div>
               </div>
               <div id="qa-quiz-content">
                 <div style="display:flex;align-items:center;justify-content:flex-end;gap:0.5rem;margin-bottom:0.75rem;">
@@ -100,9 +123,40 @@
                   <img src="img/Neo_assis.png" alt="Neo" style="width:40px;height:40px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 8px #fbbf24);" />
                   <p id="qa-hint-text" style="color:#fde68a;font-size:0.88rem;line-height:1.45;flex:1;"></p>
                 </div>
-                <p id="qa-quiz-question" style="font-weight:900;font-size:1.15rem;color:#fff;margin-bottom:0.85rem;line-height:1.4;"></p>
-                <div id="qa-quiz-choix" style="display:flex;flex-direction:column;gap:0.5rem;position:relative;"></div>
+                <div id="qa-quiz-grim-page" data-face="question">
+                  <!-- Face A : QUESTION -->
+                  <div class="grim-face grim-face--question">
+                    <p id="qa-quiz-question" style="font-weight:900;font-size:1.15rem;color:#fff;margin-bottom:0.85rem;line-height:1.4;"></p>
+                    <div id="qa-quiz-choix" style="display:flex;flex-direction:column;gap:0.5rem;position:relative;"></div>
+                  </div>
+                  <!-- Face B : ANNALE RÉVÉLÉE (feedback explicatif) -->
+                  <div class="grim-face grim-face--annale" aria-live="polite">
+                    <div class="annale-head">
+                      <span class="annale-seal" id="qa-annale-seal" data-result="correct" aria-hidden="true">
+                        <svg viewBox="0 0 40 40">
+                          <circle class="annale-seal-disk" cx="20" cy="20" r="17"/>
+                          <path class="annale-seal-mark annale-seal-mark--check" d="M 12 21 L 18 27 L 29 14" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                          <path class="annale-seal-mark annale-seal-mark--cross" d="M 13 13 L 27 27 M 27 13 L 13 27" fill="none" stroke-width="3" stroke-linecap="round"/>
+                        </svg>
+                      </span>
+                      <div class="annale-verdict">
+                        <span class="annale-answer" id="qa-annale-answer"></span>
+                        <span class="annale-yours"  id="qa-annale-yours" hidden>Tu avais répondu&nbsp;<b></b></span>
+                      </div>
+                    </div>
+                    <div class="annale-divider"><span></span></div>
+                    <p class="annale-body" id="qa-annale-body"></p>
+                    <div class="annale-foot">
+                      <button class="annale-next" id="qa-annale-next" type="button">
+                        <span>Continuer</span>
+                        <span class="annale-next-arrow" aria-hidden="true">→</span>
+                        <span class="annale-next-hint"><kbd>Espace</kbd></span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
                 <div id="qa-quiz-feedback" class="hidden"></div>
+                <!-- Bouton "suivant" — caché par défaut (annale gère le clic). Utilisé en Finish Him et fallback. -->
                 <div style="margin-top:0.75rem;display:flex;gap:0.75rem;">
                   <button id="qa-quiz-next-btn" class="btn-quiz-nav qz-pending" onclick="quizNext()">Question suivante →</button>
                 </div>

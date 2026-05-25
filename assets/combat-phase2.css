@@ -1,0 +1,163 @@
+/* ─────────────── Phase II du Gardien (banner cramoisi à ≤20% PV) ─────────────── */
+/* Déclenché par maybeTriggerPhase2() depuis bossDamage() quand PV ≤ 20% (one-shot). */
+/* Vit ~2.4s : flash blanc→rouge, 4 craquelures qui grandissent, frame avec kicker/titre/quote. */
+
+.combat-phase2-banner {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.combat-phase2-banner.is-active {
+  pointer-events: auto;
+  animation: combatP2BannerLife 2.4s ease-out forwards;
+}
+@keyframes combatP2BannerLife {
+  0%   { opacity: 0; }
+  6%   { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ─── Flash blanc → cramoisi ─── */
+.combat-p2-flash {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.95) 0%, rgba(255,170,150,0.5) 30%, transparent 70%),
+    linear-gradient(180deg, rgba(220,38,38,0.6), rgba(35,8,8,0.85));
+  animation: combatP2Flash 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+@keyframes combatP2Flash {
+  0%   { opacity: 0; }
+  10%  { opacity: 1; }
+  100% { opacity: 0.7; }
+}
+
+/* ─── Craquelures ─── */
+.combat-p2-cracks { position: absolute; inset: 0; pointer-events: none; }
+.combat-p2-crack {
+  position: absolute;
+  width: 2px; height: 0;
+  background:
+    linear-gradient(180deg,
+      transparent,
+      #fef2f2 20%,
+      #ef4444 70%,
+      transparent);
+  box-shadow:
+    0 0 12px rgba(239,68,68,0.9),
+    0 0 24px rgba(220,38,38,0.55);
+  transform-origin: 50% 0;
+  animation: combatP2CrackGrow 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+.combat-p2-crack--1 { left: 12%;  top: 0;    transform: rotate(-18deg);  animation-delay: 0.12s; }
+.combat-p2-crack--2 { right: 18%; top: 0;    transform: rotate(20deg);   animation-delay: 0.18s; }
+.combat-p2-crack--3 { left: 24%;  bottom: 0; transform: rotate(165deg);  animation-delay: 0.26s; }
+.combat-p2-crack--4 { right: 14%; bottom: 0; transform: rotate(-150deg); animation-delay: 0.32s; }
+@keyframes combatP2CrackGrow {
+  0%   { height: 0;    opacity: 0; }
+  20%  {                opacity: 1; }
+  100% { height: 70vh; opacity: 0.8; }
+}
+
+/* ─── Frame centré (kicker + titre + quote) ─── */
+.combat-p2-frame {
+  position: relative;
+  text-align: center;
+  z-index: 2;
+  padding: 1.8rem 2.4rem;
+  background:
+    linear-gradient(180deg, rgba(8,4,6,0.55), rgba(20,4,4,0.85));
+  border-top: 1px solid rgba(220,38,38,0.7);
+  border-bottom: 1px solid rgba(220,38,38,0.7);
+  box-shadow:
+    0 0 60px rgba(220,38,38,0.55),
+    inset 0 0 80px rgba(35,8,8,0.7);
+  width: min(720px, 88vw);
+  animation: combatP2FrameSlam 0.55s cubic-bezier(0.2, 0.8, 0.2, 1.05) 0.12s both;
+}
+@keyframes combatP2FrameSlam {
+  0%   { transform: scale(0.4)  skewY(-6deg); opacity: 0; filter: blur(8px); }
+  60%  { transform: scale(1.05) skewY(2deg);  opacity: 1; filter: blur(0); }
+  100% { transform: scale(1)    skewY(0);     opacity: 1; }
+}
+
+.combat-p2-kicker {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.45em;
+  text-transform: uppercase;
+  color: #fca5a5;
+  margin-bottom: 0.8rem;
+  text-shadow: 0 0 10px rgba(220,38,38,0.8);
+  opacity: 0;
+  animation: combatP2Pop 0.45s ease-out 0.2s forwards;
+}
+
+.combat-p2-title {
+  font-family: var(--combat-title-font, 'Cinzel', 'Trajan Pro', serif);
+  font-weight: 900;
+  font-size: clamp(2.2rem, 6.5vw, 4rem);
+  line-height: 0.92;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #fef3c7;
+  text-shadow:
+    0 3px 0 #000,
+    0 0 26px rgba(220,38,38,0.85),
+    0 0 6px rgba(0,0,0,0.9);
+  display: flex; flex-direction: column;
+}
+.combat-p2-title span {
+  opacity: 0;
+  animation: combatP2TitleSlam 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+.combat-p2-title span:nth-child(1) { animation-delay: 0.28s; }
+.combat-p2-title span:nth-child(2) { animation-delay: 0.42s; }
+@keyframes combatP2TitleSlam {
+  0%   { opacity: 0; transform: translateY(14px) scale(1.15); filter: blur(8px); letter-spacing: 0.25em; }
+  60%  { opacity: 1; transform: translateY(0)    scale(1);     filter: blur(0); letter-spacing: 0.04em; }
+  100% { opacity: 1; }
+}
+
+.combat-p2-quote {
+  margin-top: 0.9rem;
+  font-family: 'Cormorant Garamond', 'Georgia', serif;
+  font-style: italic;
+  font-size: 1.2rem;
+  letter-spacing: 0.04em;
+  color: rgba(254,226,226,0.95);
+  text-shadow: 0 0 12px rgba(220,38,38,0.6);
+  opacity: 0;
+  animation: combatP2Pop 0.5s ease-out 0.75s forwards;
+}
+@keyframes combatP2Pop {
+  0%   { opacity: 0; transform: translateY(6px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Boss roar (sprite plus gros, filter cramoisi) ─── */
+.combat-sprite-boss.is-phase2 {
+  animation: combatBossPhase2Roar 0.65s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  filter:
+    drop-shadow(0 8px 16px rgba(0,0,0,0.5))
+    drop-shadow(0 0 28px rgba(220,38,38,0.85));
+}
+@keyframes combatBossPhase2Roar {
+  0%   { transform: translateY(0)    scale(1); }
+  35%  { transform: translateY(-22px) scale(1.18); }
+  65%  { transform: translateY(-6px)  scale(1.08); }
+  100% { transform: translateY(-2px)  scale(1.04); }
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 600px) {
+  .combat-p2-frame  { padding: 1.2rem 1.4rem; }
+  .combat-p2-quote  { font-size: 1rem; }
+  .combat-p2-kicker { font-size: 0.65rem; letter-spacing: 0.35em; }
+}
